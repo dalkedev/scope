@@ -4,7 +4,16 @@ User-visible changes are recorded here. Back up important captures before upgrad
 
 ## Unreleased
 
-## 1.4.0 — 2026-11-09
+## 1.4.1 — 2026-11-09
+
+- Upgrade the bundled SQLite driver/runtime to the patched line for
+  RUSTSEC-2026-0459. Check the actual linked runtime in tests and keep a fresh
+  registry vulnerability audit in Linux CI and tagged release builds.
+- Include the Dark/Light/System workspace, owned Android Java engine and archive
+  diagnostics from the unpublished 1.4.0 candidate. Existing Android/platform
+  verification boundaries remain unchanged.
+
+## 1.4.0 candidate — withheld, not published
 
 - Add Light, Dark and System appearance choices in the sidebar. Remember the
   local preference, follow live system changes in System mode and apply the

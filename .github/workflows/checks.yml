@@ -47,6 +47,12 @@ jobs:
         if: runner.os == 'Linux'
         run: cargo test --locked --release -p scope-glib-variant-regression
       - run: cargo fmt --all -- --check
+      - name: Install pinned dependency auditor
+        if: runner.os == 'Linux'
+        run: cargo install cargo-audit --locked --version 0.22.2
+      - name: Audit registry dependencies against fresh RustSec data
+        if: runner.os == 'Linux'
+        run: cargo audit
       - run: cargo test --workspace --locked
       - run: npm test -- --run
       - run: node --test resources/frida/tests/scope-engine.test.cjs

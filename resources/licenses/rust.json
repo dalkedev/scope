@@ -1,6 +1,6 @@
 {
   "generator": "cargo-about 0.9.3; scripts/licenses.mjs",
-  "lockfileSha256": "39b26dcafdd2c6b64dd14f8af747b6efb2b39496c47712f9260756a37ef9f9b1",
+  "lockfileSha256": "f834e5e9b3b5e3047c075ebe6a30fd2f048d831f9510ba268e69ed92ef3027ca",
   "scope": "Workspace runtime dependencies across supported target configurations; build and dev dependencies excluded. Includes target-specific crates not necessarily present in each artifact.",
   "licenses": [
     {
@@ -18,7 +18,7 @@
         },
         {
           "name": "scope-core",
-          "version": "1.4.0",
+          "version": "1.4.1",
           "license": "AGPL-3.0-or-later",
           "repository": null,
           "authors": [],
@@ -26,7 +26,7 @@
         },
         {
           "name": "scope-device",
-          "version": "1.4.0",
+          "version": "1.4.1",
           "license": "AGPL-3.0-or-later",
           "repository": null,
           "authors": [],
@@ -34,7 +34,7 @@
         },
         {
           "name": "scope-mcp",
-          "version": "1.4.0",
+          "version": "1.4.1",
           "license": "AGPL-3.0-or-later",
           "repository": null,
           "authors": [],
@@ -42,7 +42,7 @@
         },
         {
           "name": "scope-desktop",
-          "version": "1.4.0",
+          "version": "1.4.1",
           "license": "AGPL-3.0-or-later",
           "repository": null,
           "authors": [],
@@ -1329,23 +1329,23 @@
       "packages": [
         {
           "name": "libsqlite3-sys",
-          "version": "0.36.0",
+          "version": "0.39.1",
           "license": "MIT",
           "repository": "https://github.com/rusqlite/rusqlite",
           "authors": [
             "The rusqlite developers"
           ],
-          "source": "https://crates.io/crates/libsqlite3-sys/0.36.0"
+          "source": "https://crates.io/crates/libsqlite3-sys/0.39.1"
         },
         {
           "name": "rusqlite",
-          "version": "0.38.0",
+          "version": "0.41.1",
           "license": "MIT",
           "repository": "https://github.com/rusqlite/rusqlite",
           "authors": [
             "The rusqlite developers"
           ],
-          "source": "https://crates.io/crates/rusqlite/0.38.0"
+          "source": "https://crates.io/crates/rusqlite/0.41.1"
         }
       ]
     },
@@ -6374,11 +6374,11 @@
       "packages": [
         {
           "name": "hashlink",
-          "version": "0.11.1",
+          "version": "0.12.2",
           "license": "MIT OR Apache-2.0",
           "repository": "https://github.com/djc/hashlink",
           "authors": [],
-          "source": "https://crates.io/crates/hashlink/0.11.1"
+          "source": "https://crates.io/crates/hashlink/0.12.2"
         }
       ]
     },
