@@ -24,7 +24,7 @@ Scope routes traffic through a Rust engine, gives you control over requests and 
 
 **Local capture, saved sessions and export need no account or subscription.** Built-in analysis runs locally. You choose which sessions an external agent can access.
 
-> **This README describes Scope 1.3.0.** Endpoint rules can pause a real request, response or both for manual editing before forwarding. Other endpoints keep moving; the paused-message editor is available from every workspace. Automatic rules, the offline HAR Action and the verified GLib backport remain included. Check [Releases](https://github.com/dalkedev/scope/releases) for published builds and platform notes. [Pause an endpoint →](docs/RULES.md#pause-an-endpoint-and-edit-the-real-message) · [Verification record →](docs/VERIFICATION.md)
+> **This README describes the Scope 1.4.0 candidate.** The experimental Android backend now uses Scope-owned Java hooks with owned-process Stop cleanup, and an opt-in archive measurement harness retains reproducible diagnostics. Endpoint pause/edit rules, the offline HAR Action and verified GLib backport remain included. Check [Releases](https://github.com/dalkedev/scope/releases) for published builds and platform notes. [Android acceptance →](docs/ANDROID_ACCEPTANCE.md) · [Archive measurements →](docs/ARCHIVE_RESPONSIVENESS.md) · [Verification record →](docs/VERIFICATION.md)
 
 <a href="docs/SCREENSHOTS.md"><img src="docs/images/traffic-inspector.jpg" alt="Real captured traffic: a products request returns a local HTTP 503 mock, with its rule and response JSON visible." width="100%"></a>
 
@@ -122,9 +122,9 @@ The same engine powers the native inspector and MCP. Real HTTP/TLS fixtures test
 
 | Today                   | Boundary                                                                                                                                                                  |
 | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| macOS arm64             | Local UI/package evidence is recorded by version; 1.3.0 interactive validation is recorded separately by scenario. Ad-hoc signed; not Apple-notarized.                                          |
+| macOS arm64             | Reviewed runtime sources passed native UI/package and repeated Android Start/Stop checks; final 1.4.0 artifacts require separate verification. Ad-hoc signed; not Apple-notarized.                                          |
 | Windows x64 / Linux x64 | CI builds, packages and headless MCP/capture smoke pass. Interactive UI and device validation remain open. Intel macOS is unverified.                                     |
-| Android / Frida         | Earlier smoke covered the previous hook backend on one emulator. The current Scope-owned engine has local simulated tests only; real Android/Frida/OkHttp TLS and Stop acceptance are NOT RUN.                       |
+| Android / Frida         | AOSP API 36 ARM64, Frida 17.9.1 and OkHttp 3.14.9 passed 75 direct-worker outcomes plus two native UI Start/Stop capture cycles. Other targets and active-worker crash/restart recovery remain unverified; native TLS and lazy Kotlin pinners are unsupported.                       |
 | Capture                 | Bodies are buffered up to **16 MiB each**. Streaming, WebSocket frames, trailers and HTTP3 are not implemented.                                                           |
 | Archives & analysis     | Records currently load into memory. Large-session streaming/export is planned. Observed schemas are not complete API contracts.                                           |
 | Dependencies            | A Linux glib unsoundness advisory remains tracked in [#11](https://github.com/dalkedev/scope/issues/11). See the full [dependency record](docs/DEPENDENCIES.md). |

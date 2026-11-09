@@ -4,6 +4,22 @@ User-visible changes are recorded here. Back up important captures before upgrad
 
 ## Unreleased
 
+## 1.4.0 candidate — 2026-11-09
+
+- Replace imported Android runtime hooks with the experimental Scope-owned Java
+  URL/SSLContext/ordinary OkHttp engine. Validate only the configured Scope CA
+  through a real isolated trust manager; retain original TLS/hostname failures.
+- End the exact worker-owned app process on Frida Stop, retain uncertain cleanup
+  recovery and refuse to kill saved PIDs after restart. Bound worker framing and
+  retained diagnostics; show the actual active mode and allow repeated Start/Stop.
+- Remove automatic system CA injection and root-hiding selection. System proxy
+  capture remains device-wide; native TLS, custom pinners and lazy Kotlin OkHttp
+  unpinning remain unsupported. Target-specific Android evidence is recorded
+  separately from untested API/ABI and active-worker crash/restart behavior.
+- Add an opt-in archive measurement harness, process controls, numeric compatibility
+  receipts and a measurement workflow. Historical timings retain their source
+  provenance; no production archive-writer or throughput improvement is claimed.
+
 ## 1.2.2 — 2026-11-06
 
 - Backport the upstream GLib `VariantStrIter` soundness fix to the compatible

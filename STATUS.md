@@ -1,10 +1,14 @@
-# Scope 1.2.0 release candidate
+# Scope 1.4.0 release candidate
 
-Application version: `1.2.0`. This source branch prepares the reusable offline
-HAR comparison Action, refreshed identity and desktop icons, and dependency
-updates. A version in source does not establish a published release; see
-[Releases](https://github.com/dalkedev/scope/releases) for downloads and their
-exact platform manifests/checksums.
+Application version: `1.4.0`. This source branch combines the Scope-owned
+experimental Android Java engine with an opt-in archive measurement harness.
+The reviewed runtime sources passed 75 direct-worker Android outcomes and two
+native macOS Android Start/Stop capture cycles on AOSP API 36 ARM64, Frida
+17.9.1 and OkHttp 3.14.9. The final versioned package, exact-head hosted checks,
+maintainer review and draft asset verification are separate release gates.
+A version in source does not establish a published release; see
+[Releases](https://github.com/dalkedev/scope/releases) for downloads and exact
+platform manifests/checksums.
 
 Scope includes persistent HTTP(S) capture, request/response rules, editing and
 replay, structured traffic filters, HAR/native archives, observed-traffic
@@ -20,7 +24,15 @@ macOS is unverified. The macOS package is ad-hoc signed, without Apple notarizat
 
 Public packages exclude optional native Frida worker/server binaries. Users may
 install the optional runtime separately; source integration, setup helpers and
-hook profiles remain included. [Android setup](docs/ANDROID.md)
+supported Java hook profiles remain included. System proxy mode is device-wide
+and does not install a CA. Native TLS, custom pinners and Kotlin lazy pinners are
+unsupported; active-worker crash/restart recovery, physical devices and other
+Android API/ABI combinations remain unverified. See
+[Android acceptance](docs/ANDROID_ACCEPTANCE.md).
+
+Archive harness timings retain their recorded historical source provenance. They
+do not establish a production writer change or archive-throughput improvement.
+[Archive measurements](docs/ARCHIVE_RESPONSIVENESS.md). [Android setup](docs/ANDROID.md)
 
 Bodies remain buffered up to 16 MiB each. WebSocket frames, trailers, HTTP/3,
 large-session streaming and long-duration stability are outside verified coverage.
