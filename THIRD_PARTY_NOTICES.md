@@ -1,5 +1,3 @@
-Scope includes scripts from the user's SculptTechProject/bypass-scripts-adb repository. The notices below preserve that distribution's provenance. Scope's Rust device manager and Python worker are new integration code; they do not depend on an installed HTTP Toolkit instance. The original JavaScript files and CA template are vendored unchanged. Scope substitutes its own public CA and chosen proxy port only in runtime copies. The runtime CA template also uses a Scope-specific temporary directory and certificate filename.
-
 # Third-party notices
 
 The project is distributed under **AGPL-3.0-or-later**; see [LICENSE](LICENSE).
@@ -33,24 +31,9 @@ hashes. Both directories must be retained in corresponding source archives.
 GLib's original license and authorship remain applicable; linked native GNOME
 libraries have their own license terms described in GLib's `COPYRIGHT`.
 
-## HTTP Toolkit interception scripts
+## Original Scope engine and historical migration
 
-Files: `resources/frida/config-template.js` and `resources/frida/android/*.js`.
-
-- Authors: Tim Perry and HTTP Toolkit contributors; `android-disable-root-detection.js` also credits Riyad Mondal.
-- License: **AGPL-3.0-or-later**. The original notices remain in each source file; the full license is included in [LICENSE](LICENSE).
-- Upstream project: [frida-interception-and-unpinning](https://github.com/httptoolkit/frida-interception-and-unpinning).
-- Exact distribution source: [HTTP Toolkit Server v1.26.1, overrides/frida](https://github.com/httptoolkit/httptoolkit-server/tree/1abef0adc96d07bd64377e85e847025a55bac2ac/overrides/frida), commit `1abef0adc96d07bd64377e85e847025a55bac2ac`.
-- Local changes: `config.js` was renamed to `config-template.js`. The JavaScript content is otherwise unchanged from that distribution. Runtime certificate and proxy substitutions are written to the ignored `.runtime/` directory, rather than these source files.
-
-## HTTP Toolkit system CA installation template
-
-File: `resources/device/install-system-ca.template.sh`.
-
-- Authors: Tim Perry and HTTP Toolkit contributors.
-- License: **AGPL-3.0-or-later**; see [LICENSE](LICENSE).
-- Source: the `injectSystemCertificate` shell template in [HTTP Toolkit Server v1.26.1, adb-commands.ts](https://github.com/httptoolkit/httptoolkit-server/blob/1abef0adc96d07bd64377e85e847025a55bac2ac/src/interceptors/android/adb-commands.ts).
-- Modified on **2026-09-30**: extracted the embedded shell script into a standalone template, added provenance and license comments, and retained `${certificatePath}` and `${injectionScriptPath}` as substitutions supplied by the launcher. Any later changes should keep this notice up to date.
+`resources/frida/scope-engine.js` and the Python worker are original Scope integration code under the project AGPL-3.0-or-later license. The current runtime no longer includes the six HTTP Toolkit hook/config files or its extracted system-CA installation template. The project previously distributed them from the owner's `SculptTechProject/bypass-scripts-adb` repository, originating in HTTP Toolkit Server v1.26.1 (`1abef0adc96d07bd64377e85e847025a55bac2ac`). Their historical copyright, provenance and AGPL notices remain in public Git history. No history rewrite or project license change is part of this migration. This is not a legally certified clean-room claim.
 
 ## Frida Java bridge
 
@@ -83,21 +66,9 @@ The helper license texts were copied verbatim from the published `@frida/buffer@
 
 The GNU Library GPL text was obtained from [GNU](https://www.gnu.org/licenses/old-licenses/lgpl-2.0.txt). The wxWindows license and exception were obtained from [Frida Gum 17.9.1 COPYING](https://github.com/frida/frida-gum/blob/17.9.1/COPYING), preserving that license section verbatim.
 
-The extracted CA installation template has SHA-256 `201fa259470c9fa4e1b70dd3a020e7807f762bf838346ae2f8297f62586eb67b` after the modifications listed above.
+## Retained JavaScript integrity
 
-## Vendored JavaScript integrity
-
-These SHA-256 values identify the unmodified JavaScript copied from HTTP Toolkit Server v1.26.1. The renamed configuration template has the same bytes as upstream `config.js`.
-
-| File | SHA-256 |
-| --- | --- |
-| `resources/frida/android/android-certificate-unpinning-fallback.js` | `5190e449ae590e896f362a5751267199c2bef5417f69635715705def00462cd7` |
-| `resources/frida/android/android-certificate-unpinning.js` | `21cfb61cc492c557fc55e2b504a2e5e8f679b3515bff824acb12b14975381d9b` |
-| `resources/frida/android/android-disable-root-detection.js` | `25e91287ab38111a188eb5786fa47586a252c711f0e401b9dc6a7c727600fda8` |
-| `resources/frida/android/android-proxy-override.js` | `aed9941c65bd9d23789f9e54e11d37cd95ab83c5818f0c39a36e4581b05ad688` |
-| `resources/frida/android/android-system-certificate-injection.js` | `f751f783f30fc9b296bf7f05692f27faabb31a37dafd46c31cd756bab98f8641` |
-| `resources/frida/config-template.js` | `5afad65ed908006eb1af99aa6da3a73359036bdaa870fe32bf654695fa95d02a` |
-| `resources/frida/frida-java-bridge.js` | `88f0ca1fb34d2bd7b589f3d4c44aa0077780473530922887a53311ec55d9c214` |
+The unchanged retained bridge distributed by HTTP Toolkit Server v1.26.1 has SHA-256 `88f0ca1fb34d2bd7b589f3d4c44aa0077780473530922887a53311ec55d9c214`. The exact bridge distribution source and corresponding source are listed above; retention does not make it original Scope code.
 
 ## Optional packaged Frida runtime
 
@@ -126,8 +97,7 @@ The main Frida licenses incorporate GNU Library GPL 2 or later, with an explicit
 exception permitting binary object code distribution under the distributor's
 own terms. The [GNU Library GPL text](resources/device/licenses/LGPL-2.0.txt)
 is included alongside those exceptions. Scope does not modify Frida, CPython or
-PyInstaller. The JavaScript interception scripts remain subject to the separate
-AGPL notices above.
+PyInstaller. The original Scope engine remains under the project AGPL license.
 
 The older Python 3.9 developer environment optionally installs
 `typing_extensions` 4.16.0; its [license](resources/device/licenses/typing_extensions-4.16.0-LICENSE.txt)
@@ -139,3 +109,7 @@ are recorded in the [runtime notice index](resources/device/licenses/README.md).
 Keep that directory with the integration sources. Any future redistribution of
 the optional native runtime requires a complete artifact-specific dependency and
 corresponding-source review. The public packaging checks currently reject it.
+
+## Owned Android acceptance APK (test only)
+
+The original [lab fixture](examples/android-engine-fixture/README.md) downloads checksum-locked OkHttp 3.14.9 and Okio 1.17.2 only into an explicit external build directory. Its APK includes [dependency notices](examples/android-engine-fixture/THIRD_PARTY_NOTICES.txt), Apache-2.0 text and any embedded JAR notices, including the Public Suffix List MPL-2.0 notice. These JARs and APKs are excluded from source control and Scope production resources.

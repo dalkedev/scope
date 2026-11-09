@@ -1,0 +1,42 @@
+{
+  "schema": "scope-native-android-ui-acceptance-v1",
+  "date": "2026-11-09",
+  "platform": "macOS arm64 native packaged Tauri app, relocated bundle",
+  "android_api": 36,
+  "android_abi": "arm64-v8a",
+  "fixture": "original owned loopback APK",
+  "source_hashes": {
+    "crates/scope-device/src/lib.rs": "86ba7a164fb228177839d3d0718879723cbfa12e02909b46e93ba8804330ab6c",
+    "src/App.tsx": "d35d619e8a8a44f932adc411a55a11d761442074afea90a288c6119890c16961",
+    "resources/frida/scope-engine.js": "0f9b35debb5527a2213d18db82aa571b470ef438b2cc3c958a72f968d0f1b498",
+    "resources/device/frida_worker.py": "188986d010a77bdb97fa201e9efcab546257e7111a2a15334d02b21b57cf6c1f"
+  },
+  "initial_bug": "After successful cleanup, retained device identity kept Restore action visible and blocked restarting interception; reopening active Frida panel displayed the default system proxy mode.",
+  "fixed_candidate": {
+    "completed_native_start_stop_cycles": 2,
+    "same_application_process": true,
+    "clients": [
+      "OkHttp 3.14.9",
+      "platform HTTP"
+    ],
+    "new_captures": 2,
+    "all_new_statuses": 200,
+    "independent_upstream_observed_requests": true,
+    "response_json_visible_in_ui": true,
+    "active_mode_preserved_on_panel_reopen": true,
+    "active_configuration_locked": true,
+    "start_action_restored_after_stop": true,
+    "spawned_app_absent_after_each_stop": true,
+    "owned_reverse_mapping_absent_after_each_stop": true,
+    "recovery_file_absent_after_stop": true,
+    "final_state": "idle, capture can restart",
+    "archive_rows_including_initial_diagnostic": 3,
+    "archive_integrity": "ok"
+  },
+  "packaged_desktop_mcp_smoke": "PASS: local capture, authentication, redaction, same-directory restart and sharing isolation",
+  "not_run": [
+    "physical Android",
+    "other Android API/ABI combinations",
+    "desktop crash/restart with active Android worker"
+  ]
+}

@@ -1075,6 +1075,8 @@ mod tests {
             server_pid: Some(481),
             ca_hash: None,
             root_shell: true,
+            target_spawn_pending: false,
+            target_pid: None,
         }
     }
     fn elf(path: &Path, machine: u16, class: u8, endian: u8) {

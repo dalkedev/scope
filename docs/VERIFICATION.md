@@ -3,6 +3,40 @@
 For the separate opt-in archive measurement harness, result provenance and proposed
 bounded writer, see [Archive responsiveness](ARCHIVE_RESPONSIVENESS.md).
 
+## Actual Scope-owned Android acceptance — 2026-11-09
+
+**PASS:** the direct production-worker matrix observed 75/75 expected synthetic outcomes and 2/2 owned-process Stop/restoration gates on AOSP Android 16/API 36 ARM64, Frida 17.9.1 and OkHttp 3.14.9. All phases, original SSL exception classes, pin/hostname markers, initial two failed outcomes, the explicit Java Key-cast correction and exact engine/worker hashes are recorded in [Android acceptance](ANDROID_ACCEPTANCE.md) and its [allowlisted JSON](verification/android-engine-2026-11-09.json).
+
+Fresh baseline requests after both Stops restored original rejection behavior; matching successful termination receipts, worker exit 0, app-process absence and removal of owned reverse mappings were observed. A genuine OkHttp 4.9.3/Kotlin 1.4.10 APK confirmed baseline HTTP 200, then unsupported lazy-pinner rejection before readiness, worker exit 1 and successful owned-process cleanup. This establishes rejection, not Kotlin unpinning support.
+
+**PASS:** a rebuilt, relocated macOS arm64 app completed two Android start–Stop cycles in the same process. Actual platform/OkHttp HTTP requests reached an independent loopback server, appeared as HTTP 200 with the expected JSON, and remained in SQLite after stopping. Both spawned processes and owned reverse mappings disappeared; Start became available again, and an active Frida panel retained its actual mode. The [native UI receipt](verification/android-native-ui-2026-11-09.json) records the source hashes and scope. Full Rust workspace (100 tests), UI (57 tests), Java engine (17 tests), Python worker (23 tests), production build/package and relocated desktop/MCP smoke pass.
+
+Crash/restart recovery with an active Android worker, physical devices, other API/ABI combinations and native TLS remain unverified. No global Android-support claim follows from this measured target. Earlier NOT RUN entries below describe their dated evidence, not the current result.
+
+## Android worker diagnostic memory follow-up — 2026-11-07
+
+The follow-up to the initial reviewed engine head `4edeb09` bounds worker stdout/stderr framing before JSON parsing and retained device logs. See [exact limits and lifecycle behavior](ANDROID_ENGINE.md#bounded-host-diagnostics).
+
+A reproducible synthetic profile sends 205 diagnostics of 16,384 bytes and retains the latest 200. Stored UTF-8 payload fell from **3,276,800 to 819,200 bytes (75% less)**. The bounded candidate's actual retained String capacities also total 819,200 bytes. A malformed/custom 1 MiB JSON diagnostic is now a terminal stdout protocol failure, rather than a stored large entry. These are host diagnostic-storage measurements, not total RSS, normal-traffic latency, JNI or Android throughput claims. The fixed framing buffers add a known bounded allocation per pipe; no general low-traffic memory improvement is inferred.
+
+- **PASS:** observed RED→GREEN production regressions for oversized unterminated stdout, over-limit readiness/cleanup receipts, UTF-8 storage boundaries/capacity and invalid UTF-8 after a valid Stop. Previously that read error silently ended the monitor; it now preserves failure/recovery.
+- **PASS:** 45 device Rust tests and 94 headless core/device/MCP tests; 16 Java engine adapter tests; 23 Python device tests. Added guards revalidate the same peer/CA after expiry changes and verify exact CA input-size boundaries and reread changed contents.
+- **PASS:** ten independent production-path acceptance probes cover fragmented UTF-8, exact/over-limit LF/CRLF/EOF, no-newline overflow, sticky failure despite later receipts, I/O error after Stop, bounded stderr resumption/generation isolation and actual child-pipe draining/cleanup. These copied-source probes are separate from the committed regression suite and are not Android evidence.
+- **PASS:** independent scoped source review, formatting and whitespace checks. One unchanged fake-ADB fixture produced `Text file busy`; an isolated check and final full suite passed. No timeout or fixture behavior was weakened; the failure is preserved in the implementation receipt.
+
+A separate class-wrapper-cache candidate was rejected: the retained Frida bridge already caches successful wrappers, warmed class-factory misses were zero before/after, and bounded Node timing samples were mixed. Fewer Java.use dispatches do not establish a native or Android speedup; no such product change was made.
+
+The emulator prerequisite investigation progressed beyond the earlier crash site using ordinary private directory preparation, but ADB still aborts because its standard user-storage directory is read-only in this executor. No host security setting, standard home directory or system trust store was changed. At that point actual Android/Frida/TLS/pinning/hostname/Stop acceptance was **NOT RUN**. The later [9 November target-specific record](ANDROID_ACCEPTANCE.md) supersedes that direct-worker gate; it does not infer other platform or native desktop lifecycle results. Exact final hosted check receipts are recorded in the same PR after publication.
+
+## Scope-owned Android engine boundary — 2026-11-07
+
+The source candidate reviewed on 7 November replaces the imported hook backend with Scope-owned Java hooks and ends the owned app process on Frida Stop. Local executable Node/Python policy/adapter and Rust lifecycle tests use simulated Java/Frida or local child processes; they do not execute Android TLS. At that review, real Android/Frida/OkHttp TLS, hostname controls, API/ABI compatibility and Stop restoration acceptance were **NOT RUN**; the later [9 November measured-target record](ANDROID_ACCEPTANCE.md) is separate. Earlier emulator receipts below describe the previous backend and remain historical. See [current engine coverage](ANDROID_ENGINE.md).
+
+Local source gates passed on Linux: 84 locked headless Rust tests (core/device/MCP), 56 UI tests plus TypeScript/Vite build, 26 Node engine/license/resource tests, 22 device-worker Python tests, 17 integrity-script tests and 10 fixture-helper tests. The final worker preflight regression was observed failing on malformed DER, relabelled synthetic key DER, trailing DER and a non-CA leaf, then passing with complete single-CA parsing before Frida import. The affected Python and embedded-worker Rust suites were rerun after that fix; other checked component source remained unchanged.
+
+The owned fixture APK compiled, signed and passed apksigner v2/v3 verification with the real checksum-locked OkHttp 3.14.9/Okio 1.17.2 test dependencies. Host TLS controls accepted the valid fixture CA and rejected foreign, wrong-host and expired peers. These are host/build results, **not Android execution**. One bounded software-emulator prerequisite boot failed with SIGSEGV before Android startup; cause is unestablished. Independent component and whole-branch source reviews resolved all reported findings with covering regressions and scoped re-reviews. The first hosted Windows run exposed CRLF serialization differences after the bounded binary read. Explicit LF/CRLF/CR byte-input regressions reproduced that failure, and universal-newline normalization restored the prior text-read behavior without changing CA validation. Hosted exact-head check receipts belong in the draft PR and are separate from these local results.
+
+
 ## Endpoint manual editing candidate — 2026-11-06
 
 Scope 1.3.0 adds a `pause` Traffic rule with request, response or both-stage
