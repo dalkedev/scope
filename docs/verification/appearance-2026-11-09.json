@@ -1,0 +1,253 @@
+{
+  "schema": "scope-dark-visual-qa-v1",
+  "screens": 11,
+  "actual_rendered_browser": true,
+  "fixture_kind": "Only invented in-memory Tauri IPC data; real source App/components/styles",
+  "viewports": [
+    {
+      "width": 1100,
+      "height": 820
+    },
+    {
+      "width": 1440,
+      "height": 1000
+    }
+  ],
+  "dark_text_contrast_failures": [],
+  "document_horizontal_overflow": [],
+  "states": [
+    {
+      "name": "traffic-response",
+      "width": 1100,
+      "theme": "dark",
+      "text_pairs_measured": 77,
+      "min_enabled_text_ratio": 4.55,
+      "contrast_pass": true
+    },
+    {
+      "name": "replay-body",
+      "width": 1100,
+      "theme": "dark",
+      "text_pairs_measured": 88,
+      "min_enabled_text_ratio": 4.55,
+      "contrast_pass": true
+    },
+    {
+      "name": "rules-body",
+      "width": 1100,
+      "theme": "dark",
+      "text_pairs_measured": 56,
+      "min_enabled_text_ratio": 4.55,
+      "contrast_pass": true
+    },
+    {
+      "name": "android-profiles",
+      "width": 1100,
+      "theme": "dark",
+      "text_pairs_measured": 40,
+      "min_enabled_text_ratio": 4.55,
+      "contrast_pass": true
+    },
+    {
+      "name": "connection-command",
+      "width": 1100,
+      "theme": "dark",
+      "text_pairs_measured": 38,
+      "min_enabled_text_ratio": 4.55,
+      "contrast_pass": true
+    },
+    {
+      "name": "analysis-insights",
+      "width": 1100,
+      "theme": "dark",
+      "text_pairs_measured": 47,
+      "min_enabled_text_ratio": 4.55,
+      "contrast_pass": true
+    },
+    {
+      "name": "diagnostics-command-mappings",
+      "width": 1100,
+      "theme": "dark",
+      "text_pairs_measured": 44,
+      "min_enabled_text_ratio": 4.89,
+      "contrast_pass": true
+    },
+    {
+      "name": "archive-dialog",
+      "width": 1100,
+      "theme": "dark",
+      "text_pairs_measured": 54,
+      "min_enabled_text_ratio": 4.55,
+      "contrast_pass": true
+    },
+    {
+      "name": "archive-delete-confirm",
+      "width": 1100,
+      "theme": "dark",
+      "text_pairs_measured": 51,
+      "min_enabled_text_ratio": 4.66,
+      "contrast_pass": true
+    },
+    {
+      "name": "traffic-response",
+      "width": 1440,
+      "theme": "dark",
+      "text_pairs_measured": 80,
+      "min_enabled_text_ratio": 4.55,
+      "contrast_pass": true
+    },
+    {
+      "name": "archive-dialog",
+      "width": 1440,
+      "theme": "dark",
+      "text_pairs_measured": 90,
+      "min_enabled_text_ratio": 4.55,
+      "contrast_pass": true
+    }
+  ],
+  "prior_browser_functional_checks": [
+    {
+      "theme": "light",
+      "width": 1440,
+      "check": "rule-draft-survives-theme-toggle",
+      "pass": true
+    },
+    {
+      "theme": "light",
+      "width": 1440,
+      "check": "no-page-errors",
+      "pass": true,
+      "errors": []
+    },
+    {
+      "theme": "light",
+      "width": 1440,
+      "check": "explicit-theme-persists-reload",
+      "pass": true
+    },
+    {
+      "theme": "light",
+      "width": 1440,
+      "check": "system-mode-follows-media-changes",
+      "pass": true
+    },
+    {
+      "theme": "dark",
+      "width": 1440,
+      "check": "rule-draft-survives-theme-toggle",
+      "pass": true
+    },
+    {
+      "theme": "dark",
+      "width": 1440,
+      "check": "no-page-errors",
+      "pass": true,
+      "errors": []
+    },
+    {
+      "theme": "dark",
+      "width": 1440,
+      "check": "explicit-theme-persists-reload",
+      "pass": true
+    },
+    {
+      "theme": "dark",
+      "width": 1440,
+      "check": "system-mode-follows-media-changes",
+      "pass": true
+    },
+    {
+      "theme": "light",
+      "width": 1100,
+      "check": "rule-draft-survives-theme-toggle",
+      "pass": true
+    },
+    {
+      "theme": "light",
+      "width": 1100,
+      "check": "no-page-errors",
+      "pass": true,
+      "errors": []
+    },
+    {
+      "theme": "light",
+      "width": 1100,
+      "check": "explicit-theme-persists-reload",
+      "pass": true
+    },
+    {
+      "theme": "light",
+      "width": 1100,
+      "check": "system-mode-follows-media-changes",
+      "pass": true
+    },
+    {
+      "theme": "dark",
+      "width": 1100,
+      "check": "rule-draft-survives-theme-toggle",
+      "pass": true
+    },
+    {
+      "theme": "dark",
+      "width": 1100,
+      "check": "no-page-errors",
+      "pass": true,
+      "errors": []
+    },
+    {
+      "theme": "dark",
+      "width": 1100,
+      "check": "explicit-theme-persists-reload",
+      "pass": true
+    },
+    {
+      "theme": "dark",
+      "width": 1100,
+      "check": "system-mode-follows-media-changes",
+      "pass": true
+    }
+  ],
+  "incumbent_light_palette": "Measured separately: 152 distinct low-contrast pairs in the preserved light palette; no light redesign was included in this task.",
+  "limits": [
+    "Browser synthetic visual fixture; does not prove native IPC/backend/Android execution",
+    "Calculated contrast is based on computed flat colors and excludes disabled controls; manual screenshots also inspected"
+  ],
+  "source_content_sha256": {
+    "src/styles.css": "2bc6f3e47f2183f5c39e20727693093a4fc55e378a1453c3a97f840ac1aa6001",
+    "src/workbench.css": "8bebb242b2ed1a528004275f9cf82f1189d60356b23aaa2ca9fa78c20f0a28a1",
+    "src/theme.css": "703332f86040e1554231435b1a8425fcc2a627fe848702e598804815b56c6d3d",
+    "src/theme.ts": "a2a2a4bb07515bddc86cb16652df387e15c84cb30cf37492ad3dbae4c58f36da",
+    "src/App.tsx": "6248afe1f63595d4e11f3ecb84a379c5b46d4e03e79b28b3a051b5ca9f11c5e8",
+    "index.html": "8ef9c8e55236eb7f4bfbfaf28193b175cc1e8160f070da43a25b8074f439cd06"
+  },
+  "confirmed_utc": "2026-11-09T18:27:16.603398+00:00",
+  "browser": "Google Chrome 156.0.8078.80 headless",
+  "fixture_engine": "Playwright 1.65.0",
+  "date": "2026-11-09",
+  "source_sha256": {
+    "src/App.tsx": "6248afe1f63595d4e11f3ecb84a379c5b46d4e03e79b28b3a051b5ca9f11c5e8",
+    "src/main.tsx": "b70a5abd099d6a74bb0ec95d52dc08572954547a373ca60d272beea35fea33b5",
+    "src/styles.css": "2bc6f3e47f2183f5c39e20727693093a4fc55e378a1453c3a97f840ac1aa6001",
+    "src/workbench.css": "8bebb242b2ed1a528004275f9cf82f1189d60356b23aaa2ca9fa78c20f0a28a1",
+    "src/theme.css": "703332f86040e1554231435b1a8425fcc2a627fe848702e598804815b56c6d3d",
+    "src/theme.ts": "a2a2a4bb07515bddc86cb16652df387e15c84cb30cf37492ad3dbae4c58f36da",
+    "index.html": "8ef9c8e55236eb7f4bfbfaf28193b175cc1e8160f070da43a25b8074f439cd06"
+  },
+  "automation": null,
+  "native_macos_arm64": {
+    "app_version": "1.4.0",
+    "relocated_package": true,
+    "strict_adhoc_signature_verified": true,
+    "actual_webview_origin": "tauri://localhost",
+    "actual_gui_dark_and_light": true,
+    "real_local_http_exchanges": 6,
+    "theme_toggle_preserved_exchange_count": true,
+    "json_inspector_and_rules_editor_inspected": true,
+    "proxy_stopped_from_gui": true,
+    "desktop_mcp_packaged_smoke": "PASS",
+    "limits": [
+      "Native appearance persistence across process restart was not separately exercised; browser reload and preference unit gates are separate.",
+      "The GUI generated only built-in local fixture traffic in a disposable archive."
+    ]
+  }
+}

@@ -1,0 +1,155 @@
+/* Dark surfaces use semantic roles. The original light palette remains the
+   fallback in styles.css/workbench.css, so changing appearance never changes
+   request, response, breakpoint or device state. */
+:root {
+  color-scheme: light;
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --scope-text: #e3ebf5;
+  --scope-text-secondary: #bdcbdc;
+  --scope-text-muted: #a4b4c8;
+  --scope-code: #c3d7ef;
+  --scope-surface: #17212e;
+  --scope-recessed: #131c28;
+  --scope-inset: #1c2939;
+  --scope-raised: #253449;
+  --scope-hover: #22344d;
+  --scope-selected: #213c62;
+  --scope-border: #344359;
+  --scope-control-border: #627892;
+  --scope-accent: #356fea;
+  --scope-accent-text: #99beff;
+  --scope-danger: #ffaba6;
+  --scope-danger-surface: #3b242c;
+  --scope-danger-border: #965c66;
+  --scope-warning: #eccd80;
+  --scope-warning-surface: #352f21;
+  --scope-warning-border: #89764c;
+  --scope-success: #81d6b5;
+  --scope-success-surface: #19352f;
+  --scope-success-border: #477f71;
+  --scope-violet: #c1b5ff;
+  --scope-violet-surface: #302b46;
+  --scope-violet-border: #7d709f;
+  --scope-shadow: #00000040;
+  --scope-overlay: #050b16b8;
+  background: #101721;
+}
+
+:root[data-theme='dark'] .workspace {
+  background: #101721;
+}
+
+:root[data-theme='dark'] .sidebar {
+  --sidebar: #111a25;
+  border-right-color: var(--scope-border);
+}
+
+:root[data-theme='dark'] .session-item small {
+  color: var(--scope-text-muted);
+}
+
+:root[data-theme='dark'] .session-metadata-strip > span {
+  background: var(--scope-inset);
+}
+
+:root[data-theme='dark'] .method-put,
+:root[data-theme='dark'] .method-patch {
+  color: var(--scope-violet);
+}
+
+:root[data-theme='dark'] .button.primary:not(.is-capturing):hover:not(:disabled) {
+  background: #285dd0;
+  border-color: #285dd0;
+}
+
+:root[data-theme='dark'] .button.primary.is-capturing:hover:not(:disabled) {
+  background: var(--scope-danger-surface);
+  border-color: var(--scope-danger-border);
+}
+
+:root[data-theme='dark'] .connection-pill > span {
+  background: var(--scope-text-muted);
+}
+
+:root[data-theme='dark'] .connection-pill.is-live > span {
+  background: var(--scope-success);
+}
+
+:root[data-theme='dark'] .switch.on {
+  background: var(--scope-accent);
+  border-color: var(--scope-accent);
+}
+
+:root[data-theme='dark'] .traffic-table tbody tr.row-selected {
+  box-shadow: inset 3px 0 var(--scope-accent-text);
+}
+
+:root[data-theme='dark'] .body-code,
+:root[data-theme='dark'] .code-editor {
+  caret-color: var(--scope-text);
+}
+
+:root[data-theme='dark'] ::selection {
+  color: #f3f7ff;
+  background: #345683;
+}
+
+:root[data-theme='dark'] :focus-visible {
+  outline-color: var(--scope-accent-text);
+}
+
+.theme-control {
+  margin: 12px 2px 8px;
+}
+
+.theme-control > span {
+  display: block;
+  font-size: 10px;
+  font-weight: 600;
+  color: #aab9ca;
+  margin: 0 0 7px 8px;
+}
+
+.theme-options {
+  display: flex;
+  padding: 3px;
+  gap: 3px;
+  border: 1px solid #4f637c;
+  border-radius: 6px;
+  background: #111b27;
+}
+
+.theme-options button {
+  flex: 1;
+  min-width: 0;
+  min-height: 30px;
+  border-radius: 3px;
+  padding: 5px 6px;
+  font-size: 10px;
+  font-weight: 600;
+  color: #b7c6d8;
+}
+
+.theme-options button:hover {
+  background: #25354b;
+  color: #edf4ff;
+}
+
+.theme-options button[aria-pressed='true'] {
+  background: #365a87;
+  color: #ffffff;
+}
+
+.theme-options button:focus-visible {
+  outline-offset: 0;
+}
+
+@media (forced-colors: active) {
+  .theme-options button[aria-pressed='true'] {
+    outline: 2px solid Highlight;
+    outline-offset: -2px;
+  }
+}

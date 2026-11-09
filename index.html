@@ -4,6 +4,23 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#17212b" />
+    <script>
+      (() => {
+        let preference = 'system';
+        try {
+          const saved = localStorage.getItem('scope-theme');
+          if (saved === 'light' || saved === 'dark') preference = saved;
+        } catch {}
+        let systemDark = false;
+        try {
+          systemDark = matchMedia('(prefers-color-scheme: dark)').matches;
+        } catch {}
+        const theme = preference === 'system' ? (systemDark ? 'dark' : 'light') : preference;
+        document.documentElement.dataset.theme = theme;
+        document.documentElement.style.colorScheme = theme;
+        document.documentElement.style.backgroundColor = theme === 'dark' ? '#101721' : '#f6f8fa';
+      })();
+    </script>
     <meta
       name="description"
       content="Scope is an open source local HTTP debugger for Android. Capture, edit, save and analyze traffic with a Rust engine."

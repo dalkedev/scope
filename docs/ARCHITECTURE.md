@@ -27,8 +27,8 @@ flowchart LR
 | `crates/scope-mcp`      | stdio MCP protocol and twelve tool schemas; calls the desktop's local bridge                               |
 | `src-tauri`             | Desktop lifecycle, native dialogs, command dispatch, MCP access policy and local demo server               |
 | `src`                   | React inspector, sessions, device setup, analysis, comparison and MCP settings                             |
-| `resources/device`      | Frida worker, setup helpers and certificate injection template                                             |
-| `resources/frida`       | Attributed upstream JavaScript hook profiles and Java bridge                                               |
+| `resources/device`      | Frida worker, runtime setup helpers and retained third-party licenses                                             |
+| `resources/frida`       | Original Scope Java engine and attributed unchanged Frida Java bridge                                               |
 | `examples/android-demo` | Small Java/Android localhost test target                                                                   |
 | `scripts/smoke.mjs`     | Real-process MCP/capture/persistence/redaction smoke test                                                  |
 
@@ -60,6 +60,8 @@ is a local operational journal, not a tamper-proof compliance audit system.
 
 System proxy mode is device-wide. Frida mode spawns/attaches to the selected package through an external worker and uses supported Java hooks. The worker runs outside the Tauri process to isolate instrumentation failures. It uses a standalone executable when bundled, or a Python fallback. Host and device Frida versions must match.
 
+Frida Stop terminates the exact process spawned by the worker, because created proxy/TLS objects can survive unhooking. Typed capability readiness follows durable spawned-PID recording. A successful exit and matching cleanup receipt are required; worker failure or missing acknowledgment retains target recovery. After restart, only observed absence of a recorded PID in a readable root procfs view can reconcile it automatically; unknown spawn completion requires manual reconciliation. Saved target PIDs are never killed. System proxy mode does not install certificates; legacy owned-CA removal remains supported.
+
 A failed cleanup retains its recovery record and blocks a conflicting new start. Reconnect the same device and retry Stop. Cleanup removes Scope-owned resources and restores recorded settings; it does not stop unrelated Frida servers. [Android details](ANDROID.md)
 
 ## MCP boundary
@@ -90,6 +92,6 @@ The application settings expose the actual data directory. `--data-dir` or `SCOP
 
 ## Verification and design choices
 
-Tests exercise actual local HTTP and CA-signed HTTPS, rather than only proxy parsers. The release smoke launches the actual desktop engine and MCP executable, tests access/redaction, and reopens the same SQLite archive. Native UI and one rooted Android emulator were checked separately. [Recorded results and limits](VERIFICATION.md)
+Tests exercise actual local HTTP and CA-signed HTTPS, rather than only proxy parsers. The release smoke launches the actual desktop engine and MCP executable, tests access/redaction, and reopens the same SQLite archive. Native UI and one rooted Android emulator were checked separately for earlier versions. These historical receipts do not validate the current Scope-owned engine; its real-device acceptance remains NOT RUN. [Recorded results and limits](VERIFICATION.md)
 
 Scope 1.0.0 does not capture WebSocket frames, HTTP trailers, QUIC/HTTP3 or arbitrary TCP/UDP. Windows/Linux runtime parity and physical Android support need evidence from those environments. New networking-stack support should include a minimal reproducible client/server fixture and a cleanup test.

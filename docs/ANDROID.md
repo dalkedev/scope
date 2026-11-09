@@ -1,14 +1,14 @@
 # Android interception
 
-Scope's Android adapter uses its own localhost proxy and public CA. HTTP Toolkit does not need to be installed or running.
+Scope's Android adapter uses its own localhost proxy, public CA and experimental Java interception engine on Frida. The retained Java bridge has separate third-party provenance. [Engine coverage and evidence](ANDROID_ENGINE.md).
 
 ## What is implemented
 
 - Real ADB device enumeration, including offline/unauthorized states, model and a read-only root check.
 - Installed packages and running state. If an existing Frida server is available, app display labels come from Frida; otherwise the exact package ID is shown as the name.
-- **System proxy:** Android's global HTTP proxy, a matching ADB reverse mapping and, on rooted devices, temporary system CA injection. The selected application is restarted. This mode is **device-wide**, so traffic from other apps may appear.
-- **Frida:** a separate Python worker spawns and attaches to the selected application. Bundled JavaScript profiles configure the app proxy, inject Scope's CA, disable supported certificate pinning and optionally hide selected root indicators.
-- Stop restores the previous Android proxy and reverse mapping, detaches hooks, removes Scope's temporary CA and stops only a server process spawned by Scope.
+- **System proxy:** Android's global HTTP proxy and a matching ADB reverse mapping. The selected application is restarted. This mode is **device-wide**, so traffic from other apps may appear. HTTPS requires manually configured application trust; Scope does not install a system CA.
+- **Frida:** a separate Python worker spawns and attaches to the selected application. Original Scope Java hooks configure supported proxy seams, add trust for chains validated against Scope's CA, and conditionally bypass supported OkHttp3 pins for those chains. Hostname verification remains active.
+- **Frida Stop ends the exact instrumented app process**, unloads/detaches and restores recorded owned mappings/server state. System proxy Stop restores recorded proxy/reverse state. Older recovery records retain cleanup of their Scope-owned CA.
 - A saved recovery file allows Stop to retry after a disconnected device or interrupted session. Starting another session is refused until that cleanup succeeds.
 - The 1.0 **Diagnostics** workspace and `device_diagnostics` MCP tool provide read-only authorization/root/ABI/runtime/mapping/recovery preflight with actionable fixes. See [diagnostic boundaries and troubleshooting](DIAGNOSTICS.md).
 
@@ -104,34 +104,37 @@ The locally tested optional worker used CPython 3.12.13 from python-build-standa
 
 ### Hook profiles
 
-| ID            | Behavior                                                                      |
-| ------------- | ----------------------------------------------------------------------------- |
-| `proxy`       | Redirect supported Java HTTP proxy configuration to Scope.                    |
-| `certificate` | Inject Scope's public CA into supported Java trust managers.                  |
-| `unpinning`   | Disable supported Java certificate pinning checks, including a fallback hook. |
-| `root`        | Hide selected root indicators from the instrumented app.                      |
+| ID | Supported behavior |
+| --- | --- |
+| `proxy` | Subsequent Java URL HTTP(S) connections and available OkHttp3 builders use the Scope listener. |
+| `certificate` | Subsequent SSLContext initialization wraps original X509 trust managers; separate Java PKIX validation admits only valid chains to the supplied Scope CA. |
+| `unpinning` | Ordinary Java OkHttp3 CertificatePinner List and Certificate[] overloads may accept a Scope-validated chain after an original rejection; acceptance target 3.14.9. Requires `certificate`. Lazy Kotlin `check$okhttp` configurations fail before readiness. |
 
-An empty profile array selects `proxy`, `certificate`, `unpinning`. Explicit profiles select exactly those hooks. Root hiding is opt-in. The UI and worker report hook startup diagnostics; readiness means the Java callbacks ran, not that every possible network stack is covered.
+An omitted/empty API or CLI profile array selects `proxy`, `certificate`, `unpinning` for compatibility. Explicit selections remain exact. The UI disables Start for an empty selection; deselecting certificate also deselects/disables unpinning. `root`, `system-ca` and unknown profiles fail before device probes. No root hiding is provided.
+
+Readiness requires the exact engine, owned PID, requested profiles and installed capability receipts. An unavailable supported OkHttp pinner causes default-all startup to fail; choose explicit proxy/certificate profiles for the supported available seams. A callback alone cannot establish readiness or network coverage.
 
 ### Compatibility boundaries
+
+[Actual acceptance on 9 November 2026](ANDROID_ACCEPTANCE.md) passed 75/75 direct-worker outcomes and 2/2 Stop/restoration gates on AOSP Android 16/API 36 ARM64 with Frida 17.9.1 and OkHttp 3.14.9. A genuine OkHttp 4.9.3/Kotlin 1.4.10 APK was rejected for its unsupported lazy pinner before readiness and cleaned up successfully; this is rejection coverage, not Kotlin unpinning support. Other API/ABI combinations and physical devices remain unverified. Native desktop Stop/restart and recovery are separate gates.
 
 The source repository recorded Android 16 ART/GC crashes with Frida 17.9.1. This remains experimental; app/OS combinations must be tested. Hook crashes are contained in the external worker/app process and do not erase saved sessions.
 
 The bundled profiles target **Java** networking. Native TLS implementations, QUIC/HTTP3, child processes, anti-instrumentation and app-specific pinning may need additional work. Do not infer complete capture from an empty request list.
 
-The version pin is the imported repository's integration baseline, not a claim that it supports every current Android release. Python/server upgrades should be tested together with the Java bridge bundle.
+The Frida version pin is the existing integration baseline, not a claim that it supports every current Android release. Python/server upgrades should be tested together with the Java bridge bundle.
 
 ## Cleanup and recovery
 
-Scope writes `device-recovery.json` under its runtime directory before changing the device. It contains the selected serial/package, previous proxy/reverse state, temporary CA hash and owned forwarding/server identifiers.
+Scope writes `device-recovery.json` under its runtime directory before changing the device. It contains the selected serial/package, previous proxy/reverse state, legacy temporary CA hash, owned forwarding/server identifiers and pending spawned-process cleanup/PID. The spawned PID is persisted before readiness; an attempted spawn without a returned PID remains explicitly uncertain.
 
 Press Stop while the device is connected. If cleanup fails, the file remains and the log explains that reconnection is needed. Reconnect the **same device**, then press Stop again. Do not delete the recovery file as a substitute for restoring device settings.
 
 Stop verifies that current proxy and ADB mappings still match Scope's recorded values before restoring them. External changes are preserved and logged. Invalid saved fields are rejected before cleanup commands; failed inspection leaves recovery available for a retry.
 
-Rooted CA injection uses temporary mount overlays, following the upstream Android 14+ namespace handling. Stop removes Scope's certificate from those shared stores and the selected app. The remaining mount overlays disappear on reboot. The adapter does not unmount shared trust stores underneath other apps.
+New sessions never inject system CAs. For older recovery records only, Stop still removes the recorded Scope-owned certificate from shared stores and the selected app. Existing temporary mount overlays disappear on reboot; Scope does not unmount shared trust stores underneath other apps.
 
-Frida detaches hooks on Stop and leaves the selected app running. Restart that app to return its full runtime state to a clean baseline. A server binary downloaded/copied for Scope remains available for the next session; its process is stopped.
+Frida Stop terminates the owned app process because created client/TLS objects can outlive method unhooking. The worker has 12 seconds for bounded cleanup, followed by stdout drain. A successful worker exit alone cannot prove termination: Rust requires a matching successful acknowledgment. Failed/timed-out workers and missing acknowledgments retain recovery. After a restart, only observed absence of the recorded PID in a readable root procfs view allows automatic reconciliation. A present or inaccessible PID remains an error and is never killed from saved state. Unknown attempted-spawn completion requires manual process/device reconciliation; Scope cannot safely discover it by package name. Preserve the recovery file until that reconciliation and owned setting/mapping restoration are complete. A server binary downloaded/copied for Scope remains for the next session; only its owned process is stopped.
 
 ## Local Android demo
 
@@ -166,9 +169,11 @@ Set `SCOPE_DEVICE_RUNTIME` to an absolute directory to keep the smoke-test recov
 
 ## Source and licenses
 
-The JavaScript, bridge and original CA template are preserved with their original copyright notices. See [THIRD_PARTY_NOTICES.md](../THIRD_PARTY_NOTICES.md) and the included license files. Runtime config substitutes Scope's own CA and selected proxy port; an installed HTTP Toolkit service or certificate is never read.
+The runtime uses original `scope-engine.js` plus the unchanged Frida Java bridge. Six imported HTTP Toolkit hook/config files and the CA installation template were removed; source history and retained license/provenance notices remain. Runtime data is JSON-serialized. This migration changes neither the project AGPL license nor the existing Rust proxy/CA/upstream verification. See [THIRD_PARTY_NOTICES.md](../THIRD_PARTY_NOTICES.md).
 
 ## Recorded local smoke test
+
+**Historical backend receipt:** the following 2026-11-02 results used the removed hook backend and CA-injection path. They do not validate the current Scope-owned engine or its process-ending Stop contract. Current direct-worker TLS/pinning/hostname and Stop/restoration acceptance is recorded separately for one API/ABI in [the 9 November receipt](ANDROID_ACCEPTANCE.md).
 
 On 2026-11-02, the macOS build was checked against an existing rooted Android 16 arm64 emulator using only the included `com.scope.demo` application:
 

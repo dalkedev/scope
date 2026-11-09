@@ -1,0 +1,50 @@
+name: Synthetic archive measurement
+on:
+  workflow_dispatch:
+  workflow_call:
+    inputs:
+      runner_tests_only:
+        type: boolean
+        default: false
+permissions:
+  contents: read
+concurrency:
+  group: archive-measurement-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  archive-measurement:
+    name: ${{ inputs.runner_tests_only && 'Runner regressions' || 'Archive measurement' }} ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: ${{ inputs.runner_tests_only && 5 || 45 }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-22.04, windows-2022]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: '3.12'
+      - if: ${{ !inputs.runner_tests_only }}
+        uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec
+        with:
+          toolchain: 1.99.1
+      - name: Runner regressions
+        run: python -m unittest discover -s scripts/tests -p 'test_measure_archive*.py'
+      - name: Evidence detector regressions
+        if: ${{ !inputs.runner_tests_only }}
+        run: |
+          cargo test --locked -p scope-core --lib diagnostics::
+      - name: Measure fresh synthetic archives (debug and release separately)
+        if: ${{ !inputs.runner_tests_only }}
+        run: python scripts/measure-archive.py --profiles debug release --samples 3 --workers 0 2 --output-dir .runtime/archive-measurement
+      - name: Upload numeric synthetic diagnostics only
+        if: ${{ always() && !inputs.runner_tests_only }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: archive-measurement-${{ matrix.os }}-${{ github.sha }}
+          path: .runtime/archive-measurement/measurement.json
+          if-no-files-found: error
+          retention-days: 14

@@ -1,0 +1,1393 @@
+{
+  "schema": 1,
+  "source_commit": "19aec4fc8ca63551c05a0380c157c5593f048efa",
+  "run_id": 42293997874,
+  "run_url": "https://github.com/dalkedev/scope/actions/runs/42293997874",
+  "interpretation": "Descriptive synthetic samples only; profiles and operating systems remain separate; no disk/fsync or production improvement attribution.",
+  "statistics": "Per-batch phase totals, then min/median/max across three batches. Client/probe samples pooled only within one OS/profile/runtime/transport group; p95 is nearest rank. Probe samples must be in_window.",
+  "datasets": [
+    {
+      "os": "Linux",
+      "file": "archive-responsiveness-2026-11-06-linux.json",
+      "sha256": "9ff56b40927d9e37cfc5fdc1f73b6fd333cd06d04c7038d9c9c23dd71be2f956",
+      "bytes": 1348272,
+      "metadata": {
+        "source_commit": "19aec4fc8ca63551c05a0380c157c5593f048efa",
+        "source_dirty": false,
+        "compiler": "rustc 1.99.1 (58cf8f9c3 2026-10-13)",
+        "os": "Linux",
+        "architecture": "x86_64",
+        "python": "3.12.16",
+        "hosted": {
+          "GITHUB_RUN_ID": "42293997874",
+          "GITHUB_RUN_ATTEMPT": "1",
+          "ImageOS": "ubuntu22",
+          "ImageVersion": "20261101.347.1"
+        },
+        "resources": {
+          "logical_cpus": 4,
+          "affinity_cpus": 4,
+          "cgroup_memory_max_bytes": null,
+          "cgroup_cpu_quota_us": null,
+          "cgroup_cpu_period_us": null,
+          "peak_child_rss": "NOTRUN",
+          "filesystem_type": "NOTRUN",
+          "io_quota": "NOTRUN"
+        },
+        "build_jobs": 2,
+        "profiles": [
+          "debug",
+          "release"
+        ],
+        "workers": [
+          0,
+          2
+        ],
+        "samples_per_transport": 3,
+        "build_hard_timeout_s": 600,
+        "child_hard_timeout_s": 420,
+        "overall_budget_s": 1800,
+        "optimization": {
+          "debug": "repository profile: opt-level=0,debug=1",
+          "release": "repository profile: opt-level=3,lto=thin,strip=true"
+        },
+        "profile_limits": "environment flag/profile/wrapper overrides rejected; user Cargo configuration is not inspected; hosted jobs use clean checkout and toolchain",
+        "storage": "OS temporary directory; fresh file-backed SQLite archive per case; path omitted",
+        "unavailable_resource_fields": "null means NOTRUN or not exposed by this platform"
+      }
+    },
+    {
+      "os": "Windows",
+      "file": "archive-responsiveness-2026-11-06-windows.json",
+      "sha256": "b0bc098f1cc42dbcf1efbeb32fc5b67a581820e31b4b479d06d71a0009606dac",
+      "bytes": 1393416,
+      "metadata": {
+        "source_commit": "19aec4fc8ca63551c05a0380c157c5593f048efa",
+        "source_dirty": false,
+        "compiler": "rustc 1.99.1 (58cf8f9c3 2026-10-13)",
+        "os": "Windows",
+        "architecture": "AMD64",
+        "python": "3.12.10",
+        "hosted": {
+          "GITHUB_RUN_ID": "42293997874",
+          "GITHUB_RUN_ATTEMPT": "1",
+          "ImageOS": null,
+          "ImageVersion": null
+        },
+        "resources": {
+          "logical_cpus": 4,
+          "affinity_cpus": null,
+          "cgroup_memory_max_bytes": null,
+          "cgroup_cpu_quota_us": null,
+          "cgroup_cpu_period_us": null,
+          "peak_child_rss": "NOTRUN",
+          "filesystem_type": "NOTRUN",
+          "io_quota": "NOTRUN"
+        },
+        "build_jobs": 2,
+        "profiles": [
+          "debug",
+          "release"
+        ],
+        "workers": [
+          0,
+          2
+        ],
+        "samples_per_transport": 3,
+        "build_hard_timeout_s": 600,
+        "child_hard_timeout_s": 420,
+        "overall_budget_s": 1800,
+        "optimization": {
+          "debug": "repository profile: opt-level=0,debug=1",
+          "release": "repository profile: opt-level=3,lto=thin,strip=true"
+        },
+        "profile_limits": "environment flag/profile/wrapper overrides rejected; user Cargo configuration is not inspected; hosted jobs use clean checkout and toolchain",
+        "storage": "OS temporary directory; fresh file-backed SQLite archive per case; path omitted",
+        "unavailable_resource_fields": "null means NOTRUN or not exposed by this platform"
+      }
+    }
+  ],
+  "groups": [
+    {
+      "os": "Linux",
+      "profile": "debug",
+      "workers": 0,
+      "transport": "HTTP",
+      "batches": 3,
+      "clients_successful": 96,
+      "persisted_rows": 96,
+      "successful_save_statements": 576,
+      "batch_ms": {
+        "n": 3,
+        "min": 110.792794,
+        "median": 121.559741,
+        "p95_nearest_rank": 123.572927,
+        "max": 123.572927
+      },
+      "client_ms": {
+        "n": 96,
+        "min": 105.23017,
+        "median": 117.32692399999999,
+        "p95_nearest_rank": 121.120102,
+        "max": 121.666742
+      },
+      "shutdown_ms": {
+        "n": 3,
+        "min": 2.832072,
+        "median": 2.886293,
+        "p95_nearest_rank": 3.843518,
+        "max": 3.843518
+      },
+      "probe_window_coverage_batches": {
+        "timer": 3,
+        "network": 3
+      },
+      "probe_failures_in_window": {
+        "timer": 0,
+        "network": 0
+      },
+      "control_status": "PASS",
+      "serialization_ms_per_batch_sum": {
+        "n": 3,
+        "min": 8.421571,
+        "median": 8.479403,
+        "p95_nearest_rank": 8.644987,
+        "max": 8.644987
+      },
+      "mutex_wait_ms_per_batch_sum": {
+        "n": 3,
+        "min": 0.043264,
+        "median": 0.043435,
+        "p95_nearest_rank": 0.044238,
+        "max": 0.044238
+      },
+      "statement_ms_per_batch_sum": {
+        "n": 3,
+        "min": 81.114637,
+        "median": 89.760661,
+        "p95_nearest_rank": 93.530943,
+        "max": 93.530943
+      },
+      "timer_ms_in_window": {
+        "n": 5,
+        "min": 1.529736,
+        "median": 98.882993,
+        "p95_nearest_rank": 111.691147,
+        "max": 111.691147
+      },
+      "network_ms_in_window": {
+        "n": 4,
+        "min": 0.694874,
+        "median": 99.147729,
+        "p95_nearest_rank": 111.414047,
+        "max": 111.414047
+      }
+    },
+    {
+      "os": "Linux",
+      "profile": "debug",
+      "workers": 0,
+      "transport": "TLS",
+      "batches": 3,
+      "clients_successful": 96,
+      "persisted_rows": 96,
+      "successful_save_statements": 576,
+      "batch_ms": {
+        "n": 3,
+        "min": 196.858699,
+        "median": 198.527471,
+        "p95_nearest_rank": 225.387423,
+        "max": 225.387423
+      },
+      "client_ms": {
+        "n": 96,
+        "min": 169.962646,
+        "median": 174.901142,
+        "p95_nearest_rank": 201.408111,
+        "max": 219.684967
+      },
+      "shutdown_ms": {
+        "n": 3,
+        "min": 1.995591,
+        "median": 2.024206,
+        "p95_nearest_rank": 2.031088,
+        "max": 2.031088
+      },
+      "probe_window_coverage_batches": {
+        "timer": 3,
+        "network": 3
+      },
+      "probe_failures_in_window": {
+        "timer": 0,
+        "network": 0
+      },
+      "control_status": "PASS",
+      "serialization_ms_per_batch_sum": {
+        "n": 3,
+        "min": 8.383525,
+        "median": 8.631174,
+        "p95_nearest_rank": 9.42046,
+        "max": 9.42046
+      },
+      "mutex_wait_ms_per_batch_sum": {
+        "n": 3,
+        "min": 0.044391,
+        "median": 0.051785,
+        "p95_nearest_rank": 0.069739,
+        "max": 0.069739
+      },
+      "statement_ms_per_batch_sum": {
+        "n": 3,
+        "min": 73.846576,
+        "median": 82.257895,
+        "p95_nearest_rank": 87.670585,
+        "max": 87.670585
+      },
+      "timer_ms_in_window": {
+        "n": 17,
+        "min": 0.364857,
+        "median": 13.580343,
+        "p95_nearest_rank": 96.627096,
+        "max": 96.627096
+      },
+      "network_ms_in_window": {
+        "n": 21,
+        "min": 0.149288,
+        "median": 5.188337,
+        "p95_nearest_rank": 83.848272,
+        "max": 85.469181
+      }
+    },
+    {
+      "os": "Linux",
+      "profile": "debug",
+      "workers": 2,
+      "transport": "HTTP",
+      "batches": 3,
+      "clients_successful": 96,
+      "persisted_rows": 96,
+      "successful_save_statements": 576,
+      "batch_ms": {
+        "n": 3,
+        "min": 84.755199,
+        "median": 85.189753,
+        "p95_nearest_rank": 87.917039,
+        "max": 87.917039
+      },
+      "client_ms": {
+        "n": 96,
+        "min": 19.240859,
+        "median": 80.616655,
+        "p95_nearest_rank": 85.546887,
+        "max": 86.506863
+      },
+      "shutdown_ms": {
+        "n": 3,
+        "min": 2.913494,
+        "median": 3.027426,
+        "p95_nearest_rank": 3.153561,
+        "max": 3.153561
+      },
+      "probe_window_coverage_batches": {
+        "timer": 3,
+        "network": 3
+      },
+      "probe_failures_in_window": {
+        "timer": 0,
+        "network": 0
+      },
+      "control_status": "NOTRUN",
+      "serialization_ms_per_batch_sum": {
+        "n": 3,
+        "min": 8.982542,
+        "median": 9.34041,
+        "p95_nearest_rank": 12.278159,
+        "max": 12.278159
+      },
+      "mutex_wait_ms_per_batch_sum": {
+        "n": 3,
+        "min": 55.956536,
+        "median": 56.219313,
+        "p95_nearest_rank": 56.459314,
+        "max": 56.459314
+      },
+      "statement_ms_per_batch_sum": {
+        "n": 3,
+        "min": 74.147271,
+        "median": 75.201,
+        "p95_nearest_rank": 77.674911,
+        "max": 77.674911
+      },
+      "timer_ms_in_window": {
+        "n": 9,
+        "min": 4.531464,
+        "median": 18.069815,
+        "p95_nearest_rank": 45.536244,
+        "max": 45.536244
+      },
+      "network_ms_in_window": {
+        "n": 5,
+        "min": 11.360849,
+        "median": 37.973934,
+        "p95_nearest_rank": 74.450574,
+        "max": 74.450574
+      }
+    },
+    {
+      "os": "Linux",
+      "profile": "debug",
+      "workers": 2,
+      "transport": "TLS",
+      "batches": 3,
+      "clients_successful": 96,
+      "persisted_rows": 96,
+      "successful_save_statements": 576,
+      "batch_ms": {
+        "n": 3,
+        "min": 140.938174,
+        "median": 146.341668,
+        "p95_nearest_rank": 193.332402,
+        "max": 193.332402
+      },
+      "client_ms": {
+        "n": 96,
+        "min": 67.286252,
+        "median": 118.2298885,
+        "p95_nearest_rank": 180.675767,
+        "max": 189.889643
+      },
+      "shutdown_ms": {
+        "n": 3,
+        "min": 1.905003,
+        "median": 1.997976,
+        "p95_nearest_rank": 2.054562,
+        "max": 2.054562
+      },
+      "probe_window_coverage_batches": {
+        "timer": 3,
+        "network": 3
+      },
+      "probe_failures_in_window": {
+        "timer": 0,
+        "network": 0
+      },
+      "control_status": "NOTRUN",
+      "serialization_ms_per_batch_sum": {
+        "n": 3,
+        "min": 8.682562,
+        "median": 9.088535,
+        "p95_nearest_rank": 9.164317,
+        "max": 9.164317
+      },
+      "mutex_wait_ms_per_batch_sum": {
+        "n": 3,
+        "min": 41.684575,
+        "median": 50.855206,
+        "p95_nearest_rank": 53.685758,
+        "max": 53.685758
+      },
+      "statement_ms_per_batch_sum": {
+        "n": 3,
+        "min": 78.640901,
+        "median": 79.135129,
+        "p95_nearest_rank": 84.133878,
+        "max": 84.133878
+      },
+      "timer_ms_in_window": {
+        "n": 27,
+        "min": 0.206002,
+        "median": 2.217467,
+        "p95_nearest_rank": 46.559073,
+        "max": 62.195997
+      },
+      "network_ms_in_window": {
+        "n": 20,
+        "min": 0.133238,
+        "median": 4.819744,
+        "p95_nearest_rank": 45.052806,
+        "max": 53.214357
+      }
+    },
+    {
+      "os": "Linux",
+      "profile": "release",
+      "workers": 0,
+      "transport": "HTTP",
+      "batches": 3,
+      "clients_successful": 96,
+      "persisted_rows": 96,
+      "successful_save_statements": 576,
+      "batch_ms": {
+        "n": 3,
+        "min": 69.674566,
+        "median": 74.937562,
+        "p95_nearest_rank": 82.818771,
+        "max": 82.818771
+      },
+      "client_ms": {
+        "n": 96,
+        "min": 68.07882,
+        "median": 74.03806900000001,
+        "p95_nearest_rank": 82.27168,
+        "max": 82.600062
+      },
+      "shutdown_ms": {
+        "n": 3,
+        "min": 0.9813,
+        "median": 1.003602,
+        "p95_nearest_rank": 1.046612,
+        "max": 1.046612
+      },
+      "probe_window_coverage_batches": {
+        "timer": 3,
+        "network": 3
+      },
+      "probe_failures_in_window": {
+        "timer": 0,
+        "network": 0
+      },
+      "control_status": "PASS",
+      "serialization_ms_per_batch_sum": {
+        "n": 3,
+        "min": 0.604026,
+        "median": 0.604986,
+        "p95_nearest_rank": 0.608606,
+        "max": 0.608606
+      },
+      "mutex_wait_ms_per_batch_sum": {
+        "n": 3,
+        "min": 0.00669,
+        "median": 0.006723,
+        "p95_nearest_rank": 0.006854,
+        "max": 0.006854
+      },
+      "statement_ms_per_batch_sum": {
+        "n": 3,
+        "min": 63.392218,
+        "median": 68.321466,
+        "p95_nearest_rank": 74.53068,
+        "max": 74.53068
+      },
+      "timer_ms_in_window": {
+        "n": 3,
+        "min": 59.488499,
+        "median": 64.746135,
+        "p95_nearest_rank": 72.614098,
+        "max": 72.614098
+      },
+      "network_ms_in_window": {
+        "n": 3,
+        "min": 60.26126,
+        "median": 65.468301,
+        "p95_nearest_rank": 74.382537,
+        "max": 74.382537
+      }
+    },
+    {
+      "os": "Linux",
+      "profile": "release",
+      "workers": 0,
+      "transport": "TLS",
+      "batches": 3,
+      "clients_successful": 96,
+      "persisted_rows": 96,
+      "successful_save_statements": 576,
+      "batch_ms": {
+        "n": 3,
+        "min": 121.759167,
+        "median": 131.552609,
+        "p95_nearest_rank": 157.093754,
+        "max": 157.093754
+      },
+      "client_ms": {
+        "n": 96,
+        "min": 88.809505,
+        "median": 101.4006985,
+        "p95_nearest_rank": 125.676719,
+        "max": 155.445399
+      },
+      "shutdown_ms": {
+        "n": 3,
+        "min": 0.48282,
+        "median": 0.538785,
+        "p95_nearest_rank": 0.585312,
+        "max": 0.585312
+      },
+      "probe_window_coverage_batches": {
+        "timer": 3,
+        "network": 3
+      },
+      "probe_failures_in_window": {
+        "timer": 0,
+        "network": 0
+      },
+      "control_status": "PASS",
+      "serialization_ms_per_batch_sum": {
+        "n": 3,
+        "min": 0.610542,
+        "median": 0.615829,
+        "p95_nearest_rank": 0.697681,
+        "max": 0.697681
+      },
+      "mutex_wait_ms_per_batch_sum": {
+        "n": 3,
+        "min": 0.00679,
+        "median": 0.006929,
+        "p95_nearest_rank": 0.007207,
+        "max": 0.007207
+      },
+      "statement_ms_per_batch_sum": {
+        "n": 3,
+        "min": 65.845819,
+        "median": 68.538232,
+        "p95_nearest_rank": 80.268721,
+        "max": 80.268721
+      },
+      "timer_ms_in_window": {
+        "n": 15,
+        "min": 0.382275,
+        "median": 1.525392,
+        "p95_nearest_rank": 71.974384,
+        "max": 71.974384
+      },
+      "network_ms_in_window": {
+        "n": 14,
+        "min": 0.116938,
+        "median": 0.177361,
+        "p95_nearest_rank": 76.538187,
+        "max": 76.538187
+      }
+    },
+    {
+      "os": "Linux",
+      "profile": "release",
+      "workers": 2,
+      "transport": "HTTP",
+      "batches": 3,
+      "clients_successful": 96,
+      "persisted_rows": 96,
+      "successful_save_statements": 576,
+      "batch_ms": {
+        "n": 3,
+        "min": 71.517624,
+        "median": 72.542836,
+        "p95_nearest_rank": 75.018829,
+        "max": 75.018829
+      },
+      "client_ms": {
+        "n": 96,
+        "min": 61.516431,
+        "median": 69.872967,
+        "p95_nearest_rank": 73.881897,
+        "max": 74.183809
+      },
+      "shutdown_ms": {
+        "n": 3,
+        "min": 0.929778,
+        "median": 1.074254,
+        "p95_nearest_rank": 1.090284,
+        "max": 1.090284
+      },
+      "probe_window_coverage_batches": {
+        "timer": 3,
+        "network": 3
+      },
+      "probe_failures_in_window": {
+        "timer": 0,
+        "network": 0
+      },
+      "control_status": "NOTRUN",
+      "serialization_ms_per_batch_sum": {
+        "n": 3,
+        "min": 0.669795,
+        "median": 0.772565,
+        "p95_nearest_rank": 0.929942,
+        "max": 0.929942
+      },
+      "mutex_wait_ms_per_batch_sum": {
+        "n": 3,
+        "min": 64.904937,
+        "median": 65.222348,
+        "p95_nearest_rank": 69.292447,
+        "max": 69.292447
+      },
+      "statement_ms_per_batch_sum": {
+        "n": 3,
+        "min": 66.960981,
+        "median": 68.052861,
+        "p95_nearest_rank": 71.009116,
+        "max": 71.009116
+      },
+      "timer_ms_in_window": {
+        "n": 7,
+        "min": 0.766182,
+        "median": 28.506115,
+        "p95_nearest_rank": 48.923097,
+        "max": 48.923097
+      },
+      "network_ms_in_window": {
+        "n": 4,
+        "min": 1.708476,
+        "median": 54.445869,
+        "p95_nearest_rank": 63.886992,
+        "max": 63.886992
+      }
+    },
+    {
+      "os": "Linux",
+      "profile": "release",
+      "workers": 2,
+      "transport": "TLS",
+      "batches": 3,
+      "clients_successful": 96,
+      "persisted_rows": 96,
+      "successful_save_statements": 576,
+      "batch_ms": {
+        "n": 3,
+        "min": 116.030218,
+        "median": 118.561873,
+        "p95_nearest_rank": 153.055054,
+        "max": 153.055054
+      },
+      "client_ms": {
+        "n": 96,
+        "min": 51.024543,
+        "median": 98.220146,
+        "p95_nearest_rank": 143.522807,
+        "max": 152.078543
+      },
+      "shutdown_ms": {
+        "n": 3,
+        "min": 0.517455,
+        "median": 0.536781,
+        "p95_nearest_rank": 0.575784,
+        "max": 0.575784
+      },
+      "probe_window_coverage_batches": {
+        "timer": 3,
+        "network": 3
+      },
+      "probe_failures_in_window": {
+        "timer": 0,
+        "network": 0
+      },
+      "control_status": "NOTRUN",
+      "serialization_ms_per_batch_sum": {
+        "n": 3,
+        "min": 0.670006,
+        "median": 0.702549,
+        "p95_nearest_rank": 0.758495,
+        "max": 0.758495
+      },
+      "mutex_wait_ms_per_batch_sum": {
+        "n": 3,
+        "min": 55.226283,
+        "median": 60.799116,
+        "p95_nearest_rank": 63.465332,
+        "max": 63.465332
+      },
+      "statement_ms_per_batch_sum": {
+        "n": 3,
+        "min": 65.547336,
+        "median": 69.673661,
+        "p95_nearest_rank": 71.989646,
+        "max": 71.989646
+      },
+      "timer_ms_in_window": {
+        "n": 20,
+        "min": 0.984582,
+        "median": 1.280139,
+        "p95_nearest_rank": 38.329112,
+        "max": 54.571548
+      },
+      "network_ms_in_window": {
+        "n": 17,
+        "min": 0.11257,
+        "median": 0.174215,
+        "p95_nearest_rank": 35.749394,
+        "max": 35.749394
+      }
+    },
+    {
+      "os": "Windows",
+      "profile": "debug",
+      "workers": 0,
+      "transport": "HTTP",
+      "batches": 3,
+      "clients_successful": 96,
+      "persisted_rows": 96,
+      "successful_save_statements": 576,
+      "batch_ms": {
+        "n": 3,
+        "min": 651.9128,
+        "median": 673.2964,
+        "p95_nearest_rank": 753.713,
+        "max": 753.713
+      },
+      "client_ms": {
+        "n": 96,
+        "min": 644.4864,
+        "median": 668.4947999999999,
+        "p95_nearest_rank": 750.433,
+        "max": 751.9358
+      },
+      "shutdown_ms": {
+        "n": 3,
+        "min": 2.8253,
+        "median": 3.3211,
+        "p95_nearest_rank": 3.6556,
+        "max": 3.6556
+      },
+      "probe_window_coverage_batches": {
+        "timer": 3,
+        "network": 3
+      },
+      "probe_failures_in_window": {
+        "timer": 0,
+        "network": 0
+      },
+      "control_status": "PASS",
+      "serialization_ms_per_batch_sum": {
+        "n": 3,
+        "min": 8.8091,
+        "median": 8.9748,
+        "p95_nearest_rank": 9.0825,
+        "max": 9.0825
+      },
+      "mutex_wait_ms_per_batch_sum": {
+        "n": 3,
+        "min": 0.0429,
+        "median": 0.043,
+        "p95_nearest_rank": 0.0452,
+        "max": 0.0452
+      },
+      "statement_ms_per_batch_sum": {
+        "n": 3,
+        "min": 615.2838,
+        "median": 636.3013,
+        "p95_nearest_rank": 714.8458,
+        "max": 714.8458
+      },
+      "timer_ms_in_window": {
+        "n": 5,
+        "min": 0.8816,
+        "median": 639.1408,
+        "p95_nearest_rank": 731.9699,
+        "max": 731.9699
+      },
+      "network_ms_in_window": {
+        "n": 6,
+        "min": 6.0255,
+        "median": 325.69944999999996,
+        "p95_nearest_rank": 731.1173,
+        "max": 731.1173
+      }
+    },
+    {
+      "os": "Windows",
+      "profile": "debug",
+      "workers": 0,
+      "transport": "TLS",
+      "batches": 3,
+      "clients_successful": 96,
+      "persisted_rows": 96,
+      "successful_save_statements": 576,
+      "batch_ms": {
+        "n": 3,
+        "min": 725.3956,
+        "median": 749.6946,
+        "p95_nearest_rank": 851.9789,
+        "max": 851.9789
+      },
+      "client_ms": {
+        "n": 96,
+        "min": 714.8191,
+        "median": 744.229,
+        "p95_nearest_rank": 849.2818,
+        "max": 849.9925
+      },
+      "shutdown_ms": {
+        "n": 3,
+        "min": 1.763,
+        "median": 2.1086,
+        "p95_nearest_rank": 2.1242,
+        "max": 2.1242
+      },
+      "probe_window_coverage_batches": {
+        "timer": 3,
+        "network": 3
+      },
+      "probe_failures_in_window": {
+        "timer": 0,
+        "network": 0
+      },
+      "control_status": "PASS",
+      "serialization_ms_per_batch_sum": {
+        "n": 3,
+        "min": 8.7239,
+        "median": 8.752,
+        "p95_nearest_rank": 9.1119,
+        "max": 9.1119
+      },
+      "mutex_wait_ms_per_batch_sum": {
+        "n": 3,
+        "min": 0.0437,
+        "median": 0.0446,
+        "p95_nearest_rank": 0.0468,
+        "max": 0.0468
+      },
+      "statement_ms_per_batch_sum": {
+        "n": 3,
+        "min": 585.0123,
+        "median": 613.3022,
+        "p95_nearest_rank": 666.9243,
+        "max": 666.9243
+      },
+      "timer_ms_in_window": {
+        "n": 12,
+        "min": 5.9407,
+        "median": 47.9945,
+        "p95_nearest_rank": 670.2275,
+        "max": 670.2275
+      },
+      "network_ms_in_window": {
+        "n": 18,
+        "min": 1.541,
+        "median": 24.602800000000002,
+        "p95_nearest_rank": 666.4201,
+        "max": 666.4201
+      }
+    },
+    {
+      "os": "Windows",
+      "profile": "debug",
+      "workers": 2,
+      "transport": "HTTP",
+      "batches": 3,
+      "clients_successful": 96,
+      "persisted_rows": 96,
+      "successful_save_statements": 576,
+      "batch_ms": {
+        "n": 3,
+        "min": 643.0824,
+        "median": 648.2988,
+        "p95_nearest_rank": 721.8238,
+        "max": 721.8238
+      },
+      "client_ms": {
+        "n": 96,
+        "min": 102.0302,
+        "median": 638.2235499999999,
+        "p95_nearest_rank": 717.1158,
+        "max": 718.1045
+      },
+      "shutdown_ms": {
+        "n": 3,
+        "min": 3.8204,
+        "median": 3.8985,
+        "p95_nearest_rank": 4.0645,
+        "max": 4.0645
+      },
+      "probe_window_coverage_batches": {
+        "timer": 3,
+        "network": 3
+      },
+      "probe_failures_in_window": {
+        "timer": 0,
+        "network": 0
+      },
+      "control_status": "NOTRUN",
+      "serialization_ms_per_batch_sum": {
+        "n": 3,
+        "min": 9.6244,
+        "median": 9.809,
+        "p95_nearest_rank": 10.1978,
+        "max": 10.1978
+      },
+      "mutex_wait_ms_per_batch_sum": {
+        "n": 3,
+        "min": 605.0095,
+        "median": 606.9832,
+        "p95_nearest_rank": 681.134,
+        "max": 681.134
+      },
+      "statement_ms_per_batch_sum": {
+        "n": 3,
+        "min": 628.9808,
+        "median": 637.7595,
+        "p95_nearest_rank": 709.6442,
+        "max": 709.6442
+      },
+      "timer_ms_in_window": {
+        "n": 9,
+        "min": 0.7429,
+        "median": 221.8965,
+        "p95_nearest_rank": 407.3969,
+        "max": 407.3969
+      },
+      "network_ms_in_window": {
+        "n": 9,
+        "min": 0.6611,
+        "median": 125.6057,
+        "p95_nearest_rank": 629.2787,
+        "max": 629.2787
+      }
+    },
+    {
+      "os": "Windows",
+      "profile": "debug",
+      "workers": 2,
+      "transport": "TLS",
+      "batches": 3,
+      "clients_successful": 96,
+      "persisted_rows": 96,
+      "successful_save_statements": 576,
+      "batch_ms": {
+        "n": 3,
+        "min": 675.9434,
+        "median": 717.3475,
+        "p95_nearest_rank": 723.6809,
+        "max": 723.6809
+      },
+      "client_ms": {
+        "n": 96,
+        "min": 166.3041,
+        "median": 665.1438,
+        "p95_nearest_rank": 720.5038,
+        "max": 721.1014
+      },
+      "shutdown_ms": {
+        "n": 3,
+        "min": 1.7943,
+        "median": 1.8177,
+        "p95_nearest_rank": 2.0195,
+        "max": 2.0195
+      },
+      "probe_window_coverage_batches": {
+        "timer": 3,
+        "network": 3
+      },
+      "probe_failures_in_window": {
+        "timer": 0,
+        "network": 0
+      },
+      "control_status": "NOTRUN",
+      "serialization_ms_per_batch_sum": {
+        "n": 3,
+        "min": 9.399,
+        "median": 9.5609,
+        "p95_nearest_rank": 9.5933,
+        "max": 9.5933
+      },
+      "mutex_wait_ms_per_batch_sum": {
+        "n": 3,
+        "min": 546.3954,
+        "median": 562.4312,
+        "p95_nearest_rank": 622.7948,
+        "max": 622.7948
+      },
+      "statement_ms_per_batch_sum": {
+        "n": 3,
+        "min": 622.7544,
+        "median": 623.4216,
+        "p95_nearest_rank": 661.0559,
+        "max": 661.0559
+      },
+      "timer_ms_in_window": {
+        "n": 20,
+        "min": 1.2373,
+        "median": 27.8632,
+        "p95_nearest_rank": 318.9988,
+        "max": 580.9868
+      },
+      "network_ms_in_window": {
+        "n": 16,
+        "min": 0.3608,
+        "median": 33.92865,
+        "p95_nearest_rank": 533.9077,
+        "max": 533.9077
+      }
+    },
+    {
+      "os": "Windows",
+      "profile": "release",
+      "workers": 0,
+      "transport": "HTTP",
+      "batches": 3,
+      "clients_successful": 96,
+      "persisted_rows": 96,
+      "successful_save_statements": 576,
+      "batch_ms": {
+        "n": 3,
+        "min": 575.2867,
+        "median": 600.5452,
+        "p95_nearest_rank": 606.5384,
+        "max": 606.5384
+      },
+      "client_ms": {
+        "n": 96,
+        "min": 570.0131,
+        "median": 598.1217,
+        "p95_nearest_rank": 605.6282,
+        "max": 606.1108
+      },
+      "shutdown_ms": {
+        "n": 3,
+        "min": 1.2916,
+        "median": 1.3122,
+        "p95_nearest_rank": 1.4611,
+        "max": 1.4611
+      },
+      "probe_window_coverage_batches": {
+        "timer": 3,
+        "network": 3
+      },
+      "probe_failures_in_window": {
+        "timer": 0,
+        "network": 0
+      },
+      "control_status": "PASS",
+      "serialization_ms_per_batch_sum": {
+        "n": 3,
+        "min": 0.9813,
+        "median": 1.0038,
+        "p95_nearest_rank": 1.0079,
+        "max": 1.0079
+      },
+      "mutex_wait_ms_per_batch_sum": {
+        "n": 3,
+        "min": 0.0086,
+        "median": 0.0092,
+        "p95_nearest_rank": 0.01,
+        "max": 0.01
+      },
+      "statement_ms_per_batch_sum": {
+        "n": 3,
+        "min": 558.6315,
+        "median": 586.7305,
+        "p95_nearest_rank": 593.9117,
+        "max": 593.9117
+      },
+      "timer_ms_in_window": {
+        "n": 3,
+        "min": 564.5989,
+        "median": 590.0228,
+        "p95_nearest_rank": 596.1102,
+        "max": 596.1102
+      },
+      "network_ms_in_window": {
+        "n": 5,
+        "min": 0.3321,
+        "median": 558.0494,
+        "p95_nearest_rank": 595.6781,
+        "max": 595.6781
+      }
+    },
+    {
+      "os": "Windows",
+      "profile": "release",
+      "workers": 0,
+      "transport": "TLS",
+      "batches": 3,
+      "clients_successful": 96,
+      "persisted_rows": 96,
+      "successful_save_statements": 576,
+      "batch_ms": {
+        "n": 3,
+        "min": 573.6908,
+        "median": 599.6354,
+        "p95_nearest_rank": 691.0549,
+        "max": 691.0549
+      },
+      "client_ms": {
+        "n": 96,
+        "min": 569.3921,
+        "median": 597.44925,
+        "p95_nearest_rank": 689.6464,
+        "max": 690.2845
+      },
+      "shutdown_ms": {
+        "n": 3,
+        "min": 0.5508,
+        "median": 0.617,
+        "p95_nearest_rank": 0.6503,
+        "max": 0.6503
+      },
+      "probe_window_coverage_batches": {
+        "timer": 3,
+        "network": 3
+      },
+      "probe_failures_in_window": {
+        "timer": 0,
+        "network": 0
+      },
+      "control_status": "PASS",
+      "serialization_ms_per_batch_sum": {
+        "n": 3,
+        "min": 0.9881,
+        "median": 1.0105,
+        "p95_nearest_rank": 1.0512,
+        "max": 1.0512
+      },
+      "mutex_wait_ms_per_batch_sum": {
+        "n": 3,
+        "min": 0.0088,
+        "median": 0.0093,
+        "p95_nearest_rank": 0.0106,
+        "max": 0.0106
+      },
+      "statement_ms_per_batch_sum": {
+        "n": 3,
+        "min": 537.4427,
+        "median": 559.2557,
+        "p95_nearest_rank": 610.4063,
+        "max": 610.4063
+      },
+      "timer_ms_in_window": {
+        "n": 7,
+        "min": 14.311,
+        "median": 60.9295,
+        "p95_nearest_rank": 568.5536,
+        "max": 568.5536
+      },
+      "network_ms_in_window": {
+        "n": 14,
+        "min": 0.6149,
+        "median": 7.252599999999999,
+        "p95_nearest_rank": 542.8624,
+        "max": 542.8624
+      }
+    },
+    {
+      "os": "Windows",
+      "profile": "release",
+      "workers": 2,
+      "transport": "HTTP",
+      "batches": 3,
+      "clients_successful": 96,
+      "persisted_rows": 96,
+      "successful_save_statements": 576,
+      "batch_ms": {
+        "n": 3,
+        "min": 561.4876,
+        "median": 563.1882,
+        "p95_nearest_rank": 573.3718,
+        "max": 573.3718
+      },
+      "client_ms": {
+        "n": 96,
+        "min": 266.0326,
+        "median": 546.29375,
+        "p95_nearest_rank": 569.1615,
+        "max": 570.9911
+      },
+      "shutdown_ms": {
+        "n": 3,
+        "min": 1.7843,
+        "median": 1.9612,
+        "p95_nearest_rank": 2.4155,
+        "max": 2.4155
+      },
+      "probe_window_coverage_batches": {
+        "timer": 3,
+        "network": 3
+      },
+      "probe_failures_in_window": {
+        "timer": 0,
+        "network": 0
+      },
+      "control_status": "NOTRUN",
+      "serialization_ms_per_batch_sum": {
+        "n": 3,
+        "min": 1.0454,
+        "median": 1.0962,
+        "p95_nearest_rank": 1.1191,
+        "max": 1.1191
+      },
+      "mutex_wait_ms_per_batch_sum": {
+        "n": 3,
+        "min": 539.2967,
+        "median": 545.8899,
+        "p95_nearest_rank": 560.3715,
+        "max": 560.3715
+      },
+      "statement_ms_per_batch_sum": {
+        "n": 3,
+        "min": 554.6892,
+        "median": 555.8004,
+        "p95_nearest_rank": 565.084,
+        "max": 565.084
+      },
+      "timer_ms_in_window": {
+        "n": 12,
+        "min": 0.3094,
+        "median": 36.7845,
+        "p95_nearest_rank": 559.001,
+        "max": 559.001
+      },
+      "network_ms_in_window": {
+        "n": 8,
+        "min": 0.3528,
+        "median": 251.16500000000002,
+        "p95_nearest_rank": 562.3282,
+        "max": 562.3282
+      }
+    },
+    {
+      "os": "Windows",
+      "profile": "release",
+      "workers": 2,
+      "transport": "TLS",
+      "batches": 3,
+      "clients_successful": 96,
+      "persisted_rows": 96,
+      "successful_save_statements": 576,
+      "batch_ms": {
+        "n": 3,
+        "min": 570.0818,
+        "median": 578.1471,
+        "p95_nearest_rank": 624.4967,
+        "max": 624.4967
+      },
+      "client_ms": {
+        "n": 96,
+        "min": 117.2919,
+        "median": 551.9529,
+        "p95_nearest_rank": 583.9921,
+        "max": 623.1036
+      },
+      "shutdown_ms": {
+        "n": 3,
+        "min": 0.584,
+        "median": 0.7019,
+        "p95_nearest_rank": 0.8294,
+        "max": 0.8294
+      },
+      "probe_window_coverage_batches": {
+        "timer": 3,
+        "network": 3
+      },
+      "probe_failures_in_window": {
+        "timer": 0,
+        "network": 0
+      },
+      "control_status": "NOTRUN",
+      "serialization_ms_per_batch_sum": {
+        "n": 3,
+        "min": 1.0232,
+        "median": 1.1055,
+        "p95_nearest_rank": 1.1573,
+        "max": 1.1573
+      },
+      "mutex_wait_ms_per_batch_sum": {
+        "n": 3,
+        "min": 525.5774,
+        "median": 534.2107,
+        "p95_nearest_rank": 546.393,
+        "max": 546.393
+      },
+      "statement_ms_per_batch_sum": {
+        "n": 3,
+        "min": 557.233,
+        "median": 561.5135,
+        "p95_nearest_rank": 563.7193,
+        "max": 563.7193
+      },
+      "timer_ms_in_window": {
+        "n": 18,
+        "min": 1.7836,
+        "median": 29.99975,
+        "p95_nearest_rank": 409.6201,
+        "max": 409.6201
+      },
+      "network_ms_in_window": {
+        "n": 15,
+        "min": 0.3766,
+        "median": 38.0534,
+        "p95_nearest_rank": 416.5828,
+        "max": 416.5828
+      }
+    }
+  ],
+  "measurement_source_sha256": {
+    "Cargo.toml": "d373e3935d21d32ddd24db278ef082ea1ca50089ec4d6af362205dcfc43efd90",
+    "Cargo.lock": "fdb31f03309bc8e0a6bc80dfe026b4f50a0334b5c7bbc0e9008cc225cb69126f",
+    "rust-toolchain.toml": "f715f440167e20fd8ea9afa0498c3d1ab80174cfcb8cbc895f106a34d907a1e1",
+    "crates/scope-core/Cargo.toml": "5dc6d44211e1efbc49c3351a578d62c2b6b06cb1e0be7306f83f8cd57bfa373b",
+    "crates/scope-core/src/lib.rs": "70ed83d5acd0234d0adbc0c6150a01889f09b0cb1d9c8a3bc1ea59d4508eca30",
+    "crates/scope-core/src/diagnostics.rs": "c7588e52bb3f68418ff65f50986aa588f639e153c6ff9b6d6eca58f86e14603e",
+    "crates/scope-core/src/diagnostics/probes.rs": "4511cbbb7302b3d1ec28e2201edc24641a10fdb0377ce8532da9c13fd7e35273",
+    "crates/scope-core/src/diagnostics/workload.rs": "6296247345771d584e84905269571417b330a7e9a73784997aeb42f1a9f4137e",
+    "scripts/measure-archive.py": "c68aaf8870d2fcdb190b05e00d7a7aeb9dad5222368acb05b13c289e9b43a780",
+    ".github/workflows/archive-measurement.yml": "231def056063c7d20d17891330fc236561b764b72255109787ff4f724fdc410f",
+    ".github/workflows/har-compare-action.yml": "d62193de8b7fdfe54f3207fb1a7a198786e5f04e72aaae004da48857ff37b186"
+  },
+  "artifact_receipts": [
+    {
+      "os": "Linux",
+      "artifact_id": 13540878355,
+      "artifact_zip_sha256": "557ea7f7e2b2b395ec270f58f4b2611078a5bb3b75e67977a55e929b49ff2bcd"
+    },
+    {
+      "os": "Windows",
+      "artifact_id": 13541022569,
+      "artifact_zip_sha256": "e0b2f3c65fd43e4fe179258d6a6dfd76a863c8c80059467f061e8ee3239c125d"
+    }
+  ],
+  "postmeasurement_test_only_change": {
+    "file": "crates/scope-core/src/diagnostics/probes.rs",
+    "test": "draining_real_probes_does_not_turn_an_empty_window_into_coverage",
+    "reason": "Remove an incidental nonempty network-sample assumption for a zero-width window; retain all window, NOTRUN and false-control assertions.",
+    "failure_commit": "1f6c8dd9462fe7633a9c3039b6a906ced96cbdcb",
+    "failure_job_url": "https://github.com/dalkedev/scope/actions/runs/42295532143/job/128159662751",
+    "unchanged_runtime_prefix": {
+      "definition": "UTF-8 file bytes before the first literal newline + #[test] + newline; separator and subsequent test functions excluded.",
+      "sha256": "bacc8d874415564f56f69356c100d3ede403486d56b9e9bec80086b9a0874802"
+    }
+  },
+  "postmeasurement_runner_cancellation_change": {
+    "reason": "Shared bounded tree termination/reaping on deadline and parent cancellation/exception; cancellation is reraised. Normal outputs, measurement commands and Rust workload/timing implementation are unchanged.",
+    "files_sha256": {
+      "scripts/measure-archive.py": "45485241ffb7f0c0384be7e5f88ca141d3c8235127cdd8491af1c04942bffd8e",
+      ".github/workflows/archive-measurement.yml": "de71fa332d5c4e59dbfc5b8891bda62db5431f90a5bdd2137aa03fc1b0125e26",
+      ".github/workflows/har-compare-action.yml": "22022e14f726f7d51cf127b1935b9283cff8f016c49d2caf6abbc781ab384343"
+    },
+    "validation": "Disposable child/descendant regressions; actual POSIX SIGINT and injected Python cancellation/exception. Windows console Ctrl+C is not claimed."
+  },
+  "postmeasurement_scope_1_3_0_merge": {
+    "main_commit": "cb5fccd3253a1a3b3ccb0ff4efe83350a94518e8",
+    "feature_parent_commit": "697f1d5a728d420cdeb998b0e343782a4248010b",
+    "reason": "Merge the released Scope 1.3.0 endpoint manual-editing changes and metadata into the investigation. The stored Linux/Windows measurements remain historical Scope 1.2.2 observations at source_commit, not current-head performance evidence.",
+    "files_sha256": {
+      "Cargo.toml": "c30a5483b092e447cfcea76521e255df7c75bfead217acedb8bb4f06c73f37c8",
+      "Cargo.lock": "e55e1042d7a8feefeeae8393a99d365676e9494fdb2b1dd20c11d046b187e55b",
+      "crates/scope-core/src/lib.rs": "32e88c2c9c1ce620ddab20e04ab04a5002b1836bbd0db31c91d59394b64c004d",
+      "crates/scope-core/src/proxy.rs": "9573454a53c3317a89cee8c08edef0ce24ab220dc43eab77fea2600c65b4c100",
+      "crates/scope-core/src/rules.rs": "a7c8b679881f815e93e64a191d834de875349109ee88216aabea3fa31f051e67"
+    },
+    "measurement_implementation": "Diagnostic workload and the verified probe runtime prefix are unchanged; engine/proxy/rule changes are covered by current-head compatibility checks separately.",
+    "compatibility_receipt": {
+      "source_commit": "5c8f4aed5f96361289629ca4ed2bc03a66a90287",
+      "source_dirty": false,
+      "file": "archive-compatibility-2026-11-09-macos.json",
+      "sha256": "bc95cb0ca66810fc49304cbfde8bd78e5e7990bf306e4f7a7ba9a83fad96f334",
+      "status": "PASS",
+      "os": "Darwin",
+      "architecture": "arm64",
+      "python": "3.14.6",
+      "profiles": [
+        "debug"
+      ],
+      "samples_per_transport": 1,
+      "workers": [
+        0,
+        2
+      ],
+      "workload_batches": 4,
+      "successful_clients": 128,
+      "persisted_rows": 128,
+      "successful_save_statements": 768,
+      "interpretation": "Current merged-source compatibility smoke only; not a new comparative performance baseline."
+    }
+  }
+}

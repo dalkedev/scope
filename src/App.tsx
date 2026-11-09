@@ -46,6 +46,7 @@ import {
 import { api, isNative } from './api';
 import { isExchangeError } from './exchange-utils';
 import { queryTraffic } from './traffic-search';
+import { useThemePreference } from './theme';
 import { ExchangeStatus as Status } from './components/ExchangeStatus';
 import { TrafficSearchHelp } from './components/TrafficSearchHelp';
 import { RulesWorkspace } from './components/RulesWorkspace';
@@ -543,6 +544,8 @@ export default function App() {
       setNotice('MCP access updated.');
     });
 
+  const [themePreference, chooseThemePreference] = useThemePreference();
+
   return (
     <div className="app-shell">
       <aside className="sidebar">
@@ -700,6 +703,22 @@ export default function App() {
           <div className="local-note">
             <HardDrive size={13} />
             <span>Local by design. Open source.</span>
+          </div>
+          <div className="theme-control" role="group" aria-label="Color theme">
+            <span className="theme-label">Appearance</span>
+            <div className="theme-options">
+              {(['light', 'dark', 'system'] as const).map((choice) => (
+                <button
+                  key={choice}
+                  type="button"
+                  className={themePreference === choice ? 'selected' : ''}
+                  aria-pressed={themePreference === choice}
+                  onClick={() => chooseThemePreference(choice)}
+                >
+                  {choice === 'light' ? 'Light' : choice === 'dark' ? 'Dark' : 'System'}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       </aside>
@@ -1605,12 +1624,15 @@ function DevicePanel({
     [apps, setApps] = useState<AndroidApp[]>([]),
     [serial, setSerial] = useState(device.serial || ''),
     [app, setApp] = useState(device.package || ''),
-    [mode, setMode] = useState('proxy'),
+    [draftMode, setMode] = useState(device.running && device.mode === 'frida' ? 'frida' : 'proxy'),
     [filter, setFilter] = useState(''),
     [profiles, setProfiles] = useState<string[]>(['certificate', 'unpinning', 'proxy']),
     [scan, setScan] = useState(false),
     [appsLoading, setAppsLoading] = useState(false),
     [scanError, setScanError] = useState('');
+  const mode = device.running ? device.mode : draftMode;
+  const selectedSerial = device.running ? device.serial || '' : serial;
+  const selectedApp = device.running ? device.package || '' : app;
   const refresh = useCallback(async () => {
     if (!native) return;
     setScan(true);
@@ -1627,12 +1649,12 @@ function DevicePanel({
   }, []);
   useEffect(() => {
     setApps([]);
-    if (!serial) return;
+    if (!selectedSerial) return;
     let alive = true;
     setAppsLoading(true);
     setScanError('');
     api
-      .list_apps(serial)
+      .list_apps(selectedSerial)
       .then((value) => {
         if (alive) setApps(value);
       })
@@ -1645,12 +1667,14 @@ function DevicePanel({
     return () => {
       alive = false;
     };
-  }, [serial]);
+  }, [selectedSerial]);
   const available = apps.filter((a) =>
     `${a.name} ${a.package}`.toLowerCase().includes(filter.toLowerCase()),
   );
   const start = () =>
     void perform('device', async () => {
+      if (device.running || !mode) return;
+      if (mode === 'frida' && profiles.length === 0) return;
       let p = proxy;
       if (!p.running) {
         const port = validatedListenerPort(portDraft);
@@ -1684,7 +1708,8 @@ function DevicePanel({
             <select
               className="text-input"
               aria-label="Android device"
-              value={serial}
+              value={selectedSerial}
+              disabled={device.running}
               onChange={(e) => {
                 setSerial(e.target.value);
                 setApp('');
@@ -1725,7 +1750,8 @@ function DevicePanel({
               {available.length ? (
                 available.map((a) => (
                   <button
-                    className={app === a.package ? 'chosen' : ''}
+                    className={selectedApp === a.package ? 'chosen' : ''}
+                    disabled={device.running}
                     onClick={() => setApp(a.package)}
                     key={a.package}
                   >
@@ -1736,7 +1762,7 @@ function DevicePanel({
                       <strong>{a.name || a.package.split('.').pop()}</strong>
                       <small>{a.package}</small>
                     </span>
-                    {app === a.package ? (
+                    {selectedApp === a.package ? (
                       <Check size={16} />
                     ) : a.running ? (
                       <span className="tiny-dot green" />
@@ -1764,13 +1790,21 @@ function DevicePanel({
           <div className="settings-section">
             <h2>Interception mode</h2>
             <div className="mode-options">
-              <button className={mode === 'proxy' ? 'chosen' : ''} onClick={() => setMode('proxy')}>
+              <button
+                className={mode === 'proxy' ? 'chosen' : ''}
+                disabled={device.running}
+                onClick={() => setMode('proxy')}
+              >
                 <Globe2 size={19} />
                 <strong>System proxy</strong>
                 <small>ADB + local HTTP proxy</small>
                 {mode === 'proxy' && <Check size={14} />}
               </button>
-              <button className={mode === 'frida' ? 'chosen' : ''} onClick={() => setMode('frida')}>
+              <button
+                className={mode === 'frida' ? 'chosen' : ''}
+                disabled={device.running}
+                onClick={() => setMode('frida')}
+              >
                 <Zap size={19} />
                 <strong>Frida</strong>
                 <small>Optional instrumentation</small>
@@ -1783,14 +1817,18 @@ function DevicePanel({
                 <p>
                   <strong>Device-wide capture.</strong> Android's proxy setting applies to the whole
                   device. Other apps may appear in this session; choosing an app launches it and
-                  does not isolate its traffic.
+                  does not isolate its traffic. HTTPS requires manually configured app trust; no
+                  system CA is installed.
                 </p>
               </div>
-            ) : (
+            ) : mode === 'frida' ? (
               <div className="profile-options">
                 <p className="help-copy">
-                  Select the bundled hook profiles for an app you own or are authorized to test.
-                  Frida support depends on Android and application versions.
+                  {!device.running &&
+                    'Select the bundled hook profiles for an app you own or are authorized to test. '}
+                  Experimental Java URL/OkHttp hooks only. Stop ends the instrumented app process.
+                  Unpinning requires the Scope CA profile; native TLS and custom pinners are
+                  unsupported.
                 </p>
                 <div className="info-callout">
                   <Info size={15} />
@@ -1799,26 +1837,41 @@ function DevicePanel({
                     command before changing your device. Runtime installation is a separate action.
                   </p>
                 </div>
-                {[
-                  ['certificate', 'Trust the Scope CA'],
-                  ['proxy', 'Proxy configuration'],
-                  ['unpinning', 'TLS certificate unpinning'],
-                  ['root', 'Root detection hooks'],
-                ].map(([id, label]) => (
-                  <label key={id}>
-                    <input
-                      type="checkbox"
-                      checked={profiles.includes(id)}
-                      onChange={(e) =>
-                        setProfiles((p) =>
-                          e.target.checked ? [...p, id] : p.filter((x) => x !== id),
-                        )
-                      }
-                    />
-                    {label}
-                  </label>
-                ))}
+                {device.running ? (
+                  <p className="help-copy">
+                    Stop interception to choose hook profiles for a new session.
+                  </p>
+                ) : (
+                  [
+                    ['certificate', 'Trust the Scope CA'],
+                    ['proxy', 'Proxy configuration'],
+                    ['unpinning', 'TLS certificate unpinning'],
+                  ].map(([id, label]) => (
+                    <label key={id}>
+                      <input
+                        type="checkbox"
+                        checked={profiles.includes(id)}
+                        disabled={id === 'unpinning' && !profiles.includes('certificate')}
+                        onChange={(e) =>
+                          setProfiles((p) =>
+                            e.target.checked
+                              ? [...p, id]
+                              : p.filter(
+                                  (x) => x !== id && !(id === 'certificate' && x === 'unpinning'),
+                                ),
+                          )
+                        }
+                      />
+                      {label}
+                    </label>
+                  ))
+                )}
               </div>
+            ) : (
+              <p className="help-copy">
+                The active interception mode is unavailable. Check the session log before restoring
+                device settings.
+              </p>
             )}
           </div>
           <div className="panel-actions">
@@ -1839,7 +1892,13 @@ function DevicePanel({
             ) : (
               <button
                 className="button primary"
-                disabled={!native || !serial || !app || !!busy}
+                disabled={
+                  !native ||
+                  !serial ||
+                  !app ||
+                  !!busy ||
+                  (mode === 'frida' && profiles.length === 0)
+                }
                 onClick={start}
               >
                 {busy === 'device' ? (

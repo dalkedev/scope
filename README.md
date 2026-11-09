@@ -24,7 +24,7 @@ Scope routes traffic through a Rust engine, gives you control over requests and 
 
 **Local capture, saved sessions and export need no account or subscription.** Built-in analysis runs locally. You choose which sessions an external agent can access.
 
-> **This README describes Scope 1.3.0.** Endpoint rules can pause a real request, response or both for manual editing before forwarding. Other endpoints keep moving; the paused-message editor is available from every workspace. Automatic rules, the offline HAR Action and the verified GLib backport remain included. Check [Releases](https://github.com/dalkedev/scope/releases) for published builds and platform notes. [Pause an endpoint →](docs/RULES.md#pause-an-endpoint-and-edit-the-real-message) · [Verification record →](docs/VERIFICATION.md)
+> **Scope 1.4.0:** Light/Dark/System appearance, an experimental Scope-owned Android Java engine with owned-process Stop cleanup, and reproducible archive diagnostics. Endpoint pause/edit rules, the offline HAR Action and verified GLib backport remain included. Check [Releases](https://github.com/dalkedev/scope/releases) for published builds and platform notes. [Android acceptance →](docs/ANDROID_ACCEPTANCE.md) · [Archive measurements →](docs/ARCHIVE_RESPONSIVENESS.md) · [Verification record →](docs/VERIFICATION.md)
 
 <a href="docs/SCREENSHOTS.md"><img src="docs/images/traffic-inspector.jpg" alt="Real captured traffic: a products request returns a local HTTP 503 mock, with its rule and response JSON visible." width="100%"></a>
 
@@ -36,6 +36,10 @@ Scope routes traffic through a Rust engine, gives you control over requests and 
 | [Capture walkthrough →](docs/GETTING_STARTED.md)                                                      | [Rule semantics →](docs/RULES.md)                                                                         | [Architecture & storage →](docs/ARCHITECTURE.md)                                                                |
 
 A rule-generated response is marked as a **mock**. Rewrites retain the **original** message. A replay creates a **new exchange**. The inspector keeps those distinctions visible so your evidence stays useful.
+
+Prefer a darker workspace? Choose **Light**, **Dark** or **System** under
+**Appearance** in the sidebar. Scope remembers your local choice; System follows
+your desktop's current appearance, including changes while Scope is running.
 
 <table>
   <tr>
@@ -97,7 +101,7 @@ npm run desktop
 
 Discover connected devices and installed apps over ADB. Use the **device-wide proxy** path, or instrument a **selected process with Frida** and explicit hook profiles. Read-only diagnostics explain authorization, root, ABI, runtime/server versions, mappings and recovery state before you connect.
 
-Frida is an optional, separate runtime installation. Pinning and native networking support depend on the target; selecting an app in proxy mode does not prove per-app attribution. **Stop** restores recorded Scope-owned state and preserves external changes. [Setup, supported paths and recovery →](docs/ANDROID.md) · [Diagnostic reference →](docs/DIAGNOSTICS.md)
+Frida is an optional, separate runtime installation. The experimental Scope-owned engine supports selected Java URL, SSLContext and OkHttp3 seams; native TLS and custom pinners are unsupported. **Stop ends the instrumented app process** before restoring recorded Scope-owned state and preserving external changes. System proxy mode requires manually configured app trust for HTTPS and never installs a system CA. [Setup, supported paths and recovery →](docs/ANDROID.md) · [Diagnostic reference →](docs/DIAGNOSTICS.md)
 
 ## An agent can read the evidence. You set the scope.
 
@@ -120,14 +124,14 @@ The same engine powers the native inspector and MCP. Real HTTP/TLS fixtures test
 
 <a href="docs/SCREENSHOTS.md"><img src="docs/images/analysis.jpg" alt="Analysis of the real local capture: observed endpoints, intentional errors, timings and synthetic response provenance." width="100%"></a>
 
-| Today                   | Boundary                                                                                                                                                                  |
-| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| macOS arm64             | Local UI/package evidence is recorded by version; 1.3.0 interactive validation is recorded separately by scenario. Ad-hoc signed; not Apple-notarized.                                          |
-| Windows x64 / Linux x64 | CI builds, packages and headless MCP/capture smoke pass. Interactive UI and device validation remain open. Intel macOS is unverified.                                     |
-| Android / Frida         | Earlier smoke covered one rooted Android 16 arm64 emulator. The 1.0 diagnostics changes use fixtures; arbitrary apps and TLS stacks are unverified.                       |
-| Capture                 | Bodies are buffered up to **16 MiB each**. Streaming, WebSocket frames, trailers and HTTP3 are not implemented.                                                           |
-| Archives & analysis     | Records currently load into memory. Large-session streaming/export is planned. Observed schemas are not complete API contracts.                                           |
-| Dependencies            | A Linux glib unsoundness advisory remains tracked in [#11](https://github.com/dalkedev/scope/issues/11). See the full [dependency record](docs/DEPENDENCIES.md). |
+| Today                   | Boundary                                                                                                                                                                                                                                                       |
+| ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| macOS arm64             | Reviewed runtime sources passed native UI/package and repeated Android Start/Stop checks; final 1.4.0 artifacts require separate verification. Ad-hoc signed; not Apple-notarized.                                                                             |
+| Windows x64 / Linux x64 | CI builds, packages and headless MCP/capture smoke pass. Interactive UI and device validation remain open. Intel macOS is unverified.                                                                                                                          |
+| Android / Frida         | AOSP API 36 ARM64, Frida 17.9.1 and OkHttp 3.14.9 passed 75 direct-worker outcomes plus two native UI Start/Stop capture cycles. Other targets and active-worker crash/restart recovery remain unverified; native TLS and lazy Kotlin pinners are unsupported. |
+| Capture                 | Bodies are buffered up to **16 MiB each**. Streaming, WebSocket frames, trailers and HTTP3 are not implemented.                                                                                                                                                |
+| Archives & analysis     | Records currently load into memory. Large-session streaming/export is planned. Observed schemas are not complete API contracts.                                                                                                                                |
+| Dependencies            | A Linux glib unsoundness advisory remains tracked in [#11](https://github.com/dalkedev/scope/issues/11). See the full [dependency record](docs/DEPENDENCIES.md).                                                                                               |
 
 Breakpoints expire after 60 seconds. [What was actually tested →](docs/VERIFICATION.md)
 
@@ -145,6 +149,6 @@ Every change goes through maintainer review and required platform checks. [Owner
   <a href="docs/BRAND.md"><img src="assets/brand/scope-logo.svg" alt="Scope logo and brand assets" width="48" height="48"></a>
 </p>
 
-An independent project by **[dalkedev](https://github.com/dalkedev)**. Scope includes attributed HTTP Toolkit interception scripts and Frida integration; their original licenses and notices remain intact. HTTP Toolkit does not need to be installed.
+An independent project by **[dalkedev](https://github.com/dalkedev)**. Scope uses its original Java interception engine with Frida and an unchanged, attributed Frida Java bridge. The bridge distribution provenance and third-party licenses remain in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
 **AGPL-3.0-or-later** · [License](LICENSE) · [Third-party notices](THIRD_PARTY_NOTICES.md) · [Brand assets](docs/BRAND.md)

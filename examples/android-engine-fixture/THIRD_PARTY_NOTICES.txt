@@ -1,0 +1,19 @@
+Test-only dependencies included in the owned Scope Engine Fixture APK:
+
+OkHttp 3.14.9
+Copyright Square, Inc. and contributors.
+https://github.com/square/okhttp/tree/parent-3.14.9
+Licensed under the Apache License, Version 2.0.
+
+Okio 1.17.2
+Copyright Square, Inc. and contributors.
+https://github.com/square/okio/tree/okio-parent-1.17.2
+Licensed under the Apache License, Version 2.0.
+
+The complete Apache License, Version 2.0 is included as Apache-2.0.txt.
+Any notices embedded in the exact locked JARs are also retained in this APK.
+Scope fixture source is covered by the repository AGPL-3.0-or-later license.
+
+Exact upstream license sources:
+https://github.com/square/okhttp/blob/parent-3.14.9/LICENSE.txt
+https://github.com/square/okio/blob/okio-parent-1.17.2/LICENSE.txt

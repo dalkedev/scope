@@ -12,16 +12,24 @@ on:
       - 'tools/har-compare/**'
       - '.github/workflows/har-compare-action.yml'
   workflow_dispatch:
+    inputs:
+      diagnostic:
+        description: Explicit diagnostic (archive measurement never runs the HAR consumer)
+        type: choice
+        options: [har-composite, archive-measurement, runner-regressions]
+        required: false
+        default: har-composite
 
 permissions:
   contents: read
 
 concurrency:
-  group: har-composite-${{ github.ref }}
+  group: har-composite-${{ github.event_name }}-${{ inputs.diagnostic }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
   consumer:
+    if: github.event_name != 'workflow_dispatch' || (inputs.diagnostic != 'archive-measurement' && inputs.diagnostic != 'runner-regressions')
     name: Composite ${{ matrix.scenario }}
     runs-on: ubuntu-22.04
     timeout-minutes: 5
@@ -70,3 +78,18 @@ jobs:
           DEFAULT_OUTPUTS: ${{ toJSON(steps.default.outputs) }}
           DEFERRED_OUTPUTS: ${{ toJSON(steps.deferred.outputs) }}
         run: node '.scope action/tools/har-compare/action-test/integration-check.mjs' verify
+
+  archive-measurement:
+    # Registered manual entry point while the dedicated workflow is branch-only.
+    if: github.event_name == 'workflow_dispatch' && inputs.diagnostic == 'archive-measurement'
+    uses: ./.github/workflows/archive-measurement.yml
+    permissions:
+      contents: read
+
+  runner-regressions:
+    if: github.event_name == 'workflow_dispatch' && inputs.diagnostic == 'runner-regressions'
+    uses: ./.github/workflows/archive-measurement.yml
+    with:
+      runner_tests_only: true
+    permissions:
+      contents: read

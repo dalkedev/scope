@@ -1,6 +1,6 @@
 {
   "generator": "cargo-about 0.9.3; scripts/licenses.mjs",
-  "lockfileSha256": "e55e1042d7a8feefeeae8393a99d365676e9494fdb2b1dd20c11d046b187e55b",
+  "lockfileSha256": "39b26dcafdd2c6b64dd14f8af747b6efb2b39496c47712f9260756a37ef9f9b1",
   "scope": "Workspace runtime dependencies across supported target configurations; build and dev dependencies excluded. Includes target-specific crates not necessarily present in each artifact.",
   "licenses": [
     {
@@ -18,7 +18,7 @@
         },
         {
           "name": "scope-core",
-          "version": "1.3.0",
+          "version": "1.4.0",
           "license": "AGPL-3.0-or-later",
           "repository": null,
           "authors": [],
@@ -26,7 +26,7 @@
         },
         {
           "name": "scope-device",
-          "version": "1.3.0",
+          "version": "1.4.0",
           "license": "AGPL-3.0-or-later",
           "repository": null,
           "authors": [],
@@ -34,7 +34,7 @@
         },
         {
           "name": "scope-mcp",
-          "version": "1.3.0",
+          "version": "1.4.0",
           "license": "AGPL-3.0-or-later",
           "repository": null,
           "authors": [],
@@ -42,7 +42,7 @@
         },
         {
           "name": "scope-desktop",
-          "version": "1.3.0",
+          "version": "1.4.0",
           "license": "AGPL-3.0-or-later",
           "repository": null,
           "authors": [],
@@ -148,19 +148,19 @@
         },
         {
           "name": "rmcp-macros",
-          "version": "3.8.0",
+          "version": "3.9.0",
           "license": "Apache-2.0",
           "repository": "https://github.com/modelcontextprotocol/rust-sdk/",
           "authors": [],
-          "source": "https://crates.io/crates/rmcp-macros/3.8.0"
+          "source": "https://crates.io/crates/rmcp-macros/3.9.0"
         },
         {
           "name": "rmcp",
-          "version": "3.8.0",
+          "version": "3.9.0",
           "license": "Apache-2.0",
           "repository": "https://github.com/modelcontextprotocol/rust-sdk/",
           "authors": [],
-          "source": "https://crates.io/crates/rmcp/3.8.0"
+          "source": "https://crates.io/crates/rmcp/3.9.0"
         },
         {
           "name": "ryu",
@@ -2017,6 +2017,16 @@
             "RustCrypto Developers"
           ],
           "source": "https://crates.io/crates/sha1/0.11.0"
+        },
+        {
+          "name": "sha2",
+          "version": "0.11.1",
+          "license": "MIT OR Apache-2.0",
+          "repository": "https://github.com/RustCrypto/hashes",
+          "authors": [
+            "RustCrypto Developers"
+          ],
+          "source": "https://crates.io/crates/sha2/0.11.1"
         }
       ]
     },

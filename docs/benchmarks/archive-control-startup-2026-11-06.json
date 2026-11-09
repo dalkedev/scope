@@ -1,0 +1,212 @@
+{
+  "schema": 1,
+  "status": "FAIL",
+  "scope": "Harness positive-control startup validation; workload evidence itself passed.",
+  "source_commit": "04c78d202d61689a4c9444da120c375e0818a4fb",
+  "run_id": 42292352293,
+  "run_url": "https://github.com/dalkedev/scope/actions/runs/42292352293",
+  "artifact_id": 13541075422,
+  "artifact_zip_sha256": "3bc89c7248ba9be274dc88d4ecf2e980020ec24cbd7d3c1419d11fe9e204d9fa",
+  "original_measurement_json_sha256": "2133fefd463631079a4d4d26fdc15d19441b20d27856984d9327b56fe8db3e39",
+  "runner_image": {
+    "GITHUB_RUN_ID": "42292352293",
+    "GITHUB_RUN_ATTEMPT": "1",
+    "ImageOS": null,
+    "ImageVersion": null
+  },
+  "os": "Windows",
+  "compiler": "rustc 1.99.1 (58cf8f9c3 2026-10-13)",
+  "workload_batches_passed": 24,
+  "clients_per_batch": 32,
+  "persisted_rows_per_batch": 32,
+  "save_statements_per_batch": 192,
+  "failed_controls": [
+    {
+      "profile": "debug",
+      "workers": 0,
+      "detector_threshold_ms": 100,
+      "injected_block_ms": 300,
+      "probes": {
+        "cap_per_probe": 8192,
+        "network": {
+          "dropped": 0,
+          "elapsed_ns": [
+            290787000,
+            299000,
+            289700
+          ],
+          "failures": 0,
+          "in_window_samples": 1,
+          "missed_periods": 0,
+          "samples": [
+            {
+              "elapsed_ns": 290787000,
+              "end_ns": 326666900,
+              "in_window": true,
+              "scheduled_ns": null,
+              "start_ns": 35879900,
+              "success": true
+            },
+            {
+              "elapsed_ns": 299000,
+              "end_ns": 337163400,
+              "in_window": false,
+              "scheduled_ns": null,
+              "start_ns": 336864400,
+              "success": true
+            },
+            {
+              "elapsed_ns": 289700,
+              "end_ns": 347593300,
+              "in_window": false,
+              "scheduled_ns": null,
+              "start_ns": 347303600,
+              "success": true
+            }
+          ],
+          "window_status": "PASS"
+        },
+        "period_ms": 10,
+        "timer": {
+          "dropped": 0,
+          "elapsed_ns": [
+            314690000,
+            5209700,
+            4115100,
+            6188900
+          ],
+          "failures": 0,
+          "in_window_samples": 0,
+          "missed_periods": 31,
+          "samples": [
+            {
+              "elapsed_ns": 314690000,
+              "end_ns": 326360300,
+              "in_window": false,
+              "scheduled_ns": 11670300,
+              "start_ns": 326360300,
+              "success": true
+            },
+            {
+              "elapsed_ns": 5209700,
+              "end_ns": 336880000,
+              "in_window": false,
+              "scheduled_ns": 331670300,
+              "start_ns": 336880000,
+              "success": true
+            },
+            {
+              "elapsed_ns": 4115100,
+              "end_ns": 345785400,
+              "in_window": false,
+              "scheduled_ns": 341670300,
+              "start_ns": 345785400,
+              "success": true
+            },
+            {
+              "elapsed_ns": 6188900,
+              "end_ns": 357859200,
+              "in_window": false,
+              "scheduled_ns": 351670300,
+              "start_ns": 357859200,
+              "success": true
+            }
+          ],
+          "window_status": "NOTRUN"
+        },
+        "window_end_ns": 326279300,
+        "window_start_ns": 25712800
+      },
+      "status": "FAIL"
+    },
+    {
+      "profile": "release",
+      "workers": 0,
+      "detector_threshold_ms": 100,
+      "injected_block_ms": 300,
+      "probes": {
+        "cap_per_probe": 8192,
+        "network": {
+          "dropped": 0,
+          "elapsed_ns": [
+            290187900,
+            246800,
+            213600
+          ],
+          "failures": 0,
+          "in_window_samples": 1,
+          "missed_periods": 0,
+          "samples": [
+            {
+              "elapsed_ns": 290187900,
+              "end_ns": 324416600,
+              "in_window": true,
+              "scheduled_ns": null,
+              "start_ns": 34228700,
+              "success": true
+            },
+            {
+              "elapsed_ns": 246800,
+              "end_ns": 334847500,
+              "in_window": false,
+              "scheduled_ns": null,
+              "start_ns": 334600700,
+              "success": true
+            },
+            {
+              "elapsed_ns": 213600,
+              "end_ns": 345193100,
+              "in_window": false,
+              "scheduled_ns": null,
+              "start_ns": 344979500,
+              "success": true
+            }
+          ],
+          "window_status": "PASS"
+        },
+        "period_ms": 10,
+        "timer": {
+          "dropped": 0,
+          "elapsed_ns": [
+            313290900,
+            3698200,
+            4100300
+          ],
+          "failures": 0,
+          "in_window_samples": 0,
+          "missed_periods": 31,
+          "samples": [
+            {
+              "elapsed_ns": 313290900,
+              "end_ns": 324197900,
+              "in_window": false,
+              "scheduled_ns": 10907000,
+              "start_ns": 324197900,
+              "success": true
+            },
+            {
+              "elapsed_ns": 3698200,
+              "end_ns": 334605200,
+              "in_window": false,
+              "scheduled_ns": 330907000,
+              "start_ns": 334605200,
+              "success": true
+            },
+            {
+              "elapsed_ns": 4100300,
+              "end_ns": 345007300,
+              "in_window": false,
+              "scheduled_ns": 340907000,
+              "start_ns": 345007300,
+              "success": true
+            }
+          ],
+          "window_status": "NOTRUN"
+        },
+        "window_end_ns": 324186000,
+        "window_start_ns": 23800900
+      },
+      "status": "FAIL"
+    }
+  ]
+}
