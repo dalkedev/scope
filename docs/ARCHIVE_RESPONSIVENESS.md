@@ -270,6 +270,37 @@ are unchanged. Existing Linux/Windows results remain pinned to measured source
 `19aec4f`; no long benchmark rerun is implied by this cleanup-only correction.
 Exact follow-up test receipts and head are recorded in the PR description.
 
+## Scope 1.3.0 compatibility revalidation — 2026-11-09
+
+Merged source `5c8f4aed5f96361289629ca4ed2bc03a66a90287` includes released
+Scope 1.3.0 from `cb5fccd3253a1a3b3ccb0ff4efe83350a94518e8`. Its clean-tree
+macOS arm64 compatibility check used Rust 1.99.1 and local Python 3.14.6;
+the hosted workflow still selects Python 3.12.
+
+- **PASS:** 78 locked headless Rust tests (53 core, 23 device, two MCP), including
+  real HTTP/TLS rule ordering, endpoint pause edits, persistence/reopen, concurrency
+  and the diagnostic detector regressions. The ignored timing workload ran separately.
+  Linux-specific GLib tests have zero cases on macOS and are not claimed here.
+- **PASS:** all 33 Python script tests, including the 16 measurement-runner tests
+  with real POSIX SIGINT and child/descendant cleanup; formatting and exact GLib
+  archive/patch/locked-selection verification.
+- **PASS:** one bounded debug sample for each HTTP/TLS × current-thread/two-worker
+  combination: four batches, 128 successful clients and reopened rows, 768 successful
+  save samples, no overflow or deadline violation, and certain child cleanup.
+  All corruption/loss controls detected their changes and restored baselines passed.
+  Both probes covered every workload window; the current-thread blocking control
+  passed and its two-worker counterpart remains intentionally NOT RUN.
+- **PASS:** both historical raw report hashes and schemas, source hashes, the
+  unchanged probe-runtime prefix, and all numeric fields in 16 derived groups
+  were independently rechecked after the merge.
+
+The [numeric compatibility report](benchmarks/archive-compatibility-2026-11-09-macos.json)
+records that exact source and clean-tree state. It is a small compatibility smoke
+check, not a new cross-platform or release-profile performance comparison. The
+48 hosted Linux/Windows batches remain pinned to their original Scope 1.2.2 source.
+GUI, physical Android, current-head hosted measurements and release-profile timing
+were **NOT RUN** by this revalidation. No production writer change is included.
+
 ## Bounded writer proposal (not implemented)
 
 Start with scheduling isolation, not transaction batching: one blocking writer

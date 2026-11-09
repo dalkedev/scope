@@ -1365,6 +1365,29 @@
       "crates/scope-core/src/proxy.rs": "9573454a53c3317a89cee8c08edef0ce24ab220dc43eab77fea2600c65b4c100",
       "crates/scope-core/src/rules.rs": "a7c8b679881f815e93e64a191d834de875349109ee88216aabea3fa31f051e67"
     },
-    "measurement_implementation": "Diagnostic workload and the verified probe runtime prefix are unchanged; engine/proxy/rule changes are covered by current-head compatibility checks separately."
+    "measurement_implementation": "Diagnostic workload and the verified probe runtime prefix are unchanged; engine/proxy/rule changes are covered by current-head compatibility checks separately.",
+    "compatibility_receipt": {
+      "source_commit": "5c8f4aed5f96361289629ca4ed2bc03a66a90287",
+      "source_dirty": false,
+      "file": "archive-compatibility-2026-11-09-macos.json",
+      "sha256": "bc95cb0ca66810fc49304cbfde8bd78e5e7990bf306e4f7a7ba9a83fad96f334",
+      "status": "PASS",
+      "os": "Darwin",
+      "architecture": "arm64",
+      "python": "3.14.6",
+      "profiles": [
+        "debug"
+      ],
+      "samples_per_transport": 1,
+      "workers": [
+        0,
+        2
+      ],
+      "workload_batches": 4,
+      "successful_clients": 128,
+      "persisted_rows": 128,
+      "successful_save_statements": 768,
+      "interpretation": "Current merged-source compatibility smoke only; not a new comparative performance baseline."
+    }
   }
 }
