@@ -1,5 +1,47 @@
 # Recorded verification
 
+## SQLite security maintenance — 2026-11-09
+
+The final dependency audit blocked publication of 1.4.0: its actual bundled
+SQLite 3.51.1 is affected by
+[RUSTSEC-2026-0459](https://rustsec.org/advisories/RUSTSEC-2026-0459.html).
+The immutable 1.4.0 tag and withheld draft are retained. The 1.4.1 candidate
+selects `rusqlite` 0.41.1 and `libsqlite3-sys` 0.39.1, with SQLite 3.54.1.
+
+- **EXPECTED FAIL then PASS:** a connection-backed minimum SQLite version
+  regression fails against the old linked 3.51.1 library, then passes with the
+  patched dependency. A second committed regression opens Scope's legacy SQL
+  schema while committed records remain in a real WAL, applies current metadata
+  migrations, preserves exchange bodies/headers/originals, edits session metadata,
+  exports and reopens the archive with clean database checks.
+- **PASS:** an independent check copies only the database and nonempty WAL from
+  a trusted synthetic archive produced by the actual 1.4.0 app. The 1.4.1 Engine,
+  linked to SQLite 3.54.1, recovers all six original exchange JSON models and the
+  original session revision exactly, appends a session and preserves it after
+  reopen. Integrity, foreign-key and WAL-mode checks pass. Its helper's 264 shared
+  dependency packages match the candidate lockfile. Original CA keys and MCP
+  bridge files were not read or copied. This establishes compatibility for that
+  fixture; it is not an exploit reproduction or a claim about malformed WAL
+  rejection.
+- **PASS:** `cargo test --workspace --locked` on macOS arm64: 108 tests
+  (55 core, 45 device fixtures, six desktop and two MCP). One opt-in synthetic
+  archive measurement remains intentionally ignored. Linux-only GLib runtime
+  regressions do not execute on this host; source integrity and locked selection
+  independently verify all 121 vendored files. Rust formatting passes.
+- **PASS:** 63 UI tests and 28 Node engine/attribution/release-resource tests.
+  These fixtures do not replace native desktop or Android acceptance.
+- **PASS:** fresh `cargo audit` 0.22.2 reports zero vulnerability-list entries
+  and the three existing unmaintained warnings, without ignores. Fresh Node 22
+  `npm audit` reports zero vulnerabilities including development dependencies.
+  GLib's path dependency remains excluded from cargo-audit's registry matching;
+  that omission is not evidence that its backport is safe. See the dated
+  [dependency report](DEPENDENCIES.md) and historical GLib red/green records below.
+
+These are local source and archive-compatibility results. Hosted checks, packaged
+1.4.1 native smoke and downloadable-asset verification are separate release gates.
+Earlier 1.4.0 appearance and Android evidence below retains its exact version and
+target boundaries.
+
 ## Appearance candidate — 2026-11-09
 
 - **PASS:** 63 UI tests, including six preference regressions for reload,
@@ -63,7 +105,6 @@ The source candidate reviewed on 7 November replaces the imported hook backend w
 Local source gates passed on Linux: 84 locked headless Rust tests (core/device/MCP), 56 UI tests plus TypeScript/Vite build, 26 Node engine/license/resource tests, 22 device-worker Python tests, 17 integrity-script tests and 10 fixture-helper tests. The final worker preflight regression was observed failing on malformed DER, relabelled synthetic key DER, trailing DER and a non-CA leaf, then passing with complete single-CA parsing before Frida import. The affected Python and embedded-worker Rust suites were rerun after that fix; other checked component source remained unchanged.
 
 The owned fixture APK compiled, signed and passed apksigner v2/v3 verification with the real checksum-locked OkHttp 3.14.9/Okio 1.17.2 test dependencies. Host TLS controls accepted the valid fixture CA and rejected foreign, wrong-host and expired peers. These are host/build results, **not Android execution**. One bounded software-emulator prerequisite boot failed with SIGSEGV before Android startup; cause is unestablished. Independent component and whole-branch source reviews resolved all reported findings with covering regressions and scoped re-reviews. The first hosted Windows run exposed CRLF serialization differences after the bounded binary read. Explicit LF/CRLF/CR byte-input regressions reproduced that failure, and universal-newline normalization restored the prior text-read behavior without changing CA validation. Hosted exact-head check receipts belong in the draft PR and are separate from these local results.
-
 
 ## Endpoint manual editing candidate — 2026-11-06
 
@@ -175,9 +216,9 @@ cargo-about 0.9.3 regeneration produces 226 Rust sections and seven npm notices,
 byte-identical to the previous committed JSON/HTML. The unchanged lockfile hashes
 match both generated inventories:
 
-| Lockfile | SHA-256 |
-| --- | --- |
-| `Cargo.lock` | `6b8d93fb0ae484a4fbd6093f0055a7653881ed2a393076fed34b0905fcaa0479` |
+| Lockfile            | SHA-256                                                            |
+| ------------------- | ------------------------------------------------------------------ |
+| `Cargo.lock`        | `6b8d93fb0ae484a4fbd6093f0055a7653881ed2a393076fed34b0905fcaa0479` |
 | `package-lock.json` | `c5ffec0b4bcf200ad40550cfe7796c4f402b98ed5a7aaf59ee8183436e2fd07b` |
 
 GLib retains its gtk-rs repository/authors plus upstream crate, modified-source
@@ -214,13 +255,13 @@ provides Cargo. Its RED/GREEN cycle is separate from the Git newline regression.
 
 Current local follow-up checks:
 
-| Status | Check | Result |
-| --- | --- | --- |
-| EXPECTED FAIL then PASS | Hostile inherited Git config regression | Original replay reproduces the exact checksum mismatch; command-local settings fix it. |
-| PASS | Python integrity/selection tests | 17 cases, including inherited CRLF, legacy-codepage metadata, unchanged user config and previous tamper checks. |
-| PASS | Full-tree provenance and locked Cargo selection | All 121 original files plus the exact upstream backport; same real version and lockfile. |
-| PASS | Linux optimized GLib regression crate | 24 cases: nine iterator regressions plus two logging, nine translation and four ownership checks. |
-| PASS | Locked workspace excluding desktop | 89 tests: 40 core, 23 device, 2 MCP and 24 GLib cases. |
+| Status                  | Check                                           | Result                                                                                                          |
+| ----------------------- | ----------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| EXPECTED FAIL then PASS | Hostile inherited Git config regression         | Original replay reproduces the exact checksum mismatch; command-local settings fix it.                          |
+| PASS                    | Python integrity/selection tests                | 17 cases, including inherited CRLF, legacy-codepage metadata, unchanged user config and previous tamper checks. |
+| PASS                    | Full-tree provenance and locked Cargo selection | All 121 original files plus the exact upstream backport; same real version and lockfile.                        |
+| PASS                    | Linux optimized GLib regression crate           | 24 cases: nine iterator regressions plus two logging, nine translation and four ownership checks.               |
+| PASS                    | Locked workspace excluding desktop              | 89 tests: 40 core, 23 device, 2 MCP and 24 GLib cases.                                                          |
 
 The [CodeQL triage record](security/glib-0.18.5-codeql-triage.md) identifies all seven
 exact baseline alerts, proposes dispositions with source/type/FFI/lifetime
@@ -241,23 +282,23 @@ Local checks used Linux x86-64, Rust 1.99.1, Node 22.22.3 and the existing Zig
 C compiler/linker. The iterator tests linked the actual installed GLib/GObject/GIO
 2.88 runtime through local library search settings; no system packages were installed.
 
-| Status | Check | Result / boundary |
-| --- | --- | --- |
-| PASS | `python3 scripts/verify-glib-backport.py --check-selection` | All 121 upstream crate files equal the verified original archive plus exact upstream patch; locked Cargo metadata selects only local GLib 0.18.5 at `vendor/glib`. |
-| PASS | `python3 -m unittest discover -s scripts/tests` | 15 integrity/selection cases, including tampered inputs/source/licenses and registry/wrong-path/unused selection rejection. |
-| PASS | `cargo test --locked --release -p scope-glib-variant-regression` | 9 optimized iterator tests. Seven independent content-reading cases segfaulted with pristine 0.18.5; all nine pass with the backport. |
-| PASS | `cargo test --workspace --exclude scope-desktop --locked` | 74 tests: 40 core, 23 device fixtures, 2 MCP and 9 GLib iterator regressions. Real local HTTP/TLS tests and fake ADB are not interactive GUI/device acceptance. |
-| PASS | `cargo fmt --all -- --check` | Vendored GLib remains excluded; original source bytes are preserved. |
-| PASS | `npm test -- --run`; `npm run build` | 15 frontend tests and TypeScript/Vite production build. |
-| PASS | `node --test scripts/licenses.test.mjs scripts/release.test.mjs` | 6 attribution tests and 3 release/resource tests. |
-| PASS | `python3 -m unittest discover -s resources/device/tests` | 3 installer tests. |
-| PASS | `npm test --prefix tools/har-compare` | 205 HAR tests. Contract lab also passed after its separate locked dependencies were installed. |
-| PASS | `npm audit --audit-level=high` | Zero reported npm vulnerabilities. |
-| PASS | Public resource staging/verification | 67 filtered files including the newly built MCP helper. |
-| FAIL (environment) | `cargo test --workspace --locked` | `gdk-sys` cannot run `pkg-config` for `gdk-3.0 >= 3.22`; GTK development prerequisites are unavailable on this host. |
-| FAIL (environment) | `npm run package` | Optimized locked `scope-mcp` build and frontend build pass; Tauri packaging fails at `glib-sys` because `pkg-config` / native desktop development metadata is missing. No installer produced. |
-| NOT RUN | `node scripts/smoke.mjs` | Requires the desktop binary that this host cannot build; existing core/MCP tests are separate evidence. |
-| NOT RUN | Interactive GTK/dialogs, installer launch, Android/device and other architectures | Headless/iterator tests do not establish these acceptance criteria. Issue #11 must remain open. |
+| Status             | Check                                                                             | Result / boundary                                                                                                                                                                             |
+| ------------------ | --------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| PASS               | `python3 scripts/verify-glib-backport.py --check-selection`                       | All 121 upstream crate files equal the verified original archive plus exact upstream patch; locked Cargo metadata selects only local GLib 0.18.5 at `vendor/glib`.                            |
+| PASS               | `python3 -m unittest discover -s scripts/tests`                                   | 15 integrity/selection cases, including tampered inputs/source/licenses and registry/wrong-path/unused selection rejection.                                                                   |
+| PASS               | `cargo test --locked --release -p scope-glib-variant-regression`                  | 9 optimized iterator tests. Seven independent content-reading cases segfaulted with pristine 0.18.5; all nine pass with the backport.                                                         |
+| PASS               | `cargo test --workspace --exclude scope-desktop --locked`                         | 74 tests: 40 core, 23 device fixtures, 2 MCP and 9 GLib iterator regressions. Real local HTTP/TLS tests and fake ADB are not interactive GUI/device acceptance.                               |
+| PASS               | `cargo fmt --all -- --check`                                                      | Vendored GLib remains excluded; original source bytes are preserved.                                                                                                                          |
+| PASS               | `npm test -- --run`; `npm run build`                                              | 15 frontend tests and TypeScript/Vite production build.                                                                                                                                       |
+| PASS               | `node --test scripts/licenses.test.mjs scripts/release.test.mjs`                  | 6 attribution tests and 3 release/resource tests.                                                                                                                                             |
+| PASS               | `python3 -m unittest discover -s resources/device/tests`                          | 3 installer tests.                                                                                                                                                                            |
+| PASS               | `npm test --prefix tools/har-compare`                                             | 205 HAR tests. Contract lab also passed after its separate locked dependencies were installed.                                                                                                |
+| PASS               | `npm audit --audit-level=high`                                                    | Zero reported npm vulnerabilities.                                                                                                                                                            |
+| PASS               | Public resource staging/verification                                              | 67 filtered files including the newly built MCP helper.                                                                                                                                       |
+| FAIL (environment) | `cargo test --workspace --locked`                                                 | `gdk-sys` cannot run `pkg-config` for `gdk-3.0 >= 3.22`; GTK development prerequisites are unavailable on this host.                                                                          |
+| FAIL (environment) | `npm run package`                                                                 | Optimized locked `scope-mcp` build and frontend build pass; Tauri packaging fails at `glib-sys` because `pkg-config` / native desktop development metadata is missing. No installer produced. |
+| NOT RUN            | `node scripts/smoke.mjs`                                                          | Requires the desktop binary that this host cannot build; existing core/MCP tests are separate evidence.                                                                                       |
+| NOT RUN            | Interactive GTK/dialogs, installer launch, Android/device and other architectures | Headless/iterator tests do not establish these acceptance criteria. Issue #11 must remain open.                                                                                               |
 
 The first local headless compile needed the existing Zig `CC`/`AR` selectors;
 with those configured the complete available suite passed. Initial npm installation
@@ -271,7 +312,7 @@ and seven npm runtime notices. All original license texts are byte-identical; GL
 retains gtk-rs attribution and links the upstream crate and backport provenance.
 Both recorded lockfile hashes match and the generated files contain no local paths.
 
-Current `cargo audit` 0.22.2 returned exit 0 against database commit
+At this 6 November baseline, `cargo audit` 0.22.2 returned exit 0 against database commit
 `309392b18f6b17022f82c701f300433126901068`: zero vulnerability-list entries and
 three unmaintained findings (`pin-utils`, `proc-macro-error`, `rustls-pemfile`).
 Local path GLib is excluded by this tool's registry-source filter; its absence

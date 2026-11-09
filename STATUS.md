@@ -1,6 +1,6 @@
-# Scope 1.4.0 release candidate
+# Scope 1.4.1 release candidate
 
-Application version: `1.4.0`. This source branch combines the Scope-owned
+Application version: `1.4.1`. This source branch combines the Scope-owned
 experimental Android Java engine with an opt-in archive measurement harness.
 The reviewed runtime sources passed 75 direct-worker Android outcomes and two
 native macOS Android Start/Stop capture cycles on AOSP API 36 ARM64, Frida
