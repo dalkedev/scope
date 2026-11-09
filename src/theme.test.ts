@@ -110,7 +110,8 @@ describe('appearance preference', () => {
   });
 
   it('preloads the saved or system theme before the application module and tolerates denied storage', () => {
-    const script = html.match(/<script>([\s\S]*?)<\/script>/)?.[1];
+    const parsed = new DOMParser().parseFromString(html, 'text/html');
+    const script = parsed.head.querySelector('script:not([src])')?.textContent;
     expect(script).toBeTruthy();
     expect(html.indexOf('<script>')).toBeLessThan(html.indexOf('src="/src/main.tsx"'));
     const preload = new Function('localStorage', 'matchMedia', 'document', script!);
