@@ -1,5 +1,8 @@
 # Recorded verification
 
+For the separate opt-in archive measurement harness, result provenance and proposed
+bounded writer, see [Archive responsiveness](ARCHIVE_RESPONSIVENESS.md).
+
 ## Endpoint manual editing candidate — 2026-11-06
 
 Scope 1.3.0 adds a `pause` Traffic rule with request, response or both-stage

@@ -1,6 +1,8 @@
 //! Local, durable HTTP(S) interception engine shared by Scope desktop and MCP.
 //! Buffers bodies up to 16 MiB. Larger bodies fail explicitly; no partial body
 //! is presented as a successful capture. WebSocket frames and trailers are not captured.
+#[cfg(test)]
+mod diagnostics;
 mod proxy;
 mod report;
 mod rules;
@@ -166,6 +168,8 @@ pub struct Engine {
 }
 struct Inner {
     db: Mutex<Connection>,
+    #[cfg(test)]
+    save_metrics: diagnostics::SaveMetrics,
     dir: PathBuf,
     rules: std::sync::RwLock<Vec<Arc<TrafficRule>>>,
     running: Mutex<Option<proxy::Running>>,
@@ -252,6 +256,8 @@ impl Engine {
         Ok(Self {
             inner: Arc::new(Inner {
                 db: Mutex::new(db),
+                #[cfg(test)]
+                save_metrics: diagnostics::SaveMetrics::default(),
                 dir,
                 rules: std::sync::RwLock::new(rules),
                 running: Mutex::new(None),
@@ -319,8 +325,28 @@ impl Engine {
             .ok_or_else(|| anyhow!("Session not found: {id}"))
     }
     pub(crate) fn save(&self, e: &Exchange) -> Result<()> {
+        #[cfg(test)]
+        let started = self.inner.save_metrics.start();
         let data = serde_json::to_string(e)?;
-        self.inner.db.lock().unwrap().execute("INSERT INTO exchanges VALUES(?1,?2,?3,?4) ON CONFLICT(id) DO UPDATE SET data=excluded.data",params![e.id,e.session_id,e.started_at,data])?;
+        #[cfg(test)]
+        let serialized = std::time::Instant::now();
+        let db = self.inner.db.lock().unwrap();
+        #[cfg(test)]
+        let acquired = std::time::Instant::now();
+        let result = db.execute("INSERT INTO exchanges VALUES(?1,?2,?3,?4) ON CONFLICT(id) DO UPDATE SET data=excluded.data",params![e.id,e.session_id,e.started_at,data]);
+        #[cfg(test)]
+        let finished = std::time::Instant::now();
+        drop(db);
+        #[cfg(test)]
+        self.inner.save_metrics.record(
+            started,
+            serialized,
+            acquired,
+            finished,
+            data.len(),
+            result.is_ok(),
+        );
+        result?;
         Ok(())
     }
     pub fn get_exchange(&self, id: &str) -> Result<Exchange> {
