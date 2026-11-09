@@ -1,5 +1,33 @@
 # Recorded verification
 
+## Appearance candidate — 2026-11-09
+
+- **PASS:** 63 UI tests, including six preference regressions for reload,
+  explicit overrides, live System changes, unavailable storage/system lookup,
+  preload ordering and cleanup. TypeScript/Vite production build passes.
+- **PASS:** synthetic browser inspection of the actual components in Light/Dark
+  at 1100/1440 px, including dense traffic, JSON/headers, paused-message and replay
+  editors, rules, Android setup, connection, analysis, comparison, diagnostics,
+  activity, MCP and archive dialogs. Sixteen browser checks verify persistence,
+  live system changes, preserved rule drafts and absence of page errors.
+- **PASS:** after fixing selected archive metadata, modal pills, action text,
+  idle dots and Stop hover, eleven final dark views had no measured enabled-text
+  pair below 4.5:1 (minimum 4.55:1) or document horizontal overflow. The
+  [numeric receipt](verification/appearance-2026-11-09.json) records source hashes
+  and test boundaries. This is bounded computed-color inspection, not a complete
+  accessibility certification. The existing light palette is preserved; its
+  separately observed low-contrast annotations remain follow-up work.
+
+These browser fixtures contain invented in-memory data. They do not establish
+native backend or Android functionality; those gates are recorded separately.
+
+The relocated macOS arm64 1.4.0 package also passed strict ad-hoc signature
+verification and the actual desktop/MCP smoke. Its native WebView rendered both
+themes, captured six built-in localhost HTTP exchanges, preserved them through
+theme changes, displayed response JSON and the rules editor, and stopped capture
+from the GUI. This verifies the packaged native surface without relaxing CSP.
+Native theme persistence across process restart was not separately exercised.
+
 For the separate opt-in archive measurement harness, result provenance and proposed
 bounded writer, see [Archive responsiveness](ARCHIVE_RESPONSIVENESS.md).
 

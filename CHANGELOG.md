@@ -6,6 +6,10 @@ User-visible changes are recorded here. Back up important captures before upgrad
 
 ## 1.4.0 candidate — 2026-11-09
 
+- Add Light, Dark and System appearance choices in the sidebar. Remember the
+  local preference, follow live system changes in System mode and apply the
+  selected appearance before the interface loads. Dark colors cover inspectors,
+  editors, rules, diagnostics and dialogs while preserving HTTP status meanings.
 - Replace imported Android runtime hooks with the experimental Scope-owned Java
   URL/SSLContext/ordinary OkHttp engine. Validate only the configured Scope CA
   through a real isolated trust manager; retain original TLS/hostname failures.

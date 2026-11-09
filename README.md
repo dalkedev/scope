@@ -37,6 +37,10 @@ Scope routes traffic through a Rust engine, gives you control over requests and 
 
 A rule-generated response is marked as a **mock**. Rewrites retain the **original** message. A replay creates a **new exchange**. The inspector keeps those distinctions visible so your evidence stays useful.
 
+Prefer a darker workspace? Choose **Light**, **Dark** or **System** under
+**Appearance** in the sidebar. Scope remembers your local choice; System follows
+your desktop's current appearance, including changes while Scope is running.
+
 <table>
   <tr>
     <td width="50%"><a href="docs/RULES.md"><img src="docs/images/traffic-rules.jpg" alt="Persistent rule editor: match the local products endpoint and return a maintenance response."></a><br><strong>Your rules, saved.</strong><br>Match method, host, path or URL. Rewrite, mock or block.</td>
@@ -120,14 +124,14 @@ The same engine powers the native inspector and MCP. Real HTTP/TLS fixtures test
 
 <a href="docs/SCREENSHOTS.md"><img src="docs/images/analysis.jpg" alt="Analysis of the real local capture: observed endpoints, intentional errors, timings and synthetic response provenance." width="100%"></a>
 
-| Today                   | Boundary                                                                                                                                                                  |
-| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| macOS arm64             | Reviewed runtime sources passed native UI/package and repeated Android Start/Stop checks; final 1.4.0 artifacts require separate verification. Ad-hoc signed; not Apple-notarized.                                          |
-| Windows x64 / Linux x64 | CI builds, packages and headless MCP/capture smoke pass. Interactive UI and device validation remain open. Intel macOS is unverified.                                     |
-| Android / Frida         | AOSP API 36 ARM64, Frida 17.9.1 and OkHttp 3.14.9 passed 75 direct-worker outcomes plus two native UI Start/Stop capture cycles. Other targets and active-worker crash/restart recovery remain unverified; native TLS and lazy Kotlin pinners are unsupported.                       |
-| Capture                 | Bodies are buffered up to **16 MiB each**. Streaming, WebSocket frames, trailers and HTTP3 are not implemented.                                                           |
-| Archives & analysis     | Records currently load into memory. Large-session streaming/export is planned. Observed schemas are not complete API contracts.                                           |
-| Dependencies            | A Linux glib unsoundness advisory remains tracked in [#11](https://github.com/dalkedev/scope/issues/11). See the full [dependency record](docs/DEPENDENCIES.md). |
+| Today                   | Boundary                                                                                                                                                                                                                                                       |
+| ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| macOS arm64             | Reviewed runtime sources passed native UI/package and repeated Android Start/Stop checks; final 1.4.0 artifacts require separate verification. Ad-hoc signed; not Apple-notarized.                                                                             |
+| Windows x64 / Linux x64 | CI builds, packages and headless MCP/capture smoke pass. Interactive UI and device validation remain open. Intel macOS is unverified.                                                                                                                          |
+| Android / Frida         | AOSP API 36 ARM64, Frida 17.9.1 and OkHttp 3.14.9 passed 75 direct-worker outcomes plus two native UI Start/Stop capture cycles. Other targets and active-worker crash/restart recovery remain unverified; native TLS and lazy Kotlin pinners are unsupported. |
+| Capture                 | Bodies are buffered up to **16 MiB each**. Streaming, WebSocket frames, trailers and HTTP3 are not implemented.                                                                                                                                                |
+| Archives & analysis     | Records currently load into memory. Large-session streaming/export is planned. Observed schemas are not complete API contracts.                                                                                                                                |
+| Dependencies            | A Linux glib unsoundness advisory remains tracked in [#11](https://github.com/dalkedev/scope/issues/11). See the full [dependency record](docs/DEPENDENCIES.md).                                                                                               |
 
 Breakpoints expire after 60 seconds. [What was actually tested →](docs/VERIFICATION.md)
 

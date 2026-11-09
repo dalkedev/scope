@@ -46,6 +46,7 @@ import {
 import { api, isNative } from './api';
 import { isExchangeError } from './exchange-utils';
 import { queryTraffic } from './traffic-search';
+import { useThemePreference } from './theme';
 import { ExchangeStatus as Status } from './components/ExchangeStatus';
 import { TrafficSearchHelp } from './components/TrafficSearchHelp';
 import { RulesWorkspace } from './components/RulesWorkspace';
@@ -543,6 +544,8 @@ export default function App() {
       setNotice('MCP access updated.');
     });
 
+  const [themePreference, chooseThemePreference] = useThemePreference();
+
   return (
     <div className="app-shell">
       <aside className="sidebar">
@@ -700,6 +703,22 @@ export default function App() {
           <div className="local-note">
             <HardDrive size={13} />
             <span>Local by design. Open source.</span>
+          </div>
+          <div className="theme-control" role="group" aria-label="Color theme">
+            <span className="theme-label">Appearance</span>
+            <div className="theme-options">
+              {(['light', 'dark', 'system'] as const).map((choice) => (
+                <button
+                  key={choice}
+                  type="button"
+                  className={themePreference === choice ? 'selected' : ''}
+                  aria-pressed={themePreference === choice}
+                  onClick={() => chooseThemePreference(choice)}
+                >
+                  {choice === 'light' ? 'Light' : choice === 'dark' ? 'Dark' : 'System'}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       </aside>
