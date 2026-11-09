@@ -44,32 +44,62 @@ fn evidence_detector_rejects_corrupted_archive_rows() {
         }
         rows.push(e);
     }
-    assert!(valid_evidence(&rows, session, &rules));
+    assert!(valid_evidence(&rows, session, &rules, false));
+    // Both snapshots can share the same corrupted URL. Agreement alone does not
+    // establish that either retained the target actually sent by the workload.
+    for wrong_url in [
+        "http://127.0.0.2:9/unrelated?i=0",
+        "https://localhost:1/pause?i=0",
+        "http://localhost:2/pause?i=0",
+        "http://localhost:1/other?i=0",
+        "http://localhost:1/pause?i=0&extra=1",
+        "http://localhost:1/pause?i=0#fragment",
+    ] {
+        let mut corrupt = rows.clone();
+        corrupt[0].url = wrong_url.into();
+        corrupt[0].original_request.as_mut().unwrap()["url"] = serde_json::json!(wrong_url);
+        assert!(
+            !valid_evidence(&corrupt, session, &rules, false),
+            "accepted a consistently corrupted target: {wrong_url}"
+        );
+    }
     let mut swapped = rows.clone();
     swapped[0].original_request = rows[1].original_request.clone();
     swapped[1].original_request = rows[0].original_request.clone();
-    assert!(!valid_evidence(&swapped, session, &rules));
+    assert!(!valid_evidence(&swapped, session, &rules, false));
     let mut missing = rows.clone();
     missing.pop();
-    assert!(!valid_evidence(&missing, session, &rules));
+    assert!(!valid_evidence(&missing, session, &rules, false));
     let mut corrupt = rows.clone();
     corrupt[0].applied_rules.swap(0, 1);
-    assert!(!valid_evidence(&corrupt, session, &rules));
+    assert!(!valid_evidence(&corrupt, session, &rules, false));
     let mut corrupt = rows.clone();
     corrupt[0].applied_rules[1].rule_id = "wrong".into();
-    assert!(!valid_evidence(&corrupt, session, &rules));
+    assert!(!valid_evidence(&corrupt, session, &rules, false));
     let mut corrupt = rows.clone();
     corrupt[0].completed = false;
-    assert!(!valid_evidence(&corrupt, session, &rules));
+    assert!(!valid_evidence(&corrupt, session, &rules, false));
     let mut corrupt = rows.clone();
     corrupt[0].url = rows[1].url.clone();
-    assert!(!valid_evidence(&corrupt, session, &rules));
+    assert!(!valid_evidence(&corrupt, session, &rules, false));
     let mut corrupt = rows.clone();
     corrupt[0].id = rows[1].id.clone();
-    assert!(!valid_evidence(&corrupt, session, &rules));
+    assert!(!valid_evidence(&corrupt, session, &rules, false));
     let mut corrupt = rows.clone();
     corrupt[0].original_response = None;
-    assert!(!valid_evidence(&corrupt, session, &rules));
+    assert!(!valid_evidence(&corrupt, session, &rules, false));
+
+    let mut tls_rows = rows.clone();
+    for (i, row) in tls_rows.iter_mut().enumerate() {
+        row.url = format!("https://localhost:1/pause?i={i}");
+        row.original_request.as_mut().unwrap()["url"] = serde_json::json!(row.url);
+    }
+    assert!(valid_evidence(&tls_rows, session, &rules, true));
+    assert!(!valid_evidence(&tls_rows, session, &rules, false));
+    assert!(!valid_evidence(&rows, session, &rules, true));
+    tls_rows[0].url = "http://localhost:1/pause?i=0".into();
+    tls_rows[0].original_request.as_mut().unwrap()["url"] = serde_json::json!(tls_rows[0].url);
+    assert!(!valid_evidence(&tls_rows, session, &rules, true));
 }
 
 // Catches unbounded collection and falsely claiming complete measurements after overflow.

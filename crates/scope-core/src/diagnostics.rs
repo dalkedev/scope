@@ -66,7 +66,7 @@ fn ns(duration: Duration) -> u64 {
     duration.as_nanos().min(u64::MAX as u128) as u64
 }
 
-fn valid_evidence(rows: &[Exchange], session: &str, rules: &[String; 3]) -> bool {
+fn valid_evidence(rows: &[Exchange], session: &str, rules: &[String; 3], tls: bool) -> bool {
     let mut ids = BTreeSet::new();
     let mut indexes = BTreeSet::new();
     rows.len() == CLIENTS
@@ -87,7 +87,15 @@ fn valid_evidence(rows: &[Exchange], session: &str, rules: &[String; 3]) -> bool
                 ("rewriteResponse", "response"),
             ];
             ids.insert(&e.id)
-                && index.is_some_and(|i| i < CLIENTS && indexes.insert(i))
+                && index.is_some_and(|i| {
+                    i < CLIENTS
+                        && indexes.insert(i)
+                        && e.url
+                            == format!(
+                                "{}://localhost:1/pause?i={i}",
+                                if tls { "https" } else { "http" }
+                            )
+                })
                 && e.session_id == session
                 && e.method == "GET"
                 && e.completed
