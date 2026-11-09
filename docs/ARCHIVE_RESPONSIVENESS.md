@@ -146,12 +146,18 @@ runner cancellation fix and Python-only test workflow are recorded as explicit
 source exceptions in the summary. The merge of Scope 1.3.0 is recorded separately:
 it changes engine/rule code and release metadata, so the hosted values above remain
 historical Scope 1.2.2 observations, not current-head performance evidence.
-The diagnostic workload and probe runtime implementation remain unchanged; the
-probe file is byte-identical before its first `#[test]` function. The summary
+Through that merge, the diagnostic workload and probe runtime implementation
+remain unchanged; the probe file is byte-identical before its first `#[test]`
+function. The summary
 defines that UTF-8 prefix boundary precisely and records its verified SHA-256.
 No diagnostic timing logic, threshold or window filter changed after the measured
 commit. A current-head smoke run checks compatibility without replacing the
 historical comparison.
+
+The later [target-bound validation correction](#target-bound-validation-follow-up--2026-11-09)
+changes the detector and its workload call sites after measurement. It does not
+replace the historical hashes or establish that the new check ran in 2026-11-06
+measurements.
 
 ### Descriptive timings (milliseconds)
 
@@ -300,6 +306,56 @@ check, not a new cross-platform or release-profile performance comparison. The
 48 hosted Linux/Windows batches remain pinned to their original Scope 1.2.2 source.
 GUI, physical Android, current-head hosted measurements and release-profile timing
 were **NOT RUN** by this revalidation. No production writer change is included.
+
+## Target-bound validation follow-up — 2026-11-09
+
+Independent review of release source `9789d92013ef2aac64941ebaca18a0ce691a6d4b`
+found that the detector checked the request index and equality between captured
+and original URLs, but did not bind either URL to the target actually sent.
+Changing both stored URLs to `http://127.0.0.2:9/unrelated?i=0` was accepted while
+changing only the original URL was rejected. This is a reproducible acceptance
+gap, not evidence of a production capture defect or historical archive corruption.
+
+The correction at `ad598d00a027e99ffffed79041c42c881fcdc141` passes the batch's
+HTTP/TLS selection into every initial, reopened, corruption-control, restored
+baseline and row-loss validation. Each URL must equal the fixture's exact
+`{http|https}://localhost:1/pause?i={index}` target. Original snapshot equality
+then binds both stored URLs to that independently known target. Deterministic
+regressions reject paired host/port/path/scheme/query/fragment changes and
+cross-transport batches; valid HTTP and TLS batches remain accepted. The paired
+wrong-target regression was observed failing before the correction and passing
+after it.
+
+This changes only `cfg(test)` diagnostics and their tests. The workload's actual
+request construction, timed interval, save/probe instrumentation, thresholds,
+report schema and production persistence remain unchanged. The historical raw
+datasets and summary are byte-identical; their canonical hashes still identify
+their recorded source commits, rather than these corrected detector files.
+
+Fresh Linux x86_64 acceptance at that clean code commit used Rust 1.99.1 and
+Python 3.14.4:
+
+- **PASS:** 100 locked headless core/device/MCP tests; all 33 script tests,
+  including exact GLib source/patch/locked-selection verification; formatting.
+- **PASS:** one bounded debug sample per HTTP/TLS × current-thread/two-worker
+  combination: four batches, 128 successful joined clients and reopened rows,
+  768 successful save samples/revision increments, complete target-bound evidence,
+  corruption/loss detection and baseline restoration, no overflow/deadline violation
+  and no process-cleanup uncertainty. The current-thread blocking control passed;
+  the two-worker blocking control remains intentionally **NOT RUN**.
+- **NOT RUN here:** release-profile/comparative timing, native Windows/macOS,
+  interactive desktop and Android. The separate Linux GLib regression build
+  stopped at the missing `pkg-config` prerequisite, before executing its tests.
+
+Reproduce the small compatibility gate without rerunning the historical matrix:
+
+```sh
+python scripts/measure-archive.py --profiles debug --samples 1 --workers 0 2 \
+  --output-dir /tmp/scope-target-validation
+```
+
+These are compatibility/acceptance results, not new performance measurements or
+a throughput/fsync improvement claim.
 
 ## Bounded writer proposal (not implemented)
 
