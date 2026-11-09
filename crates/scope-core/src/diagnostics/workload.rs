@@ -160,7 +160,7 @@ async fn batch(tls: bool, sample: usize) -> Value {
     let rows = engine
         .list_exchanges(&session.id, None, CLIENTS + 1, 0)
         .unwrap();
-    let evidence = valid_evidence(&rows, &session.id, &rules);
+    let evidence = valid_evidence(&rows, &session.id, &rules, tls);
     let revision_delta = engine.session(&session.id).unwrap().revision - revision_before;
     let stored = rows.len();
     let original_ids = rows.iter().map(|r| r.id.clone()).collect::<BTreeSet<_>>();
@@ -170,7 +170,7 @@ async fn batch(tls: bool, sample: usize) -> Value {
     let rows = reopened
         .list_exchanges(&session.id, None, CLIENTS + 1, 0)
         .unwrap();
-    let reopened_ok = valid_evidence(&rows, &session.id, &rules)
+    let reopened_ok = valid_evidence(&rows, &session.id, &rules, tls)
         && rows.iter().map(|r| r.id.clone()).collect::<BTreeSet<_>>() == original_ids;
     // Real persisted corruption in this disposable synthetic archive, after baseline readback.
     // Detect both row loss and lost rule evidence through the same archive validator.
@@ -189,6 +189,7 @@ async fn batch(tls: bool, sample: usize) -> Value {
             .unwrap(),
         &session.id,
         &rules,
+        tls,
     );
     // Restore the original persisted evidence before an independent row-loss control.
     if let Some(row) = rows.first() {
@@ -200,6 +201,7 @@ async fn batch(tls: bool, sample: usize) -> Value {
             .unwrap(),
         &session.id,
         &rules,
+        tls,
     );
     let db = reopened.inner.db.lock().unwrap();
     if let Some(row) = rows.first() {
@@ -213,6 +215,7 @@ async fn batch(tls: bool, sample: usize) -> Value {
             .unwrap(),
         &session.id,
         &rules,
+        tls,
     );
     let save_ok =
         saves.dropped == 0 && saves.samples.len() == 192 && saves.samples.iter().all(|s| s.success);
