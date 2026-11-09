@@ -4,6 +4,11 @@ User-visible changes are recorded here. Back up important captures before upgrad
 
 ## Unreleased
 
+- Preview and copy a captured request as a POSIX-shell cURL command, preserving
+  repeated headers and text/binary body bytes without sending traffic. Normalize
+  transport framing, explain unsupported/oversized requests and show clipboard
+  success or manual-copy fallback. Commands include captured credentials.
+
 ## 1.4.1 — 2026-11-09
 
 - Upgrade the bundled SQLite driver/runtime to the patched line for

@@ -1,10 +1,11 @@
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import App from './App';
-import type { PendingExchange, ProxyStatus, Session } from './types';
+import type { Exchange, PendingExchange, ProxyStatus, Session } from './types';
 
 const mocks = vi.hoisted(() => ({
   bootstrap: vi.fn(),
+  get_exchange: vi.fn(),
   list_sessions: vi.fn(),
   proxy_status: vi.fn(),
   pending: vi.fn(),
@@ -473,5 +474,44 @@ describe('Paused traffic across workspaces', () => {
       fireEvent.click(screen.getByRole('button', { name: 'Abort request' }));
     });
     expect(mocks.resolve_breakpoint).toHaveBeenCalledWith('pending-next', { action: 'abort' });
+  });
+});
+
+describe('Request terminal export', () => {
+  it('opens the cURL preview for the selected captured exchange', async () => {
+    const exchange: Exchange = {
+      id: 'curl-request',
+      sessionId: session.id,
+      method: 'POST',
+      url: 'https://api.example.com/curl-export',
+      status: 201,
+      requestHeaders: [{ name: 'Content-Type', value: 'application/json' }],
+      responseHeaders: [],
+      requestBody: '{"synthetic":true}',
+      responseBody: '',
+      requestBodyBase64: false,
+      responseBodyBase64: false,
+      startedAt: 0,
+      durationMs: 5,
+      requestBytes: 18,
+      responseBytes: 0,
+      error: null,
+      edited: false,
+      completed: true,
+    };
+    mocks.list_exchanges.mockResolvedValue([exchange]);
+    mocks.get_exchange.mockResolvedValue(exchange);
+    mocks.pending.mockResolvedValue([]);
+    await mount();
+    await act(async () => {
+      fireEvent.click(screen.getByRole('row', { name: `POST ${exchange.url}` }));
+    });
+    fireEvent.click(screen.getByRole('button', { name: 'Copy as cURL' }));
+    expect(screen.getByRole('dialog', { name: 'Copy as cURL' })).toBeVisible();
+    const command = (screen.getByLabelText('cURL command (POSIX shell)') as HTMLTextAreaElement)
+      .value;
+    expect(command).toContain(exchange.url);
+    expect(command).toContain(exchange.requestBody);
+    expect(mocks.get_exchange).toHaveBeenCalledWith(exchange.id);
   });
 });

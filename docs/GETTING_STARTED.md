@@ -124,3 +124,36 @@ The connection/settings view displays the data directory. It contains `scope.sql
 If cleanup fails, keep the recovery file and reconnect the same device. Removing the recovery file does not restore the device. See [recovery details](ANDROID.md#cleanup-and-recovery).
 
 For a reproducible bug report, use the repository's [issue forms](https://github.com/dalkedev/scope/issues/new/choose). Include sanitized logs and the exact stage that failed, not private captures or CA keys.
+
+## Copy a request to your terminal
+
+Select an exchange and choose **Copy as cURL** in the inspector. Review the
+command, then choose **Copy command**. The preview and clipboard action do not
+send traffic. If the clipboard is unavailable, select the preview text and copy
+it manually.
+
+The output targets a **POSIX shell** (sh, bash or zsh), including WSL or a compatible
+shell on Windows. It is not PowerShell/cmd.exe syntax. Running it sends a new
+request using the terminal's network configuration, without Scope's rules or
+breakpoints. cURL must be installed. TLS verification stays enabled; redirects
+are not followed automatically and no retry is added.
+
+**Commands contain the captured URL, headers and body, including credentials.**
+Review them before pasting into a terminal, chat, issue or script. This is an
+exact-body debugging export, not a sanitized sharing copy.
+
+Repeated and empty end-to-end headers and text/binary body bytes are retained.
+Whitespace-only header values (HTTP spaces/tabs) are normalized to an empty value.
+Host, Content-Length, hop-by-hop headers and headers named by Connection are
+removed so cURL can construct the new transport. Default Accept, User-Agent,
+Content-Type and Expect headers are suppressed when absent from the capture.
+Host overrides and proxy credentials are intentionally not reproduced. The
+export uses the effective captured request, not the pre-rewrite original; it is
+not a wire-level recording. cURL's own configuration file is disabled, while
+normal terminal environment settings (including proxy variables) still apply.
+
+The generated command is limited to under **128 KiB** and 1,024 input headers.
+Oversized requests, malformed URLs/headers/base64 and HEAD requests with a body
+show an explanation instead of a partial command. Use **Compose replay** or
+HAR/native session export for those cases. Large-capture streaming and other
+remaining product gaps are tracked in [the workflow comparison](COMPETITOR-GAPS.md).

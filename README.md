@@ -58,6 +58,11 @@ Open Scope and select **Generate real test traffic** — the lightning bolt besi
 
 No Android device is needed for this first run. [Continue with HTTPS, Android, breakpoints and export →](docs/GETTING_STARTED.md)
 
+Select an exchange and choose **Copy as cURL** to review a complete terminal
+command before copying it. Text and binary request bodies are supported; the
+preview clearly labels POSIX shell syntax and captured credentials.
+[Terminal export and limits →](docs/GETTING_STARTED.md#copy-a-request-to-your-terminal)
+
 ### Find the request. Check the API change.
 
 The desktop now accepts combined filters such as `filter: method=POST status>=500`

@@ -51,6 +51,7 @@ import { ExchangeStatus as Status } from './components/ExchangeStatus';
 import { TrafficSearchHelp } from './components/TrafficSearchHelp';
 import { RulesWorkspace } from './components/RulesWorkspace';
 import { ReplayComposer } from './components/ReplayComposer';
+import { CurlExport } from './components/CurlExport';
 import { BreakpointModal } from './components/BreakpointModal';
 import { SessionDetails } from './components/SessionDetails';
 import { ActivityWorkspace } from './components/ActivityWorkspace';
@@ -1412,6 +1413,7 @@ function RequestInspector({
           <button className="button small" onClick={onReplay} disabled={busy}>
             <RotateCcw size={13} /> Compose replay
           </button>
+          <CurlExport key={selected.id} exchange={selected} />
           <IconButton
             label="Copy request URL"
             onClick={() => void navigator.clipboard.writeText(selected.url)}
