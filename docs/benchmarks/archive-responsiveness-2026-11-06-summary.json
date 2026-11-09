@@ -1353,5 +1353,18 @@
       ".github/workflows/har-compare-action.yml": "22022e14f726f7d51cf127b1935b9283cff8f016c49d2caf6abbc781ab384343"
     },
     "validation": "Disposable child/descendant regressions; actual POSIX SIGINT and injected Python cancellation/exception. Windows console Ctrl+C is not claimed."
+  },
+  "postmeasurement_scope_1_3_0_merge": {
+    "main_commit": "cb5fccd3253a1a3b3ccb0ff4efe83350a94518e8",
+    "feature_parent_commit": "697f1d5a728d420cdeb998b0e343782a4248010b",
+    "reason": "Merge the released Scope 1.3.0 endpoint manual-editing changes and metadata into the investigation. The stored Linux/Windows measurements remain historical Scope 1.2.2 observations at source_commit, not current-head performance evidence.",
+    "files_sha256": {
+      "Cargo.toml": "c30a5483b092e447cfcea76521e255df7c75bfead217acedb8bb4f06c73f37c8",
+      "Cargo.lock": "e55e1042d7a8feefeeae8393a99d365676e9494fdb2b1dd20c11d046b187e55b",
+      "crates/scope-core/src/lib.rs": "32e88c2c9c1ce620ddab20e04ab04a5002b1836bbd0db31c91d59394b64c004d",
+      "crates/scope-core/src/proxy.rs": "9573454a53c3317a89cee8c08edef0ce24ab220dc43eab77fea2600c65b4c100",
+      "crates/scope-core/src/rules.rs": "a7c8b679881f815e93e64a191d834de875349109ee88216aabea3fa31f051e67"
+    },
+    "measurement_implementation": "Diagnostic workload and the verified probe runtime prefix are unchanged; engine/proxy/rule changes are covered by current-head compatibility checks separately."
   }
 }

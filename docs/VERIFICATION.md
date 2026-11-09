@@ -3,6 +3,52 @@
 For the separate opt-in archive measurement harness, result provenance and proposed
 bounded writer, see [Archive responsiveness](ARCHIVE_RESPONSIVENESS.md).
 
+## Endpoint manual editing candidate — 2026-11-06
+
+Scope 1.3.0 adds a `pause` Traffic rule with request, response or both-stage
+selection. This record describes the local candidate, separately from hosted
+checks and release artifacts.
+
+- **PASS:** locked Rust workspace: 78 tests on macOS arm64, including 16 real
+  rule integration tests and the native demo/pause conflict guard. Tests cover
+  HTTP/TLS edited wire values, original matcher snapshots, automatic action
+  ordering, terminal mock/block responses, deduplication, replay exclusion,
+  invalid-edit retention, expiry, abort and stop cleanup.
+- **PASS:** 55 UI tests, TypeScript and Vite production build. Regressions cover
+  pending messages across workspaces, separate resolve state, exact unchanged
+  payloads, stale/out-of-order polling, preservation of extension-method case,
+  and an editable proxy port that survives status polling before capture starts.
+  Regular capture, demo and Android starts use that selected port; invalid values
+  fail before session/listener/device side effects. A delayed pre-stop running
+  snapshot cannot replace the next idle port selection.
+- **PASS:** 17 integrity tests and exact GLib archive/patch/locked-selection
+  verification; eight license attribution and three release/resource tests.
+  Regenerated notices contain 226 Rust sections and seven frontend notices;
+  third-party versions and the vendored GLib source remain unchanged.
+- **PASS:** native macOS arm64 packaging and strict ad-hoc signature verification.
+  The packaged desktop and embedded MCP executable pass the real smoke workflow,
+  including authentication, capture, redaction, persistence, restart isolation and
+  graceful shutdown. Public resource filtering excludes optional native Frida.
+- **PASS:** an isolated native app, separate data directory and loopback HTTP
+  fixture exercised a host/path-matched both-stage rule. Before continuation the
+  upstream had no request. The native editor changed `X-Preview` and request JSON;
+  the independent server received both exact changes. Its actual HTTP 200 response
+  then paused before the client received a body. Editing status to 202 and replacing
+  its JSON produced those exact values at the independent curl client. The banner
+  and editor were used from Connection settings, with global breakpoints off.
+  SQLite retained the original request, original HTTP 200 response and one reached
+  pause evidence entry for each stage; integrity check returned `ok`.
+- **PASS:** independent source review, release metadata/notice comparison and
+  changed-source privacy scan. Private device captures and runtime files are not
+  included in this source change or the synthetic fixture.
+
+**NOT RUN locally:** interactive Windows/Linux, Intel macOS, new physical-device
+acceptance, HTTP/3 or WebSocket frame capture. Hosted three-platform checks and
+downloaded release-asset verification remain separate publication gates. Large
+bodies still have the 16 MiB rejection limit; this change does not implement
+streaming or claim archive-writer performance improvements. See
+[rule behavior and downgrade precautions](RULES.md).
+
 ## Concurrent rule fixture follow-up — 2026-11-06
 
 At `2ada212`, the [Windows job](https://github.com/dalkedev/scope/actions/runs/42281855023/job/128112730439)

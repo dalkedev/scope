@@ -62,7 +62,9 @@ struct ReplayArgs {
 struct RuleArgs {
     /// Full TrafficRule: id (empty to create), name, enabled, priority, matcher
     /// (method/host/pathPrefix/urlContains), action with type rewriteRequest,
-    /// rewriteResponse, mockResponse or block. See docs/RULES.md for the schema.
+    /// rewriteResponse, mockResponse, block, or pause with stage request/response/both.
+    /// Pause rules hold matching live traffic for manual editing in Scope;
+    /// replay skips pauses. See docs/RULES.md for the schema.
     /// Definitions are never reconstructed from list_rules inventory output.
     rule: Value,
 }

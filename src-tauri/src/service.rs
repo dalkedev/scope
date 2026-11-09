@@ -172,7 +172,9 @@ impl AppCore {
     }
 
     pub async fn generate_demo(&self, session_id: String) -> Result<Value> {
-        self.ensure_demo().await?;
+        let routes = [
+            "profile", "products", "products", "sign-in", "slow", "config",
+        ];
         let proxy = self.engine.proxy_status();
         if proxy.running && proxy.session_id.as_deref() != Some(&session_id) {
             bail!("Stop the current capture before recording demo traffic into another session");
@@ -180,6 +182,13 @@ impl AppCore {
         if proxy.request_breakpoint || proxy.response_breakpoint {
             bail!("Disable breakpoints before generating demo traffic");
         }
+        if routes.iter().any(|route| {
+            self.engine
+                .has_pause_rule_for("GET", &format!("http://127.0.0.1:17891/api/{route}"))
+        }) {
+            bail!("Disable manual pause rules matching the local demo before generating demo traffic; send a request from your own client to edit it interactively");
+        }
+        self.ensure_demo().await?;
         let port = if proxy.running {
             proxy.port
         } else {
@@ -193,9 +202,7 @@ impl AppCore {
             .proxy(reqwest::Proxy::all(format!("http://127.0.0.1:{port}"))?)
             .timeout(Duration::from_secs(15))
             .build()?;
-        for route in [
-            "profile", "products", "products", "sign-in", "slow", "config",
-        ] {
+        for route in routes {
             client
                 .get(format!("http://127.0.0.1:17891/api/{route}"))
                 .header("X-Scope-Demo", "true")
@@ -710,6 +717,42 @@ pub fn redact(mut value: Value) -> Value {
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn demo_rejects_matching_manual_pause_before_starting_capture() {
+        let dir = std::env::temp_dir().join(format!("scope-demo-pause-{}", uuid::Uuid::new_v4()));
+        let runtime = tokio::runtime::Runtime::new().unwrap();
+        runtime.block_on(async {
+            let app = AppCore::open(dir.clone(), None, 0).await.unwrap();
+            let session = app
+                .engine
+                .create_session("fixture".into(), "test".into())
+                .unwrap();
+            app.engine
+                .save_rule(
+                    serde_json::from_value(json!({
+                        "id":"", "name":"Pause demo products", "enabled":true, "priority":10,
+                        "matcher":{"host":"127.0.0.1", "pathPrefix":"/api/products"},
+                        "action":{"type":"pause", "stage":"response"}
+                    }))
+                    .unwrap(),
+                )
+                .unwrap();
+            let error = app.generate_demo(session.id.clone()).await.unwrap_err();
+            assert!(error
+                .to_string()
+                .contains("manual pause rules matching the local demo"));
+            assert!(!app.engine.proxy_status().running);
+            assert!(app.engine.pending().is_empty());
+            assert!(app
+                .engine
+                .list_exchanges(&session.id, None, 10, 0)
+                .unwrap()
+                .is_empty());
+        });
+        drop(runtime);
+        std::fs::remove_dir_all(dir).unwrap();
+    }
+
     #[test]
     fn redacts_credentials_and_keeps_evidence() {
         let v = redact(

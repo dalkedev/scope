@@ -10,7 +10,9 @@ use hudsucker::{
     rustls::{self, crypto::aws_lc_rs},
     Body,
 };
-use scope_core::{EditMessage, Engine, SessionUpdate, TrafficProvenance, TrafficRule};
+use scope_core::{
+    EditMessage, Engine, Header, PauseStage, SessionUpdate, TrafficProvenance, TrafficRule,
+};
 use serde_json::{json, Value};
 use std::{
     convert::Infallible,
@@ -809,6 +811,700 @@ async fn stopping_proxy_preserves_live_replay_ownership_until_its_final_archive_
     );
     engine.delete_session(&session.id).unwrap();
     fixture_task.abort();
+}
+
+async fn rule_pending(engine: &Engine, stage: &str) -> scope_core::PendingExchange {
+    tokio::time::timeout(Duration::from_secs(3), async {
+        loop {
+            if let Some(pending) = engine.pending().into_iter().find(|p| p.stage == stage) {
+                return pending;
+            }
+            tokio::task::yield_now().await;
+        }
+    })
+    .await
+    .expect("The matching endpoint must reach its manual breakpoint")
+}
+
+#[test]
+fn pause_rule_contract_is_strict_durable_and_uses_the_capture_matcher() {
+    let dir = tempfile::tempdir().unwrap();
+    let engine = Engine::open(dir.path()).unwrap();
+    let mut saved = Vec::new();
+    for stage in [PauseStage::Request, PauseStage::Response, PauseStage::Both] {
+        saved.push(
+            engine
+                .save_rule(rule(
+                    1,
+                    json!({"host":"EXAMPLE.COM", "method":"post", "pathPrefix":"/checkout"}),
+                    json!({"type":"pause", "stage": stage}),
+                ))
+                .unwrap(),
+        );
+    }
+    assert!(engine.has_pause_rule_for("POST", "https://example.com/checkout/confirm?currency=PLN"));
+    assert!(!engine.has_pause_rule_for("GET", "https://example.com/checkout"));
+    assert!(!engine.has_pause_rule_for("POST", "https://other.test/checkout"));
+    assert!(!engine.has_pause_rule_for("POST", "https://example.com/account"));
+    for action in [
+        json!({"type":"pause"}),
+        json!({"type":"pause", "stage":"invalid"}),
+        json!({"type":"pause", "stage":"REQUEST"}),
+        json!({"type":"pause", "stage":null}),
+        json!({"type":"pause", "stage":{"request":null}}),
+        json!({"type":"pause", "stage":["request"]}),
+        json!({"type":"pause", "stage":1}),
+        json!({"type":"pause", "stage":"request", "body":"not an automatic edit"}),
+    ] {
+        assert!(serde_json::from_value::<TrafficRule>(json!({
+            "id":saved[0].id,"name":"Invalid replacement","enabled":true,
+            "priority":1,"matcher":{},"action":action
+        }))
+        .is_err());
+    }
+    drop(engine);
+    let reopened = Engine::open(dir.path()).unwrap();
+    assert_eq!(reopened.list_rules().unwrap().len(), 3);
+    for expected in saved {
+        assert!(reopened.list_rules().unwrap().iter().any(|actual| {
+            actual.id == expected.id
+                && serde_json::to_value(&actual.action).unwrap()
+                    == serde_json::to_value(&expected.action).unwrap()
+        }));
+    }
+}
+
+#[tokio::test]
+async fn endpoint_pause_edits_real_http_and_https_once_per_stage_using_the_original_snapshot() {
+    for tls in [false, true] {
+        let dir = tempfile::tempdir().unwrap();
+        let engine = Engine::open(dir.path()).unwrap();
+        let session = engine
+            .create_session("Endpoint manual edits".into(), "test".into())
+            .unwrap();
+        let (url, requests, server) = fixture(&engine, tls).await;
+        let proxy = engine.start_proxy(session.id.clone(), 0).await.unwrap();
+        let client = client(&engine, proxy.port);
+        // Positive control: the same proxy and upstream are live before testing withholding.
+        assert_eq!(
+            client
+                .get(format!("{url}/control"))
+                .send()
+                .await
+                .unwrap()
+                .status(),
+            200
+        );
+        assert_eq!(requests.load(Ordering::SeqCst), 1);
+        let matcher = json!({"method":"POST", "pathPrefix":"/endpoint"});
+        let both = engine
+            .save_rule(rule(
+                1,
+                matcher.clone(),
+                json!({"type":"pause","stage":"both"}),
+            ))
+            .unwrap();
+        let req_pause = engine
+            .save_rule(rule(
+                2,
+                matcher.clone(),
+                json!({"type":"pause","stage":"request"}),
+            ))
+            .unwrap();
+        let res_pause = engine
+            .save_rule(rule(
+                3,
+                matcher.clone(),
+                json!({"type":"pause","stage":"response"}),
+            ))
+            .unwrap();
+        engine.save_rule(rule(10, matcher.clone(), json!({"type":"rewriteRequest", "method":"PATCH", "url":format!("{url}/automatic"), "body":"automatic request"}))).unwrap();
+        let response_rule = engine
+            .save_rule(rule(
+                20,
+                matcher,
+                json!({"type":"rewriteResponse", "status":202, "body":"automatic response"}),
+            ))
+            .unwrap();
+        let rewritten_match = engine
+            .save_rule(rule(
+                30,
+                json!({"pathPrefix":"/automatic"}),
+                json!({"type":"pause","stage":"both"}),
+            ))
+            .unwrap();
+        let manual_match = engine
+            .save_rule(rule(
+                31,
+                json!({"method":"PUT","pathPrefix":"/edited"}),
+                json!({"type":"pause","stage":"both"}),
+            ))
+            .unwrap();
+        engine.set_breakpoints(true, true);
+        let request_client = client.clone();
+        let original_url = format!("{url}/endpoint");
+        let request = tokio::spawn(async move {
+            request_client
+                .post(original_url)
+                .body("original request")
+                .send()
+                .await
+                .unwrap()
+        });
+        let pending_request = rule_pending(&engine, "request").await;
+        assert_eq!(engine.pending().len(), 1);
+        assert_eq!(pending_request.method, "PATCH");
+        assert_eq!(pending_request.url, format!("{url}/automatic"));
+        assert_eq!(pending_request.body, "automatic request");
+        assert_eq!(
+            requests.load(Ordering::SeqCst),
+            1,
+            "Nothing reached upstream while request is pending"
+        );
+        assert!(!request.is_finished());
+        assert!(engine
+            .resolve_breakpoint(
+                &pending_request.id,
+                EditMessage {
+                    action: "continue".into(),
+                    method: Some("CONNECT".into()),
+                    ..Default::default()
+                }
+            )
+            .is_err());
+        assert_eq!(engine.pending()[0].id, pending_request.id);
+        // Updates/deletions affect the next exchange, not the held snapshot.
+        engine.delete_rule(&both.id).unwrap();
+        engine.delete_rule(&req_pause.id).unwrap();
+        engine.delete_rule(&res_pause.id).unwrap();
+        engine.delete_rule(&response_rule.id).unwrap();
+        engine
+            .resolve_breakpoint(
+                &pending_request.id,
+                EditMessage {
+                    action: "continue".into(),
+                    method: Some("PUT".into()),
+                    url: Some(format!("{url}/edited")),
+                    headers: Some(vec![Header {
+                        name: "x-rule".into(),
+                        value: "manual request header".into(),
+                    }]),
+                    body: Some("upstream-edited".into()),
+                    ..Default::default()
+                },
+            )
+            .unwrap();
+        assert!(engine
+            .resolve_breakpoint(&pending_request.id, EditMessage::continue_unchanged())
+            .is_err());
+        let pending_response = rule_pending(&engine, "response").await;
+        assert_ne!(pending_response.id, pending_request.id);
+        assert_eq!(pending_response.exchange_id, pending_request.exchange_id);
+        assert_eq!(
+            engine.pending().len(),
+            1,
+            "Global + multiple matching rules share one pause"
+        );
+        assert_eq!(requests.load(Ordering::SeqCst), 2);
+        assert_eq!(pending_response.status, Some(202));
+        assert_eq!(pending_response.body, "automatic response");
+        for (name, value) in [
+            ("x-upstream-path", "/edited"),
+            ("x-upstream-method", "PUT"),
+            ("x-saw-rule", "manual request header"),
+        ] {
+            assert!(pending_response
+                .headers
+                .iter()
+                .any(|h| h.name == name && h.value == value));
+        }
+        assert!(
+            !request.is_finished(),
+            "Client response is withheld until manual continuation"
+        );
+        let held = engine.get_exchange(&pending_request.exchange_id).unwrap();
+        assert!(!held.completed);
+        assert_eq!(held.status, Some(202));
+        assert_eq!(held.response_body, "automatic response");
+        let pauses: Vec<_> = held
+            .applied_rules
+            .iter()
+            .filter(|r| r.action == "pause")
+            .map(|r| (r.rule_id.as_str(), r.stage.as_str()))
+            .collect();
+        assert_eq!(
+            pauses,
+            vec![
+                (both.id.as_str(), "request"),
+                (req_pause.id.as_str(), "request"),
+                (both.id.as_str(), "response"),
+                (res_pause.id.as_str(), "response")
+            ]
+        );
+        assert!(held
+            .applied_rules
+            .iter()
+            .all(|r| r.rule_id != rewritten_match.id && r.rule_id != manual_match.id));
+        assert!(engine
+            .resolve_breakpoint(
+                &pending_response.id,
+                EditMessage {
+                    action: "continue".into(),
+                    status: Some(101),
+                    ..Default::default()
+                }
+            )
+            .is_err());
+        assert_eq!(engine.pending()[0].id, pending_response.id);
+        engine
+            .resolve_breakpoint(
+                &pending_response.id,
+                EditMessage {
+                    action: "continue".into(),
+                    status: Some(201),
+                    headers: Some(vec![Header {
+                        name: "x-client".into(),
+                        value: "manual response header".into(),
+                    }]),
+                    body: Some("client-edited".into()),
+                    ..Default::default()
+                },
+            )
+            .unwrap();
+        let response = tokio::time::timeout(Duration::from_secs(3), request)
+            .await
+            .unwrap()
+            .unwrap();
+        assert_eq!(response.status(), 201);
+        assert_eq!(response.headers()["x-client"], "manual response header");
+        assert_eq!(response.text().await.unwrap(), "client-edited");
+        assert!(engine.pending().is_empty());
+        let completed = engine.get_exchange(&pending_request.exchange_id).unwrap();
+        assert!(completed.completed && completed.error.is_none());
+        assert_eq!(
+            completed.original_request.as_ref().unwrap()["body"],
+            "original request"
+        );
+        assert_eq!(
+            completed.original_response.as_ref().unwrap()["body"],
+            "upstream-edited"
+        );
+        engine.set_breakpoints(false, false);
+        // The deleted snapshot no longer pauses or rewrites the next response.
+        let next = client
+            .post(format!("{url}/endpoint"))
+            .body("next")
+            .send()
+            .await
+            .unwrap();
+        assert_eq!(next.status(), 200);
+        assert_eq!(next.text().await.unwrap(), "automatic request");
+        assert!(engine.pending().is_empty());
+        engine.stop_proxy().await.unwrap();
+        server.abort();
+    }
+}
+
+#[tokio::test]
+async fn endpoint_pause_includes_mock_and_blocked_responses_and_replay_never_pauses() {
+    for terminal in [
+        json!({"type":"mockResponse","status":201,"body":"mock"}),
+        json!({"type":"block","reason":"fixture"}),
+    ] {
+        let dir = tempfile::tempdir().unwrap();
+        let engine = Engine::open(dir.path()).unwrap();
+        let session = engine
+            .create_session("Terminal pauses".into(), "test".into())
+            .unwrap();
+        let (url, requests, server) = fixture(&engine, false).await;
+        let proxy = engine.start_proxy(session.id.clone(), 0).await.unwrap();
+        let client = client(&engine, proxy.port);
+        assert_eq!(
+            client
+                .get(format!("{url}/control"))
+                .send()
+                .await
+                .unwrap()
+                .status(),
+            200
+        );
+        let matcher = json!({"pathPrefix":"/terminal"});
+        engine
+            .save_rule(rule(0, matcher.clone(), terminal.clone()))
+            .unwrap();
+        engine.save_rule(rule(1, matcher.clone(), json!({"type":"rewriteResponse","status":202,"body":"after automatic response rule"}))).unwrap();
+        let pause = engine
+            .save_rule(rule(99, matcher, json!({"type":"pause","stage":"both"})))
+            .unwrap();
+        let request_url = format!("{url}/terminal");
+        let request = tokio::spawn(async move { client.get(request_url).send().await.unwrap() });
+        let pending_request = rule_pending(&engine, "request").await;
+        assert_eq!(requests.load(Ordering::SeqCst), 1);
+        engine
+            .resolve_breakpoint(&pending_request.id, EditMessage::continue_unchanged())
+            .unwrap();
+        let pending_response = rule_pending(&engine, "response").await;
+        assert_eq!(pending_response.status, Some(202));
+        assert_eq!(pending_response.body, "after automatic response rule");
+        assert_eq!(requests.load(Ordering::SeqCst), 1);
+        assert!(!request.is_finished());
+        engine
+            .resolve_breakpoint(&pending_response.id, EditMessage::continue_unchanged())
+            .unwrap();
+        let response = tokio::time::timeout(Duration::from_secs(3), request)
+            .await
+            .unwrap()
+            .unwrap();
+        assert_eq!(response.status(), 202);
+        assert_eq!(
+            response.text().await.unwrap(),
+            "after automatic response rule"
+        );
+        let captured = engine.get_exchange(&pending_request.exchange_id).unwrap();
+        assert_eq!(
+            captured.provenance,
+            if terminal["type"] == "block" {
+                TrafficProvenance::Blocked
+            } else {
+                TrafficProvenance::Mock
+            }
+        );
+        assert_eq!(
+            captured
+                .applied_rules
+                .iter()
+                .filter(|r| r.rule_id == pause.id)
+                .map(|r| r.stage.as_str())
+                .collect::<Vec<_>>(),
+            vec!["request", "response"]
+        );
+        engine.set_breakpoints(true, true);
+        let replay =
+            tokio::time::timeout(Duration::from_secs(3), engine.replay(&captured.id, None))
+                .await
+                .unwrap()
+                .unwrap();
+        assert!(replay.completed && replay.error.is_none());
+        assert_eq!(replay.provenance, captured.provenance);
+        assert_eq!(replay.response_body, "after automatic response rule");
+        assert!(replay.applied_rules.iter().all(|r| r.action != "pause"));
+        assert_eq!(requests.load(Ordering::SeqCst), 1);
+        assert!(engine.pending().is_empty());
+        engine.stop_proxy().await.unwrap();
+        server.abort();
+    }
+}
+
+#[tokio::test]
+async fn endpoint_pause_respects_stage_disabled_nonmatching_and_upstream_replay() {
+    for stage in ["request", "response"] {
+        let dir = tempfile::tempdir().unwrap();
+        let engine = Engine::open(dir.path()).unwrap();
+        let session = engine
+            .create_session("Selective pauses".into(), "test".into())
+            .unwrap();
+        let (url, requests, server) = fixture(&engine, false).await;
+        let pause = engine
+            .save_rule(rule(
+                1,
+                json!({"method":"POST","pathPrefix":"/matching"}),
+                json!({"type":"pause","stage":stage}),
+            ))
+            .unwrap();
+        let mut disabled = rule(
+            2,
+            json!({"pathPrefix":"/disabled"}),
+            json!({"type":"pause","stage":"both"}),
+        );
+        disabled.enabled = false;
+        engine.save_rule(disabled).unwrap();
+        assert!(!engine.has_pause_rule_for("GET", &format!("{url}/matching")));
+        assert!(!engine.has_pause_rule_for("POST", &format!("{url}/disabled")));
+        assert!(engine.has_pause_rule_for("POST", &format!("{url}/matching")));
+        let proxy = engine.start_proxy(session.id.clone(), 0).await.unwrap();
+        let client = client(&engine, proxy.port);
+        for path in ["/disabled", "/other", "/matching"] {
+            assert_eq!(
+                client
+                    .get(format!("{url}{path}"))
+                    .send()
+                    .await
+                    .unwrap()
+                    .status(),
+                200
+            );
+        }
+        assert_eq!(requests.load(Ordering::SeqCst), 3);
+        assert!(engine.pending().is_empty());
+        assert!(engine
+            .list_exchanges(&session.id, None, 10, 0)
+            .unwrap()
+            .iter()
+            .all(|e| e.applied_rules.is_empty()));
+        let request_url = format!("{url}/matching");
+        let request =
+            tokio::spawn(
+                async move { client.post(request_url).body("echo").send().await.unwrap() },
+            );
+        let pending = rule_pending(&engine, stage).await;
+        assert_eq!(engine.pending().len(), 1);
+        assert_eq!(
+            requests.load(Ordering::SeqCst),
+            if stage == "request" { 3 } else { 4 }
+        );
+        engine
+            .resolve_breakpoint(&pending.id, EditMessage::continue_unchanged())
+            .unwrap();
+        let response = tokio::time::timeout(Duration::from_secs(3), request)
+            .await
+            .unwrap()
+            .unwrap();
+        assert_eq!(response.text().await.unwrap(), "echo");
+        let captured = engine.get_exchange(&pending.exchange_id).unwrap();
+        assert_eq!(captured.applied_rules.len(), 1);
+        assert_eq!(captured.applied_rules[0].rule_id, pause.id);
+        assert_eq!(captured.applied_rules[0].stage, stage);
+        engine.set_breakpoints(true, true);
+        let replay =
+            tokio::time::timeout(Duration::from_secs(3), engine.replay(&captured.id, None))
+                .await
+                .unwrap()
+                .unwrap();
+        assert_eq!(replay.response_body, "echo");
+        assert!(replay.error.is_none() && replay.applied_rules.is_empty());
+        assert_eq!(requests.load(Ordering::SeqCst), 5);
+        assert!(engine.pending().is_empty());
+        engine.stop_proxy().await.unwrap();
+        server.abort();
+    }
+}
+
+#[tokio::test]
+async fn endpoint_pause_abort_and_proxy_stop_clear_pending_and_retain_stage_evidence() {
+    for stage in ["request", "response"] {
+        for stop in [false, true] {
+            let dir = tempfile::tempdir().unwrap();
+            let engine = Engine::open(dir.path()).unwrap();
+            let session = engine
+                .create_session("Pause cancellation".into(), "test".into())
+                .unwrap();
+            let (url, requests, server) = fixture(&engine, false).await;
+            engine
+                .save_rule(rule(
+                    1,
+                    json!({"pathPrefix":"/cancel"}),
+                    json!({"type":"pause","stage":stage}),
+                ))
+                .unwrap();
+            engine.save_rule(rule(2, json!({"pathPrefix":"/cancel"}), json!({"type":"rewriteResponse","status":202,"body":"persisted before response pause"}))).unwrap();
+            let proxy = engine.start_proxy(session.id.clone(), 0).await.unwrap();
+            let client = client(&engine, proxy.port);
+            assert_eq!(
+                client
+                    .get(format!("{url}/control"))
+                    .send()
+                    .await
+                    .unwrap()
+                    .status(),
+                200
+            );
+            let request_client = client.clone();
+            let request_url = format!("{url}/cancel");
+            let request = tokio::spawn(async move { request_client.get(request_url).send().await });
+            let pending = rule_pending(&engine, stage).await;
+            if stop {
+                tokio::time::timeout(Duration::from_secs(8), engine.stop_proxy())
+                    .await
+                    .unwrap()
+                    .unwrap();
+            } else {
+                engine
+                    .resolve_breakpoint(
+                        &pending.id,
+                        EditMessage {
+                            action: "abort".into(),
+                            ..Default::default()
+                        },
+                    )
+                    .unwrap();
+            }
+            let result = tokio::time::timeout(Duration::from_secs(3), request)
+                .await
+                .unwrap()
+                .unwrap();
+            if let Ok(response) = result {
+                assert_eq!(response.status(), 502);
+                assert!(response
+                    .text()
+                    .await
+                    .unwrap()
+                    .contains("aborted at breakpoint"));
+            } else {
+                assert!(
+                    stop,
+                    "Explicit abort returns an HTTP failure through the running proxy"
+                );
+            }
+            assert!(engine.pending().is_empty());
+            assert!(engine
+                .resolve_breakpoint(&pending.id, EditMessage::continue_unchanged())
+                .is_err());
+            let captured = engine.get_exchange(&pending.exchange_id).unwrap();
+            assert!(captured.completed && captured.error.is_some());
+            assert_eq!(
+                captured
+                    .applied_rules
+                    .iter()
+                    .filter(|r| r.action == "pause")
+                    .map(|r| r.stage.as_str())
+                    .collect::<Vec<_>>(),
+                vec![stage]
+            );
+            assert_eq!(
+                requests.load(Ordering::SeqCst),
+                if stage == "request" { 1 } else { 2 }
+            );
+            if stage == "response" {
+                assert_eq!(captured.status, Some(202));
+                assert_eq!(captured.response_body, "persisted before response pause");
+                assert!(captured
+                    .applied_rules
+                    .iter()
+                    .any(|r| r.action == "rewriteResponse"));
+            }
+            if !stop {
+                assert_eq!(
+                    client
+                        .get(format!("{url}/control-after-abort"))
+                        .send()
+                        .await
+                        .unwrap()
+                        .status(),
+                    200
+                );
+                engine.stop_proxy().await.unwrap();
+            }
+            server.abort();
+        }
+    }
+}
+
+#[tokio::test]
+async fn endpoint_pause_timeout_fails_closed_at_either_stage_and_retains_evidence() {
+    for stage in ["request", "response"] {
+        let dir = tempfile::tempdir().unwrap();
+        let engine = Engine::open(dir.path()).unwrap();
+        let session = engine
+            .create_session("Pause expiry".into(), "test".into())
+            .unwrap();
+        let (url, requests, server) = fixture(&engine, false).await;
+        let proxy = engine.start_proxy(session.id.clone(), 0).await.unwrap();
+        let client = client_with_timeout(&engine, proxy.port, Duration::from_secs(120));
+        assert_eq!(
+            client
+                .get(format!("{url}/control"))
+                .send()
+                .await
+                .unwrap()
+                .status(),
+            200
+        );
+        engine
+            .save_rule(rule(
+                1,
+                json!({"pathPrefix":"/expire"}),
+                json!({"type":"pause","stage":"both"}),
+            ))
+            .unwrap();
+        engine
+            .save_rule(rule(
+                2,
+                json!({"pathPrefix":"/expire"}),
+                json!({"type":"rewriteResponse","status":202,"body":"retained after expiry"}),
+            ))
+            .unwrap();
+        let request_client = client.clone();
+        let request_url = format!("{url}/expire");
+        let request =
+            tokio::spawn(async move { request_client.get(request_url).send().await.unwrap() });
+        let mut pending = rule_pending(&engine, "request").await;
+        assert_eq!(requests.load(Ordering::SeqCst), 1);
+        if stage == "response" {
+            engine
+                .resolve_breakpoint(&pending.id, EditMessage::continue_unchanged())
+                .unwrap();
+            pending = rule_pending(&engine, "response").await;
+            assert_eq!(pending.body, "retained after expiry");
+            assert_eq!(requests.load(Ordering::SeqCst), 2);
+        }
+        // Freeze only once the real socket request is positively observed waiting;
+        // advance the existing production timer instead of sleeping for a minute.
+        tokio::time::pause();
+        tokio::time::advance(Duration::from_secs(
+            scope_core::BREAKPOINT_TIMEOUT_SECONDS + 1,
+        ))
+        .await;
+        tokio::time::resume();
+        let response = tokio::time::timeout(Duration::from_secs(3), request)
+            .await
+            .unwrap()
+            .unwrap();
+        assert_eq!(response.status(), 502);
+        assert!(response
+            .text()
+            .await
+            .unwrap()
+            .contains(&format!("{stage} breakpoint expired")));
+        assert_eq!(
+            requests.load(Ordering::SeqCst),
+            if stage == "request" { 1 } else { 2 }
+        );
+        assert!(engine.pending().is_empty());
+        let expired = engine.get_exchange(&pending.exchange_id).unwrap();
+        assert!(
+            expired.completed
+                && expired
+                    .error
+                    .as_ref()
+                    .unwrap()
+                    .contains("breakpoint expired")
+        );
+        assert_eq!(
+            expired
+                .applied_rules
+                .iter()
+                .filter(|r| r.action == "pause")
+                .map(|r| r.stage.as_str())
+                .collect::<Vec<_>>(),
+            if stage == "request" {
+                vec!["request"]
+            } else {
+                vec!["request", "response"]
+            }
+        );
+        if stage == "response" {
+            assert_eq!(expired.status, Some(202));
+            assert_eq!(expired.response_body, "retained after expiry");
+            assert!(expired
+                .applied_rules
+                .iter()
+                .any(|r| r.action == "rewriteResponse"));
+        }
+        assert!(engine
+            .resolve_breakpoint(&pending.id, EditMessage::continue_unchanged())
+            .is_err());
+        assert_eq!(
+            client
+                .get(format!("{url}/control-after-expiry"))
+                .send()
+                .await
+                .unwrap()
+                .status(),
+            200
+        );
+        engine.stop_proxy().await.unwrap();
+        server.abort();
+    }
 }
 
 #[tokio::test]

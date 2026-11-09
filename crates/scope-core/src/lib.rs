@@ -9,7 +9,7 @@ mod rules;
 mod search;
 mod sessions;
 
-pub use rules::{AppliedRule, RuleAction, RuleMatcher, TrafficProvenance, TrafficRule};
+pub use rules::{AppliedRule, PauseStage, RuleAction, RuleMatcher, TrafficProvenance, TrafficRule};
 pub use sessions::{AuditEntry, SessionUpdate};
 
 use anyhow::{anyhow, bail, Context, Result};
@@ -450,13 +450,21 @@ impl Engine {
     }
     pub fn resolve_breakpoint(&self, id: &str, edit: EditMessage) -> Result<()> {
         edit.validate()?;
-        let (_, tx) = self
-            .inner
-            .pending
-            .lock()
-            .unwrap()
-            .remove(id)
+        let mut pending = self.inner.pending.lock().unwrap();
+        let (exchange, _) = pending
+            .get(id)
             .ok_or_else(|| anyhow!("Breakpoint expired or already resolved"))?;
+        if exchange.stage == "request" && edit.method.as_deref() == Some("CONNECT") {
+            bail!("Manual request edits cannot switch to CONNECT");
+        }
+        if exchange.stage == "response"
+            && edit
+                .status
+                .is_some_and(|status| !(200..=599).contains(&status))
+        {
+            bail!("Manual response status must be a final HTTP status between 200 and 599");
+        }
+        let (_, tx) = pending.remove(id).unwrap();
         tx.send(edit)
             .map_err(|_| anyhow!("Breakpoint is no longer waiting"))
     }

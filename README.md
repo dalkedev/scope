@@ -24,7 +24,7 @@ Scope routes traffic through a Rust engine, gives you control over requests and 
 
 **Local capture, saved sessions and export need no account or subscription.** Built-in analysis runs locally. You choose which sessions an external agent can access.
 
-> **This README describes Scope 1.2.2.** This maintenance update backports the upstream GLib iterator soundness fix for the compatible Linux GTK/WebKit dependency family, with verified source provenance and portable integrity checks. The HAR comparison Action, refreshed artwork and desktop icons remain included. Check [Releases](https://github.com/dalkedev/scope/releases) for published builds and platform notes. [Verification record →](docs/VERIFICATION.md)
+> **This README describes Scope 1.3.0.** Endpoint rules can pause a real request, response or both for manual editing before forwarding. Other endpoints keep moving; the paused-message editor is available from every workspace. Automatic rules, the offline HAR Action and the verified GLib backport remain included. Check [Releases](https://github.com/dalkedev/scope/releases) for published builds and platform notes. [Pause an endpoint →](docs/RULES.md#pause-an-endpoint-and-edit-the-real-message) · [Verification record →](docs/VERIFICATION.md)
 
 <a href="docs/SCREENSHOTS.md"><img src="docs/images/traffic-inspector.jpg" alt="Real captured traffic: a products request returns a local HTTP 503 mock, with its rule and response JSON visible." width="100%"></a>
 
@@ -122,7 +122,7 @@ The same engine powers the native inspector and MCP. Real HTTP/TLS fixtures test
 
 | Today                   | Boundary                                                                                                                                                                  |
 | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| macOS arm64             | Local UI/package evidence is recorded by version; 1.2.2 interactive validation remains open. Ad-hoc signed; not Apple-notarized.                                          |
+| macOS arm64             | Local UI/package evidence is recorded by version; 1.3.0 interactive validation is recorded separately by scenario. Ad-hoc signed; not Apple-notarized.                                          |
 | Windows x64 / Linux x64 | CI builds, packages and headless MCP/capture smoke pass. Interactive UI and device validation remain open. Intel macOS is unverified.                                     |
 | Android / Frida         | Earlier smoke covered one rooted Android 16 arm64 emulator. The 1.0 diagnostics changes use fixtures; arbitrary apps and TLS stacks are unverified.                       |
 | Capture                 | Bodies are buffered up to **16 MiB each**. Streaming, WebSocket frames, trailers and HTTP3 are not implemented.                                                           |

@@ -1,6 +1,6 @@
 {
   "generator": "cargo-about 0.9.3; scripts/licenses.mjs",
-  "lockfileSha256": "fdb31f03309bc8e0a6bc80dfe026b4f50a0334b5c7bbc0e9008cc225cb69126f",
+  "lockfileSha256": "e55e1042d7a8feefeeae8393a99d365676e9494fdb2b1dd20c11d046b187e55b",
   "scope": "Workspace runtime dependencies across supported target configurations; build and dev dependencies excluded. Includes target-specific crates not necessarily present in each artifact.",
   "licenses": [
     {
@@ -18,7 +18,7 @@
         },
         {
           "name": "scope-core",
-          "version": "1.2.2",
+          "version": "1.3.0",
           "license": "AGPL-3.0-or-later",
           "repository": null,
           "authors": [],
@@ -26,7 +26,7 @@
         },
         {
           "name": "scope-device",
-          "version": "1.2.2",
+          "version": "1.3.0",
           "license": "AGPL-3.0-or-later",
           "repository": null,
           "authors": [],
@@ -34,7 +34,7 @@
         },
         {
           "name": "scope-mcp",
-          "version": "1.2.2",
+          "version": "1.3.0",
           "license": "AGPL-3.0-or-later",
           "repository": null,
           "authors": [],
@@ -42,7 +42,7 @@
         },
         {
           "name": "scope-desktop",
-          "version": "1.2.2",
+          "version": "1.3.0",
           "license": "AGPL-3.0-or-later",
           "repository": null,
           "authors": [],

@@ -18,6 +18,49 @@ mock/block stops subsequent request actions; matched response rewrites can still
 apply. Manual breakpoints run after automatic actions, so an explicit manual
 edit wins. Replay uses current rules and skips manual breakpoints.
 
+## Pause an endpoint and edit the real message
+
+Create a rule matching the endpoint's host and path, then choose **Pause & edit**.
+Choose the request, response, or both stages. A pause rule contains no replacement
+body: the editor is filled with the actual message when it arrives.
+
+- **Request:** holds the message before it is sent upstream. Edit its method,
+  URL, headers or body, then send it on.
+- **Response:** lets the request reach upstream, then holds the received response
+  before the client gets it. Edit its final status, headers or body, then send it on.
+- **Both:** holds the request first, then opens a separate response pause after
+  the continued request receives a response.
+
+The paused-message banner is available from every workspace, including the rule
+editor. Open it to edit the message, continue it unchanged, or abort it. Closing
+the editor only hides the editor; it does not release the message. Each stage
+expires after 60 seconds and aborts the transfer. The client may time out sooner.
+Stopping capture aborts outstanding pauses rather than forwarding them silently.
+
+For example, match `api.example.test` and path prefix `/v1/products`, then use:
+
+```json
+{ "type": "pause", "stage": "response" }
+```
+
+Only matching traffic pauses; other endpoints continue normally. A path prefix
+also matches longer paths beginning with that text. Add a method or URL substring
+when you need a narrower match. The global Request/Response breakpoint buttons
+still pause all proxied traffic when enabled.
+
+Pause selectors use the original request's rule snapshot, even if an automatic
+rewrite or a manual edit changes its destination. Automatic actions run before
+the manual pause for that stage. Matched pauses also apply to mock and blocked
+responses, including selectors ordered after the terminal request action.
+Several matching pause rules and a global breakpoint create only one editor per
+message/stage; every matching pause rule is recorded at the stage actually reached.
+The edited and original messages remain in the session. Direct replay skips
+pause rules and does not record them as applied.
+
+The built-in six-request demo generator refuses matching manual pause rules to
+avoid waiting for an editor during an automatic batch. Use your own test client
+through the proxy to exercise a pause interactively.
+
 Each exchange records `provenance` (`upstream`, `mock`, `blocked`) and
 `appliedRules`. Original messages remain available alongside edits. A mock is
 synthetic evidence; its timing/status must not be treated as an upstream result.
@@ -54,6 +97,7 @@ Matchers may also contain `urlContains`.
 | `rewriteResponse` | Optional `status`, `headers`, `body`, `bodyBase64`                                    |
 | `mockResponse`    | `status`; optional `headers` (empty by default), `body` (empty), `bodyBase64` (false) |
 | `block`           | Optional `reason`                                                                     |
+| `pause`           | Required `stage`: `request`, `response` or `both`; no replacement fields                 |
 
 `headers` replaces the full header list; it does not merge by name. Repeated
 headers remain separate array entries. Omitted rewrite fields keep their current
@@ -65,6 +109,11 @@ The engine validates a whole update before replacing the last good configuration
 Limits: 256 rules, 128 headers per action, 1 MiB decoded body per rule and 8 MiB
 serialized total rule configuration. A rule body limit is separate from the
 16 MiB capture limit. Matching does not execute arbitrary JavaScript or regexes.
+
+Pause rules add a new action to the persisted rule format. Before downgrading to
+a version without pause-rule support, remove or convert those rules using the
+new version, or restore your pre-upgrade data backup. Merely disabling them does
+not make their action readable by an older binary.
 
 ## Agent automation
 

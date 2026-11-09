@@ -50,6 +50,7 @@ import { ExchangeStatus as Status } from './components/ExchangeStatus';
 import { TrafficSearchHelp } from './components/TrafficSearchHelp';
 import { RulesWorkspace } from './components/RulesWorkspace';
 import { ReplayComposer } from './components/ReplayComposer';
+import { BreakpointModal } from './components/BreakpointModal';
 import { SessionDetails } from './components/SessionDetails';
 import { ActivityWorkspace } from './components/ActivityWorkspace';
 import { DiagnosticsWorkspace } from './components/DiagnosticsWorkspace';
@@ -216,17 +217,28 @@ function download(value: unknown, name: string) {
   window.setTimeout(() => URL.revokeObjectURL(objectUrl), 1000);
 }
 
+function validatedListenerPort(draft: string): number {
+  const port = Number(draft);
+  if (!Number.isInteger(port) || port < 1024 || port > 65535)
+    throw new Error('Enter a whole proxy port from 1024 to 65535.');
+  return port;
+}
+
 export default function App() {
   const [boot, setBoot] = useState<Bootstrap | null>(null);
   const [sessions, setSessions] = useState<Session[]>([]);
   const [sessionId, setSessionId] = useState('');
   const sessionIdRef = useRef(sessionId);
   const [proxy, setProxy] = useState(initialProxy);
+  const [proxyPortDraft, setProxyPortDraft] = useState('17890');
+  const proxyEpoch = useRef(0);
   const [device, setDevice] = useState(initialDevice);
   const [exchanges, setExchanges] = useState<Exchange[]>([]);
   const [selected, setSelected] = useState<Exchange | null>(null);
   const [pending, setPending] = useState<PendingExchange[]>([]);
   const [activePending, setActivePending] = useState<PendingExchange | null>(null);
+  const resolvingPending = useRef<string | null>(null);
+  const pendingEpoch = useRef(0);
   const [view, setView] = useState<View>('traffic');
   const [panel, setPanel] = useState<Panel>(null);
   const [query, setQuery] = useState('');
@@ -257,6 +269,12 @@ export default function App() {
     .join('|');
   const native = isNative();
 
+  useEffect(() => {
+    // Polling reports listener state, not the user's next-listener preference.
+    // Only a running listener has an authoritative bound port to adopt.
+    if (proxy.running) setProxyPortDraft(String(proxy.port));
+  }, [proxy.running, proxy.port]);
+
   const refreshSessions = useCallback(async () => {
     const all = await api.list_sessions();
     setSessions(all);
@@ -285,18 +303,28 @@ export default function App() {
   useEffect(() => {
     if (!native) return;
     let alive = true;
+    let nextPoll = 0;
+    let lastAppliedPoll = 0;
     const poll = async () => {
+      const sequence = ++nextPoll;
+      const epoch = pendingEpoch.current;
+      const listenerEpoch = proxyEpoch.current;
       const results = await Promise.allSettled([
         api.list_sessions(),
         api.proxy_status(),
         api.pending(),
         api.device_status(),
       ]);
-      if (!alive) return;
+      // Native calls can outlive the polling interval. Never let an older
+      // snapshot discard a newer pending message and its unsent editor fields.
+      if (!alive || sequence < lastAppliedPoll) return;
+      lastAppliedPoll = sequence;
       const [s, p, b, d] = results;
       if (s.status === 'fulfilled') setSessions(s.value);
-      if (p.status === 'fulfilled') setProxy(p.value);
-      if (b.status === 'fulfilled') setPending(b.value);
+      if (p.status === 'fulfilled' && listenerEpoch === proxyEpoch.current) setProxy(p.value);
+      // A successful Continue/Abort retires its ID immediately. A snapshot
+      // requested before that resolution must not resurrect it afterwards.
+      if (b.status === 'fulfilled' && epoch === pendingEpoch.current) setPending(b.value);
       if (d.status === 'fulfilled') setDevice(d.value);
     };
     const id = window.setInterval(() => void poll(), 2000);
@@ -305,6 +333,14 @@ export default function App() {
       clearInterval(id);
     };
   }, [native]);
+  useEffect(() => {
+    if (activePending && !pending.some((item) => item.id === activePending.id)) {
+      setActivePending(null);
+      setNotice(
+        'This message is no longer paused. It may have expired, been aborted or continued elsewhere.',
+      );
+    }
+  }, [pendingSignature, activePending?.id]);
   useEffect(() => {
     sessionIdRef.current = sessionId;
     setSelected(null);
@@ -399,16 +435,22 @@ export default function App() {
     setSessionId(s.id);
     return s.id;
   }
+  function applyProxyControl(status: ProxyStatus) {
+    // A listener control receipt is newer than any status poll begun before it.
+    proxyEpoch.current += 1;
+    setProxy(status);
+  }
   const toggleCapture = () =>
     perform('capture', async () => {
       if (proxy.running) {
         if (device.running) setDevice(await api.stop_device());
         await api.stop_proxy();
-        setProxy(await api.proxy_status());
+        applyProxyControl(await api.proxy_status());
         setNotice('Capture stopped. Your traffic is saved.');
       } else {
+        const port = validatedListenerPort(proxyPortDraft);
         const id = await ensureSession();
-        setProxy(await api.start_proxy(id, proxy.port || 17890));
+        applyProxyControl(await api.start_proxy(id, port));
         setNotice('Local proxy listening. Connect a device or configure your HTTP client.');
       }
     });
@@ -416,8 +458,9 @@ export default function App() {
     perform('demo', async () => {
       if (proxy.requestBreakpoint || proxy.responseBreakpoint)
         throw new Error('Disable request and response breakpoints before generating test traffic.');
+      const port = proxy.running ? proxy.port : validatedListenerPort(proxyPortDraft);
       const id = await ensureSession('Demo traffic', 'local-demo');
-      if (!proxy.running) setProxy(await api.start_proxy(id, proxy.port || 17890));
+      if (!proxy.running) applyProxyControl(await api.start_proxy(id, port));
       if (proxy.running && proxy.sessionId !== id)
         throw new Error('Stop the active capture before generating traffic in another session.');
       await api.generate_demo(id);
@@ -783,6 +826,25 @@ export default function App() {
             </IconButton>
           </div>
         )}
+        {pending.length > 0 && (
+          <div
+            className="pending-banner"
+            role="region"
+            aria-label="Paused traffic"
+            aria-live="polite"
+          >
+            <Pause size={15} />
+            <span>
+              <strong>
+                {pending.length} {pending.length === 1 ? 'message is' : 'messages are'} paused
+              </strong>{' '}
+              at a breakpoint.
+            </span>
+            <button className="button small" onClick={() => setActivePending(pending[0])}>
+              Inspect & edit <ArrowRight size={13} />
+            </button>
+          </div>
+        )}
         {panel === 'rules' ? (
           <RulesWorkspace native={native} />
         ) : panel === 'activity' ? (
@@ -798,12 +860,13 @@ export default function App() {
           <DevicePanel
             device={device}
             proxy={proxy}
+            portDraft={proxyPortDraft}
             busy={busy}
             native={native}
             onClose={() => setPanel(null)}
             perform={perform}
             ensureSession={ensureSession}
-            onProxy={setProxy}
+            onProxy={applyProxyControl}
             onDevice={setDevice}
             onNotice={setNotice}
           />
@@ -820,11 +883,12 @@ export default function App() {
         ) : panel === 'connection' ? (
           <ConnectionPanel
             proxy={proxy}
+            portDraft={proxyPortDraft}
+            onPortChange={setProxyPortDraft}
             boot={boot}
             native={native}
             busy={busy}
             onClose={() => setPanel(null)}
-            onProxy={setProxy}
             onToggle={toggleCapture}
           />
         ) : (
@@ -888,20 +952,6 @@ export default function App() {
                 </button>
               </div>
             </div>
-            {pending.length > 0 && (
-              <div className="pending-banner">
-                <Pause size={15} />
-                <span>
-                  <strong>
-                    {pending.length} {pending.length === 1 ? 'message is' : 'messages are'} paused
-                  </strong>{' '}
-                  at a breakpoint.
-                </span>
-                <button className="button small" onClick={() => setActivePending(pending[0])}>
-                  Edit & continue <ArrowRight size={13} />
-                </button>
-              </div>
-            )}
             {view === 'traffic' ? (
               <section className="traffic-workspace">
                 <div className="traffic-toolbar">
@@ -945,7 +995,7 @@ export default function App() {
                             !proxy.requestBreakpoint,
                             proxy.responseBreakpoint,
                           );
-                          setProxy(await api.proxy_status());
+                          applyProxyControl(await api.proxy_status());
                         })
                       }
                     >
@@ -962,7 +1012,7 @@ export default function App() {
                             proxy.requestBreakpoint,
                             !proxy.responseBreakpoint,
                           );
-                          setProxy(await api.proxy_status());
+                          applyProxyControl(await api.proxy_status());
                         })
                       }
                     >
@@ -1231,25 +1281,40 @@ export default function App() {
       {activePending && (
         <BreakpointModal
           item={activePending}
-          busy={!!busy}
           onClose={() => setActivePending(null)}
-          onResolve={(edit) =>
-            void perform('resolve', async () => {
-              await api.resolve_breakpoint(activePending.id, edit);
-              setActivePending(null);
+          onResolve={async (edit: EditMessage) => {
+            // Resolving a paused transfer must not wait behind demo generation or
+            // any other operation that may itself be waiting for that transfer.
+            if (resolvingPending.current)
+              throw new Error('Another paused message is being continued. Try again in a moment.');
+            const item = activePending;
+            resolvingPending.current = item.id;
+            try {
+              await api.resolve_breakpoint(item.id, edit);
+              pendingEpoch.current += 1;
+              setActivePending((current) => (current?.id === item.id ? null : current));
+              setPending((items) => items.filter((pendingItem) => pendingItem.id !== item.id));
               setNotice(
                 edit.action === 'abort'
-                  ? 'Message aborted.'
-                  : 'Message continued with your changes.',
+                  ? `${item.stage === 'request' ? 'Request' : 'Response'} aborted.`
+                  : Object.keys(edit).length === 1
+                    ? 'Message continued unchanged.'
+                    : 'Message sent with your changes.',
               );
-              setPending(await api.pending());
-              await refreshSessions();
-              if (selected?.id === activePending.exchangeId) {
-                const full = await api.get_exchange(activePending.exchangeId);
-                setSelected(full);
-              }
-            })
-          }
+              // Resolving succeeded. Refresh errors must not offer to send the
+              // same transfer again; report them separately in the workspace.
+              void refreshSessions().catch((e) => setError(errorText(e)));
+              if (selected?.id === item.exchangeId)
+                void api
+                  .get_exchange(item.exchangeId)
+                  .then((full) =>
+                    setSelected((current) => (current?.id === full.id ? full : current)),
+                  )
+                  .catch((e) => setError(errorText(e)));
+            } finally {
+              resolvingPending.current = null;
+            }
+          }}
         />
       )}
     </div>
@@ -1487,120 +1552,6 @@ function NewSessionModal({
   );
 }
 
-function BreakpointModal({
-  item,
-  busy,
-  onClose,
-  onResolve,
-}: {
-  item: PendingExchange;
-  busy: boolean;
-  onClose: () => void;
-  onResolve: (edit: EditMessage) => void;
-}) {
-  const [method, setMethod] = useState(item.method),
-    [url, setUrl] = useState(item.url),
-    [status, setStatus] = useState(String(item.status || 200)),
-    [body, setBody] = useState(item.body),
-    [headers, setHeaders] = useState(JSON.stringify(item.headers, null, 2)),
-    [validation, setValidation] = useState('');
-  const submit = () => {
-    try {
-      const parsed: unknown = JSON.parse(headers);
-      if (
-        !Array.isArray(parsed) ||
-        parsed.some((h) => !h || typeof h.name !== 'string' || typeof h.value !== 'string')
-      )
-        throw new Error('Headers must be an array of {name, value} objects.');
-      if (
-        item.stage === 'response' &&
-        (!Number.isInteger(Number(status)) || +status < 100 || +status > 599)
-      )
-        throw new Error('Enter an HTTP status from 100 to 599.');
-      onResolve({
-        action: 'continue',
-        method: item.stage === 'request' ? method : undefined,
-        url: item.stage === 'request' ? url : undefined,
-        status: item.stage === 'response' ? +status : undefined,
-        headers: parsed,
-        body,
-        bodyBase64: item.bodyBase64,
-      });
-    } catch (e) {
-      setValidation(errorText(e));
-    }
-  };
-  return (
-    <div className="modal-backdrop">
-      <div className="modal breakpoint-modal">
-        <div className="modal-heading">
-          <span className="connection-pill paused">
-            <Pause size={12} /> Paused {item.stage}
-          </span>
-          <IconButton label="Close breakpoint editor" onClick={onClose}>
-            <X size={18} />
-          </IconButton>
-        </div>
-        <h2>Inspect. Edit. Continue.</h2>
-        <p>Changes apply to this message. The original is preserved in the session.</p>
-        {item.stage === 'request' ? (
-          <div className="edit-url">
-            <input
-              className="text-input edit-method"
-              aria-label="HTTP method"
-              value={method}
-              onChange={(e) => setMethod(e.target.value)}
-            />
-            <input
-              className="text-input"
-              aria-label="Request URL"
-              value={url}
-              onChange={(e) => setUrl(e.target.value)}
-            />
-          </div>
-        ) : (
-          <>
-            <label className="field-label">Response status</label>
-            <input
-              className="text-input"
-              aria-label="Response status"
-              value={status}
-              onChange={(e) => setStatus(e.target.value)}
-            />
-          </>
-        )}
-        <label className="field-label">Headers · JSON array</label>
-        <textarea
-          spellCheck={false}
-          className="code-editor headers-editor"
-          value={headers}
-          onChange={(e) => setHeaders(e.target.value)}
-        />
-        <label className="field-label">Body {item.bodyBase64 ? '· base64' : ''}</label>
-        <textarea
-          spellCheck={false}
-          className="code-editor"
-          value={body}
-          onChange={(e) => setBody(e.target.value)}
-        />
-        {validation && <p className="inline-warning">{validation}</p>}
-        <div className="modal-actions">
-          <button
-            className="button danger"
-            disabled={busy}
-            onClick={() => onResolve({ action: 'abort' })}
-          >
-            Abort message
-          </button>
-          <button className="button primary" disabled={busy} onClick={submit}>
-            <Play size={14} /> Continue with changes
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 function PanelHeading({
   icon,
   title,
@@ -1628,6 +1579,7 @@ function PanelHeading({
 function DevicePanel({
   device,
   proxy,
+  portDraft,
   busy,
   native,
   onClose,
@@ -1639,6 +1591,7 @@ function DevicePanel({
 }: {
   device: DeviceStatus;
   proxy: ProxyStatus;
+  portDraft: string;
   busy: string;
   native: boolean;
   onClose: () => void;
@@ -1700,7 +1653,8 @@ function DevicePanel({
     void perform('device', async () => {
       let p = proxy;
       if (!p.running) {
-        p = await api.start_proxy(await ensureSession(), p.port || 17890);
+        const port = validatedListenerPort(portDraft);
+        p = await api.start_proxy(await ensureSession(), port);
         onProxy(p);
       }
       onDevice(await api.start_device(serial, app, mode, profiles));
@@ -2183,21 +2137,24 @@ function McpPanel({
 
 function ConnectionPanel({
   proxy,
+  portDraft,
+  onPortChange,
   boot,
   native,
   busy,
   onClose,
-  onProxy,
   onToggle,
 }: {
   proxy: ProxyStatus;
+  portDraft: string;
+  onPortChange: (port: string) => void;
   boot: Bootstrap | null;
   native: boolean;
   busy: string;
   onClose: () => void;
-  onProxy: (p: ProxyStatus) => void;
   onToggle: () => void;
 }) {
+  const displayedPort = proxy.running ? String(proxy.port) : portDraft;
   return (
     <section className="settings-page">
       <PanelHeading
@@ -2225,12 +2182,10 @@ function ConnectionPanel({
                   type="number"
                   min="1024"
                   max="65535"
-                  value={proxy.port}
-                  disabled={proxy.running}
+                  value={displayedPort}
+                  disabled={proxy.running || !!busy}
                   aria-label="Proxy port"
-                  onChange={(e) =>
-                    onProxy({ ...proxy, port: Math.min(65535, Math.max(1024, +e.target.value)) })
-                  }
+                  onChange={(e) => onPortChange(e.target.value)}
                 />
               </div>
             </div>
@@ -2278,7 +2233,7 @@ function ConnectionPanel({
           </h3>
           <p className="help-copy">With capture running, route a request through Scope:</p>
           <pre className="command-example">
-            curl --proxy http://127.0.0.1:{proxy.port} \ --cacert "
+            curl --proxy http://127.0.0.1:{displayedPort} \ --cacert "
             {proxy.caCertPath || '/path/to/scope-ca.pem'}" \ https://example.com
           </pre>
           <div className="aside-note">

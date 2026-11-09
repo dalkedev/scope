@@ -136,6 +136,7 @@ export interface RuleMatcher {
   urlContains?: string;
 }
 export type RuleAction =
+  | { type: 'pause'; stage: 'request' | 'response' | 'both' }
   | {
       type: 'rewriteRequest';
       method?: string;

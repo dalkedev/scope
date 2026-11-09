@@ -27,24 +27,28 @@ import type { Header, RuleAction, TrafficRule } from '../types';
 import { HeaderEditor, InlineError, WorkspaceHeading } from './WorkbenchUi';
 
 const actionLabels: Record<RuleAction['type'], string> = {
+  pause: 'Pause & edit',
   rewriteRequest: 'Rewrite request',
   rewriteResponse: 'Rewrite response',
   mockResponse: 'Mock response',
   block: 'Block request',
 };
+const pauseStageLabels = {
+  request: 'Request',
+  response: 'Response',
+  both: 'Request & response',
+} as const;
+const ruleActionLabel = (action: RuleAction) =>
+  action.type === 'pause'
+    ? `Pause & edit · ${pauseStageLabels[action.stage]}`
+    : actionLabels[action.type];
 const newRule = (priority = 10): TrafficRule => ({
   id: '',
   name: '',
   enabled: true,
   priority,
   matcher: {},
-  action: {
-    type: 'mockResponse',
-    status: 200,
-    headers: [{ name: 'content-type', value: 'application/json' }],
-    body: '{}',
-    bodyBase64: false,
-  },
+  action: { type: 'pause', stage: 'request' },
 });
 const sortRules = (rules: TrafficRule[]) =>
   [...rules].sort((a, b) => a.priority - b.priority || a.id.localeCompare(b.id));
@@ -140,7 +144,10 @@ export function RulesWorkspace({ native }: { native: boolean }) {
             <div className="rule-empty">
               <Filter size={25} />
               <h3>No rules yet</h3>
-              <p>Match a host, method or path. Then rewrite, mock or block its traffic.</p>
+              <p>
+                Match an endpoint, then pause and edit its real traffic. Or apply an automatic
+                action.
+              </p>
               {!native && <small>Rules require the native desktop engine.</small>}
             </div>
           ) : (
@@ -172,7 +179,7 @@ export function RulesWorkspace({ native }: { native: boolean }) {
                   }}
                 >
                   <strong>{rule.name}</strong>
-                  <small>{actionLabels[rule.action.type]}</small>
+                  <small>{ruleActionLabel(rule.action)}</small>
                   <span className="rule-match-summary">
                     {rule.matcher.method || 'Any method'} <span>·</span>{' '}
                     {rule.matcher.host ||
@@ -274,10 +281,10 @@ export function RulesWorkspace({ native }: { native: boolean }) {
                   <Check size={22} />
                 </span>
               </div>
-              <h2>Make the next request predictable.</h2>
+              <h2>Catch the next request. Change what happens.</h2>
               <p>
-                Mock an unavailable service, exercise an error state or rewrite a request. Every
-                applied rule is recorded with the exchange.
+                Pause a matching request or response, inspect the actual data, then send it
+                unchanged or edit it first. Automatic actions are available too.
               </p>
               <button
                 className="button"
@@ -287,9 +294,9 @@ export function RulesWorkspace({ native }: { native: boolean }) {
                 <Plus size={14} /> Create your first rule
               </button>
               <div className="rule-examples">
-                <span>503 for a maintenance screen</span>
-                <span>Empty JSON for an edge case</span>
-                <span>Block a noisy analytics host</span>
+                <span>Edit an authorization header before sending</span>
+                <span>Change a real response to exercise an error state</span>
+                <span>Mock an unavailable service automatically</span>
               </div>
             </div>
           )}
@@ -317,7 +324,11 @@ export function RuleEditor({
     [contains, setContains] = useState(rule.matcher.urlContains || '');
   const [matchAll, setMatchAll] = useState(!!rule.id && !Object.values(rule.matcher).some(Boolean));
   const [kind, setKind] = useState<RuleAction['type']>(rule.action.type);
-  const action = rule.action.type === 'block' ? undefined : rule.action;
+  const [pauseStage, setPauseStage] = useState<'request' | 'response' | 'both'>(
+    rule.action.type === 'pause' ? rule.action.stage : 'request',
+  );
+  const action =
+    rule.action.type === 'block' || rule.action.type === 'pause' ? undefined : rule.action;
   const [status, setStatus] = useState(
     String(action && 'status' in action ? (action.status ?? '') : ''),
   );
@@ -360,7 +371,8 @@ export function RuleEditor({
       if (matcher.pathPrefix && !matcher.pathPrefix.startsWith('/'))
         throw new Error('A path prefix must start with /.');
       let nextAction: RuleAction;
-      if (kind === 'block')
+      if (kind === 'pause') nextAction = { type: 'pause', stage: pauseStage };
+      else if (kind === 'block')
         nextAction = { type: 'block', ...(reason.trim() ? { reason: reason.trim() } : {}) };
       else {
         if (mock || replaceHeaders) validateHeaders(headers);
@@ -550,6 +562,7 @@ export function RuleEditor({
               type="button"
               key={type}
               className={kind === type ? 'action-chosen' : ''}
+              aria-pressed={kind === type}
               disabled={locked}
               onClick={() => {
                 setKind(type as RuleAction['type']);
@@ -560,7 +573,39 @@ export function RuleEditor({
             </button>
           ))}
         </div>
-        {kind === 'block' ? (
+        {kind === 'pause' ? (
+          <div className="pause-rule-details">
+            <label className="field-label" htmlFor="rule-pause-stage">
+              Pause at
+            </label>
+            <select
+              id="rule-pause-stage"
+              className="text-input"
+              value={pauseStage}
+              disabled={locked}
+              onChange={(event) => setPauseStage(event.target.value as typeof pauseStage)}
+            >
+              {Object.entries(pauseStageLabels).map(([value, label]) => (
+                <option key={value} value={value}>
+                  {label}
+                </option>
+              ))}
+            </select>
+            <p className="field-help">
+              Save this rule, then trigger a matching request in your app. Scope waits for the
+              actual {pauseStage === 'both' ? 'request and response' : pauseStage} before you edit
+              it. This rule pauses only matching endpoints.
+            </p>
+            <p className="field-help">
+              {pauseStage === 'request'
+                ? 'Edit the URL, method, headers or body before the request reaches the server.'
+                : pauseStage === 'response'
+                  ? 'Edit the status, headers or body after the server replies, before your app receives it.'
+                  : 'Edit the request before it reaches the server, then edit the response before your app receives it.'}{' '}
+              Choose Continue unchanged, Send with changes or Abort in the paused-message editor.
+            </p>
+          </div>
+        ) : kind === 'block' ? (
           <>
             <label className="field-label" htmlFor="block-reason">
               Reason shown in the capture

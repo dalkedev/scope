@@ -3,7 +3,7 @@
 ## Review, tag and publication
 
 The `release/<version>` branch carries the proposed changes, currently
-`release/1.2.2`. Opening a proposal does not
+`release/1.3.0`. Opening a proposal does not
 create a tag or a public release. [Governance](GOVERNANCE.md) describes the required
 maintainer review and bot-authored PR, which lets the maintainer use native
 GitHub approval. Dispatch `release.yml` on this branch with `mode: proposal`
@@ -12,14 +12,14 @@ the branch matches the version and reads `docs/releases/<version>-review.md`.
 This mode skips all release build/upload jobs and creates no tag.
 
 After review and successful required checks, merge the PR and tag the reviewed
-main commit. Dispatch the same workflow with `mode: draft` and `tag: v1.2.2` to
+main commit. Dispatch the same workflow with `mode: draft` and `tag: v1.3.0` to
 build the existing tag into a draft prerelease. Inspect the assets and use
-[the 1.2.2 release notes](releases/1.2.2.md) as the publication body. Publication
+[the 1.3.0 release notes](releases/1.3.0.md) as the publication body. Publication
 is a separate maintainer action; for a stable release, clear both the draft and
 prerelease flags. Keep historical release assets attached to their original tags.
 
 The first public prerelease, `v0.1.0-alpha.1`, used application version `0.1.0`;
-the current source uses application version `1.2.2`.
+the current source uses application version `1.3.0`.
 Repository: [dalkedev/scope](https://github.com/dalkedev/scope).
 The recorded 1.0.0 interactive host was macOS Apple Silicon; this does not establish
 new-version interactive validation. Windows/Linux packages
@@ -103,13 +103,13 @@ before preparing release assets. The helper refuses a dirty tracked checkout or
 a mismatched tag, preventing a source archive from describing different code.
 
 ```sh
-node scripts/release-assets.mjs v1.2.2
+node scripts/release-assets.mjs v1.3.0
 ```
 
 On macOS this produces:
 
-- `Scope-v1.2.2-macOS-arm64.zip`, preserving the app bundle with `ditto`;
-- `Scope-v1.2.2-source.zip`, produced by `git archive` from the exact tag;
+- `Scope-v1.3.0-macOS-arm64.zip`, preserving the app bundle with `ditto`;
+- `Scope-v1.3.0-source.zip`, produced by `git archive` from the exact tag;
 - platform checksums and a build manifest recording the commit and exclusion of
   optional Frida binaries.
 

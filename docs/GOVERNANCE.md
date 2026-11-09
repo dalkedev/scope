@@ -9,7 +9,7 @@ disabled. `.github/CODEOWNERS` assigns the maintainer to every path.
 
 ## Reviewing a release proposal
 
-Use a `release/<version>` branch, such as `release/1.2.2`. Dispatch
+Use a `release/<version>` branch, such as `release/1.3.0`. Dispatch
 **Prepare review or draft release** on that branch with `mode: proposal` and
 the matching `tag: v<version>` to open
 a draft PR authored by `github-actions[bot]`. The workflow only opens a PR; it

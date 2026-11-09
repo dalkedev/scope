@@ -21,6 +21,7 @@ All JSON fields use camelCase. The local engine is the single source of truth.
 - `engine.set_breakpoints(request: bool, response: bool)`
 - `engine.pending() -> Vec<PendingExchange>`
 - `engine.resolve_breakpoint(id: &str, edit: EditMessage) -> Result<()>`
+- `engine.has_pause_rule_for(method: &str, url: &str) -> bool` (point-in-time rule preflight)
 - `engine.replay(id: &str, edit: Option<EditMessage>) -> async Result<Exchange>`
 - `engine.compare_sessions(left: &str, right: &str) -> Result<serde_json::Value>`
 
@@ -32,6 +33,14 @@ PendingExchange { id: String (breakpoint id), exchangeId, stage: String (request
 EditMessage { action: String (continue/abort), method: Option<String>, url: Option<String>, status: Option<u16>, headers: Option<Vec<Header>>, body: Option<String>, bodyBase64: Option<bool> }
 
 Bodies are persisted; use binary-safe base64 when non-UTF8. The per-body capture limit is 16 MiB; oversized bodies fail explicitly and are not presented as successful complete captures. Proxy binds localhost. Breakpoints must expire and never deadlock shutdown. Replay is a separate outbound request. Scoped MCP reads redact credentials by default.
+
+Traffic rules additionally support `action: {type:"pause",stage:"request"|"response"|"both"}`.
+Original request matching is frozen for the transfer. After automatic stage
+actions, all matching manual pause selectors coalesce with the global breakpoint
+into one pending message per stage. Pause rule evidence is recorded only for a
+stage actually reached; direct replay skips pauses and their evidence. Manual
+response edits require a final 200–599 status and request edits cannot switch to
+CONNECT. Invalid edits leave the pending message available for correction.
 
 ## Desktop commands
 

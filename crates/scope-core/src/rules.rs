@@ -4,6 +4,37 @@ pub const MAX_RULES: usize = 256;
 pub const MAX_RULE_BODY_BYTES: usize = 1024 * 1024;
 pub const MAX_RULE_CONFIG_BYTES: usize = 8 * 1024 * 1024;
 
+#[derive(Clone, Copy, Debug, Serialize, PartialEq, Eq)]
+#[serde(rename_all = "camelCase")]
+pub enum PauseStage {
+    Request,
+    Response,
+    Both,
+}
+impl<'de> Deserialize<'de> for PauseStage {
+    fn deserialize<D: serde::Deserializer<'de>>(
+        deserializer: D,
+    ) -> std::result::Result<Self, D::Error> {
+        // Unit enums normally also accept {"request":null}. The wire contract
+        // deliberately accepts only the three documented string values.
+        let value = String::deserialize(deserializer)?;
+        match value.as_str() {
+            "request" => Ok(Self::Request),
+            "response" => Ok(Self::Response),
+            "both" => Ok(Self::Both),
+            _ => Err(serde::de::Error::unknown_variant(
+                &value,
+                &["request", "response", "both"],
+            )),
+        }
+    }
+}
+impl PauseStage {
+    pub(crate) fn includes(self, stage: Self) -> bool {
+        self == Self::Both || self == stage
+    }
+}
+
 #[derive(Clone, Debug, Default, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct RuleMatcher {
@@ -44,6 +75,9 @@ pub enum RuleAction {
     Block {
         reason: Option<String>,
     },
+    Pause {
+        stage: PauseStage,
+    },
 }
 impl RuleAction {
     pub fn kind(&self) -> &'static str {
@@ -52,6 +86,7 @@ impl RuleAction {
             Self::RewriteResponse { .. } => "rewriteResponse",
             Self::MockResponse { .. } => "mockResponse",
             Self::Block { .. } => "block",
+            Self::Pause { .. } => "pause",
         }
     }
     pub(crate) fn edit(&self) -> EditMessage {
@@ -113,6 +148,9 @@ impl RuleAction {
                 )),
                 ..EditMessage::default()
             },
+            // A pause has no automatic edit. Its continuation uses the same
+            // validated PendingExchange/EditMessage path as global breakpoints.
+            Self::Pause { .. } => EditMessage::continue_unchanged(),
         }
     }
 }
@@ -310,6 +348,13 @@ impl Engine {
             .iter()
             .map(|rule| rule.as_ref().clone())
             .collect())
+    }
+    /// Whether the incoming request's rule snapshot would pause either stage.
+    /// This is read-only and uses the same enabled/matcher logic as capture.
+    pub fn has_pause_rule_for(&self, method: &str, url: &str) -> bool {
+        self.matching_rules(method, url)
+            .iter()
+            .any(|rule| matches!(rule.action, RuleAction::Pause { .. }))
     }
     pub(crate) fn matching_rules(&self, method: &str, url: &str) -> Vec<Arc<TrafficRule>> {
         self.inner

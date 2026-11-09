@@ -36,9 +36,11 @@ or native-security changes, and a 45-minute job limit. Each runner exports one
 allowlisted numeric JSON artifact; compiler logs, archives and temporary CA keys
 are excluded. The Python runner has an overall 30-minute budget, bounded builds
 and child processes, and kills/reaps children on hard timeout. A failure to
-establish process-tree cleanup ends further sampling. Parent cancellation or an
-exception also invokes the same bounded tree termination/reaping before the
-original exception is reraised; uncertain cleanup is attached as a fixed note.
+establish process-tree cleanup ends further sampling. A Python cancellation or
+exception, including POSIX SIGINT/KeyboardInterrupt, also invokes the same bounded
+tree termination/reaping before the original exception is reraised; uncertain
+cleanup is attached as a fixed note. Abrupt parent termination is outside this
+cleanup guarantee; native Windows console Ctrl+C coverage is NOT RUN.
 
 ## Workload and interpretation
 
@@ -139,12 +141,17 @@ reports passed the strict schema validator, source/clean-tree/run/attempt/sample
 identity checks and exact evidence counts. Independent review recalculated all
 16 groups and every displayed table cell. Recorded whole-file hashes identify
 the measured commit. Subsequent changes add documentation/results and correct
-one ordinary-CI assertion in the probe regression tests, described below. The later runner cancellation fix and Python-only test workflow are recorded
-as explicit source exceptions in the summary; other recorded sources match.
-The probe runtime implementation is byte-
-identical before its first `#[test]` function. The summary defines that UTF-8
-prefix boundary precisely and records its verified SHA-256. No timing logic,
-threshold, window filter or workload changed after the measured commit.
+one ordinary-CI assertion in the probe regression tests, described below. The later
+runner cancellation fix and Python-only test workflow are recorded as explicit
+source exceptions in the summary. The merge of Scope 1.3.0 is recorded separately:
+it changes engine/rule code and release metadata, so the hosted values above remain
+historical Scope 1.2.2 observations, not current-head performance evidence.
+The diagnostic workload and probe runtime implementation remain unchanged; the
+probe file is byte-identical before its first `#[test]` function. The summary
+defines that UTF-8 prefix boundary precisely and records its verified SHA-256.
+No diagnostic timing logic, threshold or window filter changed after the measured
+commit. A current-head smoke run checks compatibility without replacing the
+historical comparison.
 
 ### Descriptive timings (milliseconds)
 

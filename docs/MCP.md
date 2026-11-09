@@ -78,6 +78,11 @@ contain secrets. `save_rule` accepts a complete [TrafficRule](RULES.md), with an
 empty ID to create or an existing ID to replace. Global rules can affect ALL
 captures, including sessions not shared with MCP. Both rule and write permission
 are required for a mutation; rule permission alone only allows inventory reads.
+Rules may use `{"type":"pause","stage":"response"}`; `stage` also accepts
+`request` or `both`. A pause holds matching live traffic for a person to edit in Scope;
+MCP cannot inspect or resolve the pending editor. This can hold traffic in
+unshared sessions too, so the same global-rule and write permissions are required.
+Direct replay skips these pauses and does not record pause-rule evidence.
 Device diagnostics can expose local paths and serials. It never installs a
 runtime, starts interception or changes the device. Tools do not expose arbitrary
 shell execution or live breakpoint editing.

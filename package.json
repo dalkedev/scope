@@ -1,6 +1,6 @@
 {
   "name": "scope-desktop",
-  "version": "1.2.2",
+  "version": "1.3.0",
   "description": "Desktop HTTP(S) debugging with persistent sessions, Android instrumentation and MCP",
   "license": "AGPL-3.0-or-later",
   "repository": {

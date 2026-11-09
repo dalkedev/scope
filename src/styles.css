@@ -1372,6 +1372,7 @@ textarea::placeholder {
   gap: 10px;
   font-size: 10px;
   color: #a38843;
+  flex-shrink: 0;
 }
 .pending-banner .button {
   margin-left: auto;
@@ -1489,6 +1490,21 @@ textarea::placeholder {
   width: 700px;
   max-height: 92vh;
   overflow: auto;
+}
+.breakpoint-modal .breakpoint-destination {
+  font-family: var(--mono);
+  overflow-wrap: anywhere;
+  margin-bottom: 8px;
+}
+.breakpoint-modal .breakpoint-hold-note {
+  margin: 0 0 15px;
+  color: #80652e;
+}
+.breakpoint-modal .header-editor {
+  margin-top: 20px;
+}
+.breakpoint-actions {
+  flex-wrap: wrap;
 }
 .edit-url {
   display: flex;

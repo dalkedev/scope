@@ -478,6 +478,24 @@ fn apply_response_rules(e: &mut Exchange, rules: &[Arc<TrafficRule>]) -> Result<
     }
     Ok(())
 }
+/// Only live captures call this: replays apply automatic actions without
+/// claiming that a manual pause happened. Keep the original matched snapshot,
+/// including pause rules after a terminal mock/block action in rule order.
+fn record_pause_rules(e: &mut Exchange, rules: &[Arc<TrafficRule>], stage: PauseStage) -> bool {
+    let mut pause = false;
+    for rule in rules {
+        if matches!(rule.action, RuleAction::Pause { stage: configured } if configured.includes(stage))
+        {
+            e.applied_rules.push(rule.evidence(match stage {
+                PauseStage::Request => "request",
+                PauseStage::Response => "response",
+                PauseStage::Both => unreachable!("A capture pauses at one stage at a time"),
+            }));
+            pause = true;
+        }
+    }
+    pause
+}
 fn normalize_exchange_response(e: &mut Exchange) -> Result<()> {
     let mut bytes = decode_body(&e.response_body, e.response_body_base64)?;
     let status = e.status.unwrap_or(502);
@@ -522,8 +540,9 @@ impl Capture {
         e.request_bytes = bytes.len() as i64;
         self.engine.save(e)?;
         let terminal = apply_request_rules(e, &self.matched_rules)?;
+        let rule_pause = record_pause_rules(e, &self.matched_rules, PauseStage::Request);
         self.engine.save(e)?;
-        if self.engine.inner.request_breakpoint.load(Ordering::SeqCst) {
+        if rule_pause || self.engine.inner.request_breakpoint.load(Ordering::SeqCst) {
             let edit = self.engine.pause(e, "request").await?;
             apply_request_edit(e, &edit)?;
         }
@@ -568,7 +587,9 @@ impl Capture {
         e.response_bytes = bytes.len() as i64;
         self.engine.save(e)?;
         apply_response_rules(e, &self.matched_rules)?;
-        if self.engine.inner.response_breakpoint.load(Ordering::SeqCst) {
+        let rule_pause = record_pause_rules(e, &self.matched_rules, PauseStage::Response);
+        if rule_pause || self.engine.inner.response_breakpoint.load(Ordering::SeqCst) {
+            self.engine.save(e)?;
             let edit = self.engine.pause(e, "response").await?;
             apply_response_edit(e, &edit)?;
         }

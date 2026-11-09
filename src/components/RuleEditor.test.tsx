@@ -12,6 +12,63 @@ const draft: TrafficRule = {
   action: { type: 'rewriteResponse' },
 };
 describe('Rule editor actions', () => {
+  it.each(['request', 'response', 'both'] as const)(
+    'saves a scoped manual %s pause without automatic rewrite fields',
+    async (stage) => {
+      const save = vi.fn().mockResolvedValue(undefined);
+      const user = userEvent.setup();
+      render(
+        <RuleEditor
+          rule={{
+            ...draft,
+            name: 'Inspect products',
+            matcher: { host: 'api.example.com', pathPrefix: '/products' },
+            action: {
+              type: 'mockResponse',
+              status: 503,
+              headers: [{ name: 'x-mock', value: 'yes' }],
+              body: 'mock body',
+              bodyBase64: false,
+            },
+          }}
+          disabled={false}
+          onSave={save}
+        />,
+      );
+      await user.click(screen.getByRole('button', { name: 'Pause & edit' }));
+      await user.selectOptions(screen.getByLabelText('Pause at'), stage);
+      expect(screen.queryByLabelText('Response status')).not.toBeInTheDocument();
+      expect(screen.queryByLabelText('Body', { exact: true })).not.toBeInTheDocument();
+      expect(screen.queryByRole('button', { name: 'Add header' })).not.toBeInTheDocument();
+      expect(screen.getByText(/trigger a matching request in your app/)).toBeVisible();
+      await user.click(screen.getByRole('button', { name: 'Save rule' }));
+      await waitFor(() => expect(save).toHaveBeenCalledOnce());
+      expect(save.mock.calls[0][0]).toMatchObject({
+        matcher: { host: 'api.example.com', pathPrefix: '/products' },
+        action: { type: 'pause', stage },
+      });
+      expect(save.mock.calls[0][0].action).toEqual({ type: 'pause', stage });
+    },
+  );
+  it('reopens an existing response pause and preserves its stage and matcher', async () => {
+    const save = vi.fn().mockResolvedValue(undefined);
+    const user = userEvent.setup();
+    const rule: TrafficRule = {
+      ...draft,
+      id: 'pause-products',
+      name: 'Inspect reply',
+      matcher: { method: 'POST', host: 'api.example.com', pathPrefix: '/products' },
+      action: { type: 'pause', stage: 'response' },
+    };
+    render(<RuleEditor rule={rule} disabled={false} onSave={save} />);
+    expect(screen.getByRole('button', { name: 'Pause & edit' })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    );
+    expect(screen.getByLabelText('Pause at')).toHaveValue('response');
+    await user.click(screen.getByRole('button', { name: 'Save rule' }));
+    await waitFor(() => expect(save).toHaveBeenCalledWith(rule));
+  });
   it('requires explicit matcher scope before enabling a traffic-changing rule', async () => {
     const save = vi.fn().mockResolvedValue(undefined);
     const user = userEvent.setup();

@@ -54,13 +54,23 @@ For runtime installation, supported hook profiles, non-root limitations and exac
 
 ## Pause and change a message
 
-1. Enable a request or response breakpoint.
-2. Send a new request through Scope. Select the paused exchange.
-3. Edit the available URL/method, status, headers or body fields for that stage.
-4. Continue to forward the edited message, or abort to end that transfer.
-5. Inspect **Original** to compare the captured message before the edit.
+1. Open **Traffic rules**, create a rule, and match the endpoint's host and path.
+2. Choose **Pause & edit**, then request, response, or both stages. Save the rule.
+3. Send a new request through Scope from your client or Android app. The paused
+   message banner appears even while you stay in the rule editor.
+4. Open the editor. It contains the real message: edit the request URL/method,
+   headers or body, or the response's final status, headers or body.
+5. Send it with your changes, continue it unchanged, or abort that transfer.
+   **Both** creates a separate response pause after the request is continued.
+6. Inspect **Original** to compare the captured message before the edit.
 
-A breakpoint expires after **60 seconds**, at which point the transfer is aborted. Disable breakpoints before generating the automatic demo batch. **Replay** sends a new outbound request directly and creates another exchange; it does not replace an earlier response or trigger the proxy breakpoints. Send traffic through the configured proxy when you want to pause and edit it.
+A breakpoint expires after **60 seconds**, at which point the transfer is aborted.
+Closing its editor does not continue it. The global Request/Response buttons in
+Traffic still pause every proxied message when enabled; an endpoint rule only
+pauses its matches. Disable global breakpoints and rules matching the demo routes
+before generating the automatic demo batch. **Replay** sends a new outbound
+request directly and creates another exchange; it skips manual pauses. Send
+traffic through the proxy to pause and edit it. [Matching, ordering and examples →](RULES.md)
 
 ## Save and move sessions
 
