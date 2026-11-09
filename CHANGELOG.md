@@ -4,7 +4,7 @@ User-visible changes are recorded here. Back up important captures before upgrad
 
 ## Unreleased
 
-## 1.4.0 candidate — 2026-11-09
+## 1.4.0 — 2026-11-09
 
 - Add Light, Dark and System appearance choices in the sidebar. Remember the
   local preference, follow live system changes in System mode and apply the
@@ -23,6 +23,20 @@ User-visible changes are recorded here. Back up important captures before upgrad
 - Add an opt-in archive measurement harness, process controls, numeric compatibility
   receipts and a measurement workflow. Historical timings retain their source
   provenance; no production archive-writer or throughput improvement is claimed.
+- Bind diagnostic evidence to the actual HTTP/TLS target sent by the fixture,
+  catching consistent corruption of both captured URL fields.
+- Update the MCP SDK to 3.9.0 and Vitest to 5.1.0, regenerate bundled dependency
+  notices, and parse the appearance preload as HTML in its regression test.
+
+## 1.3.0 — 2026-11-06
+
+- Pause matching endpoint requests, responses or both through Traffic rules,
+  then continue unchanged, edit the actual message or abort it. Original values,
+  immutable rule snapshots and applied-rule evidence remain in the archive.
+- Keep the paused-message editor available across workspaces and unrelated UI
+  operations. Pauses expire after 60 seconds; stopping capture aborts them.
+- Preserve the typed proxy port while polling and validate it before capture.
+  Persisted pause rules must be removed or converted before downgrading.
 
 ## 1.2.2 — 2026-11-06
 

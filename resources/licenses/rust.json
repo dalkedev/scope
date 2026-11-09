@@ -1,6 +1,6 @@
 {
   "generator": "cargo-about 0.9.3; scripts/licenses.mjs",
-  "lockfileSha256": "7d30cc4b79278fa29e6252290ba87601d3c23a293bf9de55ad477d9fa12c3f86",
+  "lockfileSha256": "39b26dcafdd2c6b64dd14f8af747b6efb2b39496c47712f9260756a37ef9f9b1",
   "scope": "Workspace runtime dependencies across supported target configurations; build and dev dependencies excluded. Includes target-specific crates not necessarily present in each artifact.",
   "licenses": [
     {
@@ -148,19 +148,19 @@
         },
         {
           "name": "rmcp-macros",
-          "version": "3.8.0",
+          "version": "3.9.0",
           "license": "Apache-2.0",
           "repository": "https://github.com/modelcontextprotocol/rust-sdk/",
           "authors": [],
-          "source": "https://crates.io/crates/rmcp-macros/3.8.0"
+          "source": "https://crates.io/crates/rmcp-macros/3.9.0"
         },
         {
           "name": "rmcp",
-          "version": "3.8.0",
+          "version": "3.9.0",
           "license": "Apache-2.0",
           "repository": "https://github.com/modelcontextprotocol/rust-sdk/",
           "authors": [],
-          "source": "https://crates.io/crates/rmcp/3.8.0"
+          "source": "https://crates.io/crates/rmcp/3.9.0"
         },
         {
           "name": "ryu",
@@ -2017,6 +2017,16 @@
             "RustCrypto Developers"
           ],
           "source": "https://crates.io/crates/sha1/0.11.0"
+        },
+        {
+          "name": "sha2",
+          "version": "0.11.1",
+          "license": "MIT OR Apache-2.0",
+          "repository": "https://github.com/RustCrypto/hashes",
+          "authors": [
+            "RustCrypto Developers"
+          ],
+          "source": "https://crates.io/crates/sha2/0.11.1"
         }
       ]
     },

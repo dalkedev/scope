@@ -24,7 +24,7 @@ Scope routes traffic through a Rust engine, gives you control over requests and 
 
 **Local capture, saved sessions and export need no account or subscription.** Built-in analysis runs locally. You choose which sessions an external agent can access.
 
-> **This README describes the Scope 1.4.0 candidate.** The experimental Android backend now uses Scope-owned Java hooks with owned-process Stop cleanup, and an opt-in archive measurement harness retains reproducible diagnostics. Endpoint pause/edit rules, the offline HAR Action and verified GLib backport remain included. Check [Releases](https://github.com/dalkedev/scope/releases) for published builds and platform notes. [Android acceptance →](docs/ANDROID_ACCEPTANCE.md) · [Archive measurements →](docs/ARCHIVE_RESPONSIVENESS.md) · [Verification record →](docs/VERIFICATION.md)
+> **Scope 1.4.0:** Light/Dark/System appearance, an experimental Scope-owned Android Java engine with owned-process Stop cleanup, and reproducible archive diagnostics. Endpoint pause/edit rules, the offline HAR Action and verified GLib backport remain included. Check [Releases](https://github.com/dalkedev/scope/releases) for published builds and platform notes. [Android acceptance →](docs/ANDROID_ACCEPTANCE.md) · [Archive measurements →](docs/ARCHIVE_RESPONSIVENESS.md) · [Verification record →](docs/VERIFICATION.md)
 
 <a href="docs/SCREENSHOTS.md"><img src="docs/images/traffic-inspector.jpg" alt="Real captured traffic: a products request returns a local HTTP 503 mock, with its rule and response JSON visible." width="100%"></a>
 
