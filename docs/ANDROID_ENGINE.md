@@ -38,13 +38,14 @@ Retained log entries contain at most 4,096 UTF-8 bytes including any truncation 
 | Worker lifecycle and source construction | Executable Python suite covers profiles, JSON config, readiness, cancellation and owned-process cleanup. |
 | Rust application lifecycle | Local child pipes and fixture ADB cover typed receipts, output drain, recovery, profile preflight and legacy cleanup. |
 | UI | Selection/dependency regressions and production frontend build are local checks. |
-| Real Android/Frida/OkHttp TLS and hostname controls | **NOT RUN** |
-| Actual app termination/restoration and API/ABI compatibility | **NOT RUN** |
+| Real Android/Frida/OkHttp TLS and hostname controls | **PASS:** 75/75 actual synthetic outcomes on AOSP Android 16/API 36 ARM64, Frida 17.9.1, OkHttp 3.14.9; [exact evidence](ANDROID_ACCEPTANCE.md). |
+| Actual worker app termination/restoration | **PASS:** 2/2 matching owned-process termination/exit/absence gates and fresh baseline restoration on that same API/ABI. Other targets remain unverified. |
+| Native desktop proxy capture, Stop and reconnect | **PASS:** two cycles in one relocated macOS arm64 app with the owned API 36 fixture; [native evidence](ANDROID_ACCEPTANCE.md#native-desktop-capture-and-reconnect). Active-worker crash recovery remains NOT RUN. |
 
-Simulated tests do not prove Android execution, cryptography or compatibility. Historical emulator observations used the previous backend. The source candidate must remain draft until real-device acceptance is separately recorded. No native UI/device evidence is inferred from a headless build.
+Simulated tests do not prove Android execution, cryptography or compatibility. The separately recorded [9 November actual acceptance](ANDROID_ACCEPTANCE.md) covers one emulator API/ABI, the direct production worker and separately measured native capture/Stop/reconnect. Earlier emulator observations used the previous backend and remain historical. No native UI/device evidence is inferred from a headless build, and no general Android compatibility claim follows from the measured target.
 
 ## Owned acceptance fixture
 
-The [original lab APK and manual matrix](../examples/android-engine-fixture/README.md) target real OkHttp 3.14.9 with a deliberately mismatching pin, fresh platform contexts and ephemeral loopback-only valid/foreign/wrong-host/expired TLS endpoints. Build/signature and host certificate-fixture checks are separate from Android execution. All Android/Frida/TLS/Stop gates remain **NOT RUN**.
+The [original lab APK and manual matrix](../examples/android-engine-fixture/README.md) target real OkHttp 3.14.9 with a deliberately mismatching pin, fresh platform contexts and ephemeral loopback-only valid/foreign/wrong-host/expired TLS endpoints. Build/signature and host certificate-fixture checks are separate from Android execution. The [recorded actual matrix](ANDROID_ACCEPTANCE.md) passes all 75 controlled outcomes and both worker Stop/restoration gates on the specified target. Native desktop lifecycle gates remain separate.
 
 Recognized Kotlin lazy `check$okhttp` configurations are rejected transactionally before unpinning readiness, including classes that also expose ordinary public overloads. Their original-manager chain cleaner can discard the raw chain before the pinner sees it. No lazy support or chain-cleaner override is claimed. Ordinary Java overloads preserve the raw chain and typed original/non-Scope error controls.

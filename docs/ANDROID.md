@@ -116,6 +116,8 @@ Readiness requires the exact engine, owned PID, requested profiles and installed
 
 ### Compatibility boundaries
 
+[Actual acceptance on 9 November 2026](ANDROID_ACCEPTANCE.md) passed 75/75 direct-worker outcomes and 2/2 Stop/restoration gates on AOSP Android 16/API 36 ARM64 with Frida 17.9.1 and OkHttp 3.14.9. A genuine OkHttp 4.9.3/Kotlin 1.4.10 APK was rejected for its unsupported lazy pinner before readiness and cleaned up successfully; this is rejection coverage, not Kotlin unpinning support. Other API/ABI combinations and physical devices remain unverified. Native desktop Stop/restart and recovery are separate gates.
+
 The source repository recorded Android 16 ART/GC crashes with Frida 17.9.1. This remains experimental; app/OS combinations must be tested. Hook crashes are contained in the external worker/app process and do not erase saved sessions.
 
 The bundled profiles target **Java** networking. Native TLS implementations, QUIC/HTTP3, child processes, anti-instrumentation and app-specific pinning may need additional work. Do not infer complete capture from an empty request list.
@@ -171,7 +173,7 @@ The runtime uses original `scope-engine.js` plus the unchanged Frida Java bridge
 
 ## Recorded local smoke test
 
-**Historical backend receipt:** the following 2026-11-02 results used the removed hook backend and CA-injection path. They do not validate the current Scope-owned engine or its process-ending Stop contract. Current real Android/Frida/OkHttp TLS and Stop acceptance: **NOT RUN**.
+**Historical backend receipt:** the following 2026-11-02 results used the removed hook backend and CA-injection path. They do not validate the current Scope-owned engine or its process-ending Stop contract. Current direct-worker TLS/pinning/hostname and Stop/restoration acceptance is recorded separately for one API/ABI in [the 9 November receipt](ANDROID_ACCEPTANCE.md).
 
 On 2026-11-02, the macOS build was checked against an existing rooted Android 16 arm64 emulator using only the included `com.scope.demo` application:
 

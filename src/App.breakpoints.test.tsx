@@ -21,6 +21,7 @@ const mocks = vi.hoisted(() => ({
   list_devices: vi.fn(),
   list_apps: vi.fn(),
   start_device: vi.fn(),
+  stop_device: vi.fn(),
 }));
 vi.mock('./api', () => ({ isNative: () => true, api: mocks }));
 
@@ -89,6 +90,7 @@ beforeEach(() => {
   mocks.list_devices.mockResolvedValue([]);
   mocks.list_apps.mockResolvedValue([]);
   mocks.start_device.mockResolvedValue({ ...device, running: true, serial: 'test-device' });
+  mocks.stop_device.mockResolvedValue(device);
 });
 afterEach(() => {
   vi.useRealTimers();
@@ -158,6 +160,52 @@ describe('Proxy listener settings', () => {
     expect(
       screen.queryByRole('checkbox', { name: 'Root detection hooks' }),
     ).not.toBeInTheDocument();
+  });
+  it('reopens an active Frida session with its actual mode and locked configuration', async () => {
+    androidAvailable();
+    const active = {
+      ...device,
+      running: true,
+      serial: 'test-device',
+      package: 'com.example.demo',
+      mode: 'frida',
+    };
+    mocks.bootstrap.mockResolvedValue({ sessions: [session], proxy, deviceStatus: active });
+    mocks.device_status.mockResolvedValue(active);
+    await mount();
+    const openDevice = async () => {
+      await act(async () => {
+        fireEvent.click(screen.getByRole('button', { name: /test-device com.example.demo/ }));
+      });
+    };
+    await openDevice();
+    await poll();
+    await act(async () => {
+      fireEvent.click(screen.getByRole('button', { name: /^Traffic \d/ }));
+    });
+    await openDevice();
+    expect(screen.getByRole('button', { name: /Frida Optional instrumentation/ })).toHaveClass(
+      'chosen',
+    );
+    expect(screen.getByRole('button', { name: /System proxy ADB/ })).toBeDisabled();
+    expect(screen.getByLabelText('Android device')).toBeDisabled();
+    expect(screen.getByRole('button', { name: /Demo app com.example.demo/ })).toBeDisabled();
+    expect(screen.getByText(/Experimental Java URL\/OkHttp hooks only/)).toBeInTheDocument();
+    expect(screen.queryByText('Device-wide capture.')).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('checkbox', { name: 'TLS certificate unpinning' }),
+    ).not.toBeInTheDocument();
+    expect(mocks.start_device).not.toHaveBeenCalled();
+    await act(async () => {
+      fireEvent.click(screen.getByRole('button', { name: 'Stop interception' }));
+    });
+    expect(mocks.stop_device).toHaveBeenCalledOnce();
+    expect(screen.getByRole('button', { name: 'Start interception' })).toBeEnabled();
+    expect(screen.getByRole('button', { name: /Frida Optional instrumentation/ })).toHaveClass(
+      'chosen',
+    );
+    expect(screen.getByLabelText('Android device')).toHaveValue('test-device');
+    expect(screen.getByRole('button', { name: /Demo app com.example.demo/ })).toHaveClass('chosen');
   });
   it('uses the configured port when demo traffic starts an idle listener', async () => {
     idleListener();

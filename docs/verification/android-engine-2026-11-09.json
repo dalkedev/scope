@@ -1,0 +1,842 @@
+{
+  "schema": "scope-owned-android-acceptance-v1",
+  "captured_utc": "2026-11-09T17:46:31.515330+00:00",
+  "scope": "Synthetic owned fixture only; one observed Android API/ABI; direct production worker path",
+  "environment": {
+    "android_release": "16",
+    "api_level": 36,
+    "abi": "arm64-v8a",
+    "image": "AOSP userdebug",
+    "emulator_version": "37.1.11",
+    "frida_host": "17.9.1",
+    "frida_server": "17.9.1",
+    "okhttp": "3.14.9",
+    "okio": "1.17.2",
+    "javac": "25.0.3",
+    "compile_platform": 35,
+    "build_tools": "36.0.0"
+  },
+  "source": {
+    "base_commit": "f738ab4bb8f235f2a1055602f162b4b36aa52852",
+    "engine_sha256": "0f9b35debb5527a2213d18db82aa571b470ef438b2cc3c958a72f968d0f1b498",
+    "worker_sha256": "188986d010a77bdb97fa201e9efcab546257e7111a2a15334d02b21b57cf6c1f",
+    "change": "Explicit java.security.Key cast before reading public-key algorithm; preserves original certificate/pin rejection policy"
+  },
+  "fixture": {
+    "apk_sha256": "10fa6df5c938d138591f88482792fef5ac19f1d7779154f0fdeb1743e3a2558e",
+    "url_scope": "Host loopback endpoints reached through task-owned ADB reverse mappings",
+    "wrong_pin": "sha256/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+    "system_trust_store_modified": false,
+    "external_traffic": false
+  },
+  "initial_run": {
+    "base_commit": "f738ab4bb8f235f2a1055602f162b4b36aa52852",
+    "cells": 75,
+    "failed_expected_outcomes": 2,
+    "failed_cells": [
+      {
+        "phase": "certificate-unpinning",
+        "client": "okhttp",
+        "certificate_case": "scope",
+        "outcome": "error",
+        "status": 0,
+        "errorClass": "javax.net.ssl.SSLPeerUnverifiedException",
+        "causeClass": "java.lang.reflect.InvocationTargetException",
+        "specific_wrong_pin_marker": false,
+        "specific_wrong_hostname_marker": false
+      },
+      {
+        "phase": "certificate-unpinning",
+        "client": "okhttp-scope",
+        "certificate_case": "scope",
+        "outcome": "error",
+        "status": 0,
+        "errorClass": "javax.net.ssl.SSLPeerUnverifiedException",
+        "specific_wrong_pin_marker": true,
+        "specific_wrong_hostname_marker": false
+      }
+    ],
+    "isolated_cause": "Frida PublicKey wrapper did not expose inherited Key.getAlgorithm; TypeError prevented isolated Scope chain validation after correctly classified original pin rejection"
+  },
+  "final_run": {
+    "phases": [
+      "baseline",
+      "certificate",
+      "restored-after-certificate",
+      "certificate-unpinning",
+      "restored-after-unpinning"
+    ],
+    "cells": 75,
+    "all_expected_outcomes_pass": true,
+    "cells_observed": [
+      {
+        "phase": "baseline",
+        "client": "platform",
+        "certificate_case": "http",
+        "outcome": "response",
+        "status": 200
+      },
+      {
+        "phase": "baseline",
+        "client": "platform",
+        "certificate_case": "scope",
+        "outcome": "error",
+        "status": 0,
+        "errorClass": "javax.net.ssl.SSLHandshakeException",
+        "causeClass": "java.security.cert.CertificateException",
+        "specific_wrong_pin_marker": false,
+        "specific_wrong_hostname_marker": false
+      },
+      {
+        "phase": "baseline",
+        "client": "platform",
+        "certificate_case": "foreign",
+        "outcome": "error",
+        "status": 0,
+        "errorClass": "javax.net.ssl.SSLHandshakeException",
+        "causeClass": "java.security.cert.CertificateException",
+        "specific_wrong_pin_marker": false,
+        "specific_wrong_hostname_marker": false
+      },
+      {
+        "phase": "baseline",
+        "client": "platform",
+        "certificate_case": "wrong-host",
+        "outcome": "error",
+        "status": 0,
+        "errorClass": "javax.net.ssl.SSLHandshakeException",
+        "causeClass": "java.security.cert.CertificateException",
+        "specific_wrong_pin_marker": false,
+        "specific_wrong_hostname_marker": false
+      },
+      {
+        "phase": "baseline",
+        "client": "platform",
+        "certificate_case": "expired",
+        "outcome": "error",
+        "status": 0,
+        "errorClass": "javax.net.ssl.SSLHandshakeException",
+        "causeClass": "java.security.cert.CertificateException",
+        "specific_wrong_pin_marker": false,
+        "specific_wrong_hostname_marker": false
+      },
+      {
+        "phase": "baseline",
+        "client": "okhttp",
+        "certificate_case": "http",
+        "outcome": "response",
+        "status": 200
+      },
+      {
+        "phase": "baseline",
+        "client": "okhttp",
+        "certificate_case": "scope",
+        "outcome": "error",
+        "status": 0,
+        "errorClass": "javax.net.ssl.SSLHandshakeException",
+        "causeClass": "java.security.cert.CertificateException",
+        "specific_wrong_pin_marker": false,
+        "specific_wrong_hostname_marker": false
+      },
+      {
+        "phase": "baseline",
+        "client": "okhttp",
+        "certificate_case": "foreign",
+        "outcome": "error",
+        "status": 0,
+        "errorClass": "javax.net.ssl.SSLHandshakeException",
+        "causeClass": "java.security.cert.CertificateException",
+        "specific_wrong_pin_marker": false,
+        "specific_wrong_hostname_marker": false
+      },
+      {
+        "phase": "baseline",
+        "client": "okhttp",
+        "certificate_case": "wrong-host",
+        "outcome": "error",
+        "status": 0,
+        "errorClass": "javax.net.ssl.SSLHandshakeException",
+        "causeClass": "java.security.cert.CertificateException",
+        "specific_wrong_pin_marker": false,
+        "specific_wrong_hostname_marker": false
+      },
+      {
+        "phase": "baseline",
+        "client": "okhttp",
+        "certificate_case": "expired",
+        "outcome": "error",
+        "status": 0,
+        "errorClass": "javax.net.ssl.SSLHandshakeException",
+        "causeClass": "java.security.cert.CertificateException",
+        "specific_wrong_pin_marker": false,
+        "specific_wrong_hostname_marker": false
+      },
+      {
+        "phase": "baseline",
+        "client": "okhttp-scope",
+        "certificate_case": "http",
+        "outcome": "response",
+        "status": 200
+      },
+      {
+        "phase": "baseline",
+        "client": "okhttp-scope",
+        "certificate_case": "scope",
+        "outcome": "error",
+        "status": 0,
+        "errorClass": "javax.net.ssl.SSLPeerUnverifiedException",
+        "specific_wrong_pin_marker": true,
+        "specific_wrong_hostname_marker": false
+      },
+      {
+        "phase": "baseline",
+        "client": "okhttp-scope",
+        "certificate_case": "foreign",
+        "outcome": "error",
+        "status": 0,
+        "errorClass": "javax.net.ssl.SSLHandshakeException",
+        "causeClass": "java.security.cert.CertificateException",
+        "specific_wrong_pin_marker": false,
+        "specific_wrong_hostname_marker": false
+      },
+      {
+        "phase": "baseline",
+        "client": "okhttp-scope",
+        "certificate_case": "wrong-host",
+        "outcome": "error",
+        "status": 0,
+        "errorClass": "javax.net.ssl.SSLPeerUnverifiedException",
+        "specific_wrong_pin_marker": false,
+        "specific_wrong_hostname_marker": true
+      },
+      {
+        "phase": "baseline",
+        "client": "okhttp-scope",
+        "certificate_case": "expired",
+        "outcome": "error",
+        "status": 0,
+        "errorClass": "javax.net.ssl.SSLHandshakeException",
+        "causeClass": "java.security.cert.CertificateException",
+        "specific_wrong_pin_marker": false,
+        "specific_wrong_hostname_marker": false
+      },
+      {
+        "phase": "certificate",
+        "client": "platform",
+        "certificate_case": "http",
+        "outcome": "response",
+        "status": 200
+      },
+      {
+        "phase": "certificate",
+        "client": "platform",
+        "certificate_case": "scope",
+        "outcome": "response",
+        "status": 200
+      },
+      {
+        "phase": "certificate",
+        "client": "platform",
+        "certificate_case": "foreign",
+        "outcome": "error",
+        "status": 0,
+        "errorClass": "javax.net.ssl.SSLHandshakeException",
+        "causeClass": "java.security.cert.CertificateException",
+        "specific_wrong_pin_marker": false,
+        "specific_wrong_hostname_marker": false
+      },
+      {
+        "phase": "certificate",
+        "client": "platform",
+        "certificate_case": "wrong-host",
+        "outcome": "error",
+        "status": 0,
+        "errorClass": "javax.net.ssl.SSLPeerUnverifiedException",
+        "specific_wrong_pin_marker": false,
+        "specific_wrong_hostname_marker": true
+      },
+      {
+        "phase": "certificate",
+        "client": "platform",
+        "certificate_case": "expired",
+        "outcome": "error",
+        "status": 0,
+        "errorClass": "javax.net.ssl.SSLHandshakeException",
+        "causeClass": "java.security.cert.CertificateException",
+        "specific_wrong_pin_marker": false,
+        "specific_wrong_hostname_marker": false
+      },
+      {
+        "phase": "certificate",
+        "client": "okhttp",
+        "certificate_case": "http",
+        "outcome": "response",
+        "status": 200
+      },
+      {
+        "phase": "certificate",
+        "client": "okhttp",
+        "certificate_case": "scope",
+        "outcome": "error",
+        "status": 0,
+        "errorClass": "javax.net.ssl.SSLPeerUnverifiedException",
+        "causeClass": "java.lang.reflect.InvocationTargetException",
+        "specific_wrong_pin_marker": false,
+        "specific_wrong_hostname_marker": false
+      },
+      {
+        "phase": "certificate",
+        "client": "okhttp",
+        "certificate_case": "foreign",
+        "outcome": "error",
+        "status": 0,
+        "errorClass": "javax.net.ssl.SSLHandshakeException",
+        "causeClass": "java.security.cert.CertificateException",
+        "specific_wrong_pin_marker": false,
+        "specific_wrong_hostname_marker": false
+      },
+      {
+        "phase": "certificate",
+        "client": "okhttp",
+        "certificate_case": "wrong-host",
+        "outcome": "error",
+        "status": 0,
+        "errorClass": "javax.net.ssl.SSLPeerUnverifiedException",
+        "specific_wrong_pin_marker": false,
+        "specific_wrong_hostname_marker": true
+      },
+      {
+        "phase": "certificate",
+        "client": "okhttp",
+        "certificate_case": "expired",
+        "outcome": "error",
+        "status": 0,
+        "errorClass": "javax.net.ssl.SSLHandshakeException",
+        "causeClass": "java.security.cert.CertificateException",
+        "specific_wrong_pin_marker": false,
+        "specific_wrong_hostname_marker": false
+      },
+      {
+        "phase": "certificate",
+        "client": "okhttp-scope",
+        "certificate_case": "http",
+        "outcome": "response",
+        "status": 200
+      },
+      {
+        "phase": "certificate",
+        "client": "okhttp-scope",
+        "certificate_case": "scope",
+        "outcome": "error",
+        "status": 0,
+        "errorClass": "javax.net.ssl.SSLPeerUnverifiedException",
+        "specific_wrong_pin_marker": true,
+        "specific_wrong_hostname_marker": false
+      },
+      {
+        "phase": "certificate",
+        "client": "okhttp-scope",
+        "certificate_case": "foreign",
+        "outcome": "error",
+        "status": 0,
+        "errorClass": "javax.net.ssl.SSLHandshakeException",
+        "causeClass": "java.security.cert.CertificateException",
+        "specific_wrong_pin_marker": false,
+        "specific_wrong_hostname_marker": false
+      },
+      {
+        "phase": "certificate",
+        "client": "okhttp-scope",
+        "certificate_case": "wrong-host",
+        "outcome": "error",
+        "status": 0,
+        "errorClass": "javax.net.ssl.SSLPeerUnverifiedException",
+        "specific_wrong_pin_marker": false,
+        "specific_wrong_hostname_marker": true
+      },
+      {
+        "phase": "certificate",
+        "client": "okhttp-scope",
+        "certificate_case": "expired",
+        "outcome": "error",
+        "status": 0,
+        "errorClass": "javax.net.ssl.SSLHandshakeException",
+        "causeClass": "java.security.cert.CertificateException",
+        "specific_wrong_pin_marker": false,
+        "specific_wrong_hostname_marker": false
+      },
+      {
+        "phase": "restored-after-certificate",
+        "client": "platform",
+        "certificate_case": "http",
+        "outcome": "response",
+        "status": 200
+      },
+      {
+        "phase": "restored-after-certificate",
+        "client": "platform",
+        "certificate_case": "scope",
+        "outcome": "error",
+        "status": 0,
+        "errorClass": "javax.net.ssl.SSLHandshakeException",
+        "causeClass": "java.security.cert.CertificateException",
+        "specific_wrong_pin_marker": false,
+        "specific_wrong_hostname_marker": false
+      },
+      {
+        "phase": "restored-after-certificate",
+        "client": "platform",
+        "certificate_case": "foreign",
+        "outcome": "error",
+        "status": 0,
+        "errorClass": "javax.net.ssl.SSLHandshakeException",
+        "causeClass": "java.security.cert.CertificateException",
+        "specific_wrong_pin_marker": false,
+        "specific_wrong_hostname_marker": false
+      },
+      {
+        "phase": "restored-after-certificate",
+        "client": "platform",
+        "certificate_case": "wrong-host",
+        "outcome": "error",
+        "status": 0,
+        "errorClass": "javax.net.ssl.SSLHandshakeException",
+        "causeClass": "java.security.cert.CertificateException",
+        "specific_wrong_pin_marker": false,
+        "specific_wrong_hostname_marker": false
+      },
+      {
+        "phase": "restored-after-certificate",
+        "client": "platform",
+        "certificate_case": "expired",
+        "outcome": "error",
+        "status": 0,
+        "errorClass": "javax.net.ssl.SSLHandshakeException",
+        "causeClass": "java.security.cert.CertificateException",
+        "specific_wrong_pin_marker": false,
+        "specific_wrong_hostname_marker": false
+      },
+      {
+        "phase": "restored-after-certificate",
+        "client": "okhttp",
+        "certificate_case": "http",
+        "outcome": "response",
+        "status": 200
+      },
+      {
+        "phase": "restored-after-certificate",
+        "client": "okhttp",
+        "certificate_case": "scope",
+        "outcome": "error",
+        "status": 0,
+        "errorClass": "javax.net.ssl.SSLHandshakeException",
+        "causeClass": "java.security.cert.CertificateException",
+        "specific_wrong_pin_marker": false,
+        "specific_wrong_hostname_marker": false
+      },
+      {
+        "phase": "restored-after-certificate",
+        "client": "okhttp",
+        "certificate_case": "foreign",
+        "outcome": "error",
+        "status": 0,
+        "errorClass": "javax.net.ssl.SSLHandshakeException",
+        "causeClass": "java.security.cert.CertificateException",
+        "specific_wrong_pin_marker": false,
+        "specific_wrong_hostname_marker": false
+      },
+      {
+        "phase": "restored-after-certificate",
+        "client": "okhttp",
+        "certificate_case": "wrong-host",
+        "outcome": "error",
+        "status": 0,
+        "errorClass": "javax.net.ssl.SSLHandshakeException",
+        "causeClass": "java.security.cert.CertificateException",
+        "specific_wrong_pin_marker": false,
+        "specific_wrong_hostname_marker": false
+      },
+      {
+        "phase": "restored-after-certificate",
+        "client": "okhttp",
+        "certificate_case": "expired",
+        "outcome": "error",
+        "status": 0,
+        "errorClass": "javax.net.ssl.SSLHandshakeException",
+        "causeClass": "java.security.cert.CertificateException",
+        "specific_wrong_pin_marker": false,
+        "specific_wrong_hostname_marker": false
+      },
+      {
+        "phase": "restored-after-certificate",
+        "client": "okhttp-scope",
+        "certificate_case": "http",
+        "outcome": "response",
+        "status": 200
+      },
+      {
+        "phase": "restored-after-certificate",
+        "client": "okhttp-scope",
+        "certificate_case": "scope",
+        "outcome": "error",
+        "status": 0,
+        "errorClass": "javax.net.ssl.SSLPeerUnverifiedException",
+        "specific_wrong_pin_marker": true,
+        "specific_wrong_hostname_marker": false
+      },
+      {
+        "phase": "restored-after-certificate",
+        "client": "okhttp-scope",
+        "certificate_case": "foreign",
+        "outcome": "error",
+        "status": 0,
+        "errorClass": "javax.net.ssl.SSLHandshakeException",
+        "causeClass": "java.security.cert.CertificateException",
+        "specific_wrong_pin_marker": false,
+        "specific_wrong_hostname_marker": false
+      },
+      {
+        "phase": "restored-after-certificate",
+        "client": "okhttp-scope",
+        "certificate_case": "wrong-host",
+        "outcome": "error",
+        "status": 0,
+        "errorClass": "javax.net.ssl.SSLPeerUnverifiedException",
+        "specific_wrong_pin_marker": false,
+        "specific_wrong_hostname_marker": true
+      },
+      {
+        "phase": "restored-after-certificate",
+        "client": "okhttp-scope",
+        "certificate_case": "expired",
+        "outcome": "error",
+        "status": 0,
+        "errorClass": "javax.net.ssl.SSLHandshakeException",
+        "causeClass": "java.security.cert.CertificateException",
+        "specific_wrong_pin_marker": false,
+        "specific_wrong_hostname_marker": false
+      },
+      {
+        "phase": "certificate-unpinning",
+        "client": "platform",
+        "certificate_case": "http",
+        "outcome": "response",
+        "status": 200
+      },
+      {
+        "phase": "certificate-unpinning",
+        "client": "platform",
+        "certificate_case": "scope",
+        "outcome": "response",
+        "status": 200
+      },
+      {
+        "phase": "certificate-unpinning",
+        "client": "platform",
+        "certificate_case": "foreign",
+        "outcome": "error",
+        "status": 0,
+        "errorClass": "javax.net.ssl.SSLHandshakeException",
+        "causeClass": "java.security.cert.CertificateException",
+        "specific_wrong_pin_marker": false,
+        "specific_wrong_hostname_marker": false
+      },
+      {
+        "phase": "certificate-unpinning",
+        "client": "platform",
+        "certificate_case": "wrong-host",
+        "outcome": "error",
+        "status": 0,
+        "errorClass": "javax.net.ssl.SSLPeerUnverifiedException",
+        "specific_wrong_pin_marker": false,
+        "specific_wrong_hostname_marker": true
+      },
+      {
+        "phase": "certificate-unpinning",
+        "client": "platform",
+        "certificate_case": "expired",
+        "outcome": "error",
+        "status": 0,
+        "errorClass": "javax.net.ssl.SSLHandshakeException",
+        "causeClass": "java.security.cert.CertificateException",
+        "specific_wrong_pin_marker": false,
+        "specific_wrong_hostname_marker": false
+      },
+      {
+        "phase": "certificate-unpinning",
+        "client": "okhttp",
+        "certificate_case": "http",
+        "outcome": "response",
+        "status": 200
+      },
+      {
+        "phase": "certificate-unpinning",
+        "client": "okhttp",
+        "certificate_case": "scope",
+        "outcome": "response",
+        "status": 200
+      },
+      {
+        "phase": "certificate-unpinning",
+        "client": "okhttp",
+        "certificate_case": "foreign",
+        "outcome": "error",
+        "status": 0,
+        "errorClass": "javax.net.ssl.SSLHandshakeException",
+        "causeClass": "java.security.cert.CertificateException",
+        "specific_wrong_pin_marker": false,
+        "specific_wrong_hostname_marker": false
+      },
+      {
+        "phase": "certificate-unpinning",
+        "client": "okhttp",
+        "certificate_case": "wrong-host",
+        "outcome": "error",
+        "status": 0,
+        "errorClass": "javax.net.ssl.SSLPeerUnverifiedException",
+        "specific_wrong_pin_marker": false,
+        "specific_wrong_hostname_marker": true
+      },
+      {
+        "phase": "certificate-unpinning",
+        "client": "okhttp",
+        "certificate_case": "expired",
+        "outcome": "error",
+        "status": 0,
+        "errorClass": "javax.net.ssl.SSLHandshakeException",
+        "causeClass": "java.security.cert.CertificateException",
+        "specific_wrong_pin_marker": false,
+        "specific_wrong_hostname_marker": false
+      },
+      {
+        "phase": "certificate-unpinning",
+        "client": "okhttp-scope",
+        "certificate_case": "http",
+        "outcome": "response",
+        "status": 200
+      },
+      {
+        "phase": "certificate-unpinning",
+        "client": "okhttp-scope",
+        "certificate_case": "scope",
+        "outcome": "response",
+        "status": 200
+      },
+      {
+        "phase": "certificate-unpinning",
+        "client": "okhttp-scope",
+        "certificate_case": "foreign",
+        "outcome": "error",
+        "status": 0,
+        "errorClass": "javax.net.ssl.SSLHandshakeException",
+        "causeClass": "java.security.cert.CertificateException",
+        "specific_wrong_pin_marker": false,
+        "specific_wrong_hostname_marker": false
+      },
+      {
+        "phase": "certificate-unpinning",
+        "client": "okhttp-scope",
+        "certificate_case": "wrong-host",
+        "outcome": "error",
+        "status": 0,
+        "errorClass": "javax.net.ssl.SSLPeerUnverifiedException",
+        "specific_wrong_pin_marker": false,
+        "specific_wrong_hostname_marker": true
+      },
+      {
+        "phase": "certificate-unpinning",
+        "client": "okhttp-scope",
+        "certificate_case": "expired",
+        "outcome": "error",
+        "status": 0,
+        "errorClass": "javax.net.ssl.SSLHandshakeException",
+        "causeClass": "java.security.cert.CertificateException",
+        "specific_wrong_pin_marker": false,
+        "specific_wrong_hostname_marker": false
+      },
+      {
+        "phase": "restored-after-unpinning",
+        "client": "platform",
+        "certificate_case": "http",
+        "outcome": "response",
+        "status": 200
+      },
+      {
+        "phase": "restored-after-unpinning",
+        "client": "platform",
+        "certificate_case": "scope",
+        "outcome": "error",
+        "status": 0,
+        "errorClass": "javax.net.ssl.SSLHandshakeException",
+        "causeClass": "java.security.cert.CertificateException",
+        "specific_wrong_pin_marker": false,
+        "specific_wrong_hostname_marker": false
+      },
+      {
+        "phase": "restored-after-unpinning",
+        "client": "platform",
+        "certificate_case": "foreign",
+        "outcome": "error",
+        "status": 0,
+        "errorClass": "javax.net.ssl.SSLHandshakeException",
+        "causeClass": "java.security.cert.CertificateException",
+        "specific_wrong_pin_marker": false,
+        "specific_wrong_hostname_marker": false
+      },
+      {
+        "phase": "restored-after-unpinning",
+        "client": "platform",
+        "certificate_case": "wrong-host",
+        "outcome": "error",
+        "status": 0,
+        "errorClass": "javax.net.ssl.SSLHandshakeException",
+        "causeClass": "java.security.cert.CertificateException",
+        "specific_wrong_pin_marker": false,
+        "specific_wrong_hostname_marker": false
+      },
+      {
+        "phase": "restored-after-unpinning",
+        "client": "platform",
+        "certificate_case": "expired",
+        "outcome": "error",
+        "status": 0,
+        "errorClass": "javax.net.ssl.SSLHandshakeException",
+        "causeClass": "java.security.cert.CertificateException",
+        "specific_wrong_pin_marker": false,
+        "specific_wrong_hostname_marker": false
+      },
+      {
+        "phase": "restored-after-unpinning",
+        "client": "okhttp",
+        "certificate_case": "http",
+        "outcome": "response",
+        "status": 200
+      },
+      {
+        "phase": "restored-after-unpinning",
+        "client": "okhttp",
+        "certificate_case": "scope",
+        "outcome": "error",
+        "status": 0,
+        "errorClass": "javax.net.ssl.SSLHandshakeException",
+        "causeClass": "java.security.cert.CertificateException",
+        "specific_wrong_pin_marker": false,
+        "specific_wrong_hostname_marker": false
+      },
+      {
+        "phase": "restored-after-unpinning",
+        "client": "okhttp",
+        "certificate_case": "foreign",
+        "outcome": "error",
+        "status": 0,
+        "errorClass": "javax.net.ssl.SSLHandshakeException",
+        "causeClass": "java.security.cert.CertificateException",
+        "specific_wrong_pin_marker": false,
+        "specific_wrong_hostname_marker": false
+      },
+      {
+        "phase": "restored-after-unpinning",
+        "client": "okhttp",
+        "certificate_case": "wrong-host",
+        "outcome": "error",
+        "status": 0,
+        "errorClass": "javax.net.ssl.SSLHandshakeException",
+        "causeClass": "java.security.cert.CertificateException",
+        "specific_wrong_pin_marker": false,
+        "specific_wrong_hostname_marker": false
+      },
+      {
+        "phase": "restored-after-unpinning",
+        "client": "okhttp",
+        "certificate_case": "expired",
+        "outcome": "error",
+        "status": 0,
+        "errorClass": "javax.net.ssl.SSLHandshakeException",
+        "causeClass": "java.security.cert.CertificateException",
+        "specific_wrong_pin_marker": false,
+        "specific_wrong_hostname_marker": false
+      },
+      {
+        "phase": "restored-after-unpinning",
+        "client": "okhttp-scope",
+        "certificate_case": "http",
+        "outcome": "response",
+        "status": 200
+      },
+      {
+        "phase": "restored-after-unpinning",
+        "client": "okhttp-scope",
+        "certificate_case": "scope",
+        "outcome": "error",
+        "status": 0,
+        "errorClass": "javax.net.ssl.SSLPeerUnverifiedException",
+        "specific_wrong_pin_marker": true,
+        "specific_wrong_hostname_marker": false
+      },
+      {
+        "phase": "restored-after-unpinning",
+        "client": "okhttp-scope",
+        "certificate_case": "foreign",
+        "outcome": "error",
+        "status": 0,
+        "errorClass": "javax.net.ssl.SSLHandshakeException",
+        "causeClass": "java.security.cert.CertificateException",
+        "specific_wrong_pin_marker": false,
+        "specific_wrong_hostname_marker": false
+      },
+      {
+        "phase": "restored-after-unpinning",
+        "client": "okhttp-scope",
+        "certificate_case": "wrong-host",
+        "outcome": "error",
+        "status": 0,
+        "errorClass": "javax.net.ssl.SSLPeerUnverifiedException",
+        "specific_wrong_pin_marker": false,
+        "specific_wrong_hostname_marker": true
+      },
+      {
+        "phase": "restored-after-unpinning",
+        "client": "okhttp-scope",
+        "certificate_case": "expired",
+        "outcome": "error",
+        "status": 0,
+        "errorClass": "javax.net.ssl.SSLHandshakeException",
+        "causeClass": "java.security.cert.CertificateException",
+        "specific_wrong_pin_marker": false,
+        "specific_wrong_hostname_marker": false
+      }
+    ]
+  },
+  "stop": {
+    "gates": 2,
+    "all_pass": true,
+    "matching_owned_process_acknowledgements": true,
+    "worker_exit_zero": true,
+    "application_pid_absent_after_each_stop": true,
+    "fresh_baseline_retested_after_each_stop": true,
+    "owned_reverse_mappings_removed": true
+  },
+  "unsupported_kotlin": {
+    "okhttp": "4.9.3",
+    "okio": "2.8.0",
+    "kotlin_stdlib": "1.4.10",
+    "baseline_http_status": 200,
+    "requested_profiles": [
+      "certificate",
+      "unpinning"
+    ],
+    "result": "startup rejection",
+    "marker": "Unsupported lazy OkHttp configuration: check$okhttp",
+    "readiness_emitted": false,
+    "worker_exit": 1,
+    "matching_cleanup_receipt": true,
+    "application_pid_absent": true,
+    "pass": true
+  },
+  "limits": [
+    "Only API36/arm64-v8a was measured",
+    "Direct worker acceptance does not establish full desktop Rust/UI lifecycle, recovery after app restart, or proxy capture",
+    "Kotlin control establishes startup rejection, not Kotlin unpinning support",
+    "Raw Logcat, complete exceptions, build receipts and local paths remain private"
+  ]
+}

@@ -142,7 +142,8 @@
       // performs path construction, signature, usage and algorithm validation.
       state.ca.checkValidity();
       values.forEach(cert => cert.checkValidity());
-      const authType = context ? context.authType : String(values[0].getPublicKey().getAlgorithm());
+      // Frida's PublicKey wrapper may not expose the inherited Key interface.
+      const authType = context ? context.authType : String(Java.cast(values[0].getPublicKey(), use('java.security.Key')).getAlgorithm());
       const peer = Java.array('java.security.cert.X509Certificate', values);
       if (context && context.type) {
         if (!state.Extended || !state.Extended.class.isInstance(state.manager)) throw new Error('Isolated Scope manager cannot preserve extended TLS context');

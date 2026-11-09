@@ -2,7 +2,7 @@
 
 This original lab APK exercises a fresh platform `SSLContext.init` and real OkHttp **3.14.9**, with a deliberately wrong SHA-256 pin for `127.0.0.1`. It keeps the original hostname verifier, certificate checks and request errors. The explicit `okhttp-scope` control uses an isolated original manager containing only an optional public fixture CA; that same manager and its socket factory reach OkHttp, so the deliberate wrong pin is tested after successful chain cleaning. `platform` and default `okhttp` retain original system trust. Only `http[s]://127.0.0.1:PORT/` inputs are accepted; credentials, queries, fragments and redirects are forbidden. One action makes one GET, with one request in flight, four-second socket timeouts and an eight-second OkHttp call deadline. No response bodies are logged. HTTP reachability is separate from TLS/pin acceptance.
 
-**Android/Frida/TLS/unpinning/Stop acceptance: NOT RUN.** A software-emulator prerequisite exited with SIGSEGV before usable Android execution. Compiling/signing this APK and passing host Python/OpenSSL TLS controls do not establish any Android engine result. The APK is test-only and is never packaged with Scope.
+**Actual direct-worker acceptance: PASS, 75/75 outcomes and 2/2 Stop/restoration gates** on AOSP Android 16/API 36 ARM64, Frida 17.9.1 and real OkHttp 3.14.9. See [the exact target, source hashes, initial failure/fix and full numeric receipt](../../docs/ANDROID_ACCEPTANCE.md). The earlier software-emulator prerequisite failure remains historical; it is superseded for this measured target. Other API/ABI combinations and full native desktop lifecycle gates remain separate. The APK is test-only and is never packaged with Scope.
 
 ## Build with existing tools
 
@@ -93,22 +93,22 @@ python3 resources/device/frida_worker.py --serial "$SERIAL" \
 
 These standalone commands deliberately select direct certificate/unpinning hooks. An omitted profile selects proxy as well and would route TLS through a different CA; that is a different experiment. This recipe does not exercise Rust/UI readiness, recovery or proxy capture.
 
-| Phase / client | HTTP control | Valid Scope TLS | Foreign CA | Wrong host | Expired leaf | Actual result |
+| Phase / client | HTTP control | Valid Scope TLS | Foreign CA | Wrong host | Expired leaf | Actual result: API 36 ARM64, 2026-11-09 |
 | --- | --- | --- | --- | --- | --- | --- |
-| No hooks / platform | 200 | trust rejection | trust rejection | rejection | rejection | NOT RUN |
-| No hooks / default OkHttp | 200 | trust rejection | trust rejection | rejection | rejection | NOT RUN |
-| No hooks / `okhttp-scope` | 200 | specific pin mismatch | trust rejection | hostname rejection | expiry rejection | NOT RUN |
-| Certificate only / platform | 200 | 200 | trust rejection | hostname rejection | expiry rejection | NOT RUN |
-| Certificate only / default OkHttp | 200 | rejection at original cleaner or pin enforcement | trust rejection | hostname rejection | expiry rejection | NOT RUN |
-| Certificate only / `okhttp-scope` | 200 | specific pin mismatch | trust rejection | hostname rejection | expiry rejection | NOT RUN |
-| Certificate + unpinning / platform | 200 | 200 | trust rejection | hostname rejection | expiry rejection | NOT RUN |
-| Certificate + unpinning / both OkHttp modes | 200 | 200 despite configured wrong pin | trust rejection | hostname rejection | expiry rejection | NOT RUN |
-| Stop + fresh restart / platform and default OkHttp | 200 | original trust rejection restored | trust rejection | rejection | rejection | NOT RUN |
-| Stop + fresh restart / `okhttp-scope` | 200 | specific pin mismatch restored | trust rejection | hostname rejection | expiry rejection | NOT RUN |
+| No hooks / platform | 200 | trust rejection | trust rejection | rejection | rejection | PASS |
+| No hooks / default OkHttp | 200 | trust rejection | trust rejection | rejection | rejection | PASS |
+| No hooks / `okhttp-scope` | 200 | specific pin mismatch | trust rejection | hostname rejection | expiry rejection | PASS |
+| Certificate only / platform | 200 | 200 | trust rejection | hostname rejection | expiry rejection | PASS |
+| Certificate only / default OkHttp | 200 | rejection at original cleaner or pin enforcement | trust rejection | hostname rejection | expiry rejection | PASS |
+| Certificate only / `okhttp-scope` | 200 | specific pin mismatch | trust rejection | hostname rejection | expiry rejection | PASS |
+| Certificate + unpinning / platform | 200 | 200 | trust rejection | hostname rejection | expiry rejection | PASS |
+| Certificate + unpinning / both OkHttp modes | 200 | 200 despite configured wrong pin | trust rejection | hostname rejection | expiry rejection | PASS |
+| Stop + fresh restart / platform and default OkHttp | 200 | original trust rejection restored | trust rejection | rejection | rejection | PASS |
+| Stop + fresh restart / `okhttp-scope` | 200 | specific pin mismatch restored | trust rejection | hostname rejection | expiry rejection | PASS |
 
 Record actual exception types/causes for every failure. For `okhttp-scope`, require `SSLPeerUnverifiedException` with `Certificate pinning failure!` for the valid-Scope no-hooks/certificate-only/Stop controls; a generic trust failure is insufficient. The default OkHttp chain cleaner retains its original manager and can reject Scope CA before the wrong pin is evaluated in certificate-only mode; that rejection alone does not prove a measured pin mismatch. Ordinary 3.14.9 pinner hooks retain the raw chain for isolated Scope validation. Kotlin lazy `check$okhttp` configurations are rejected before readiness because their cleaner can discard that chain. No chain-cleaner override is installed.
 
-After Stop, require the worker's matching successful termination acknowledgment, check `adb -s "$SERIAL" shell pidof com.scope.enginefixture` reports absence, and launch the fresh baseline again. Missing acknowledgment, a surviving PID or unknown termination is a failed cleanup gate; do not kill arbitrary PIDs. Exercise Scope UI Stop/application restart separately to validate the full Rust/UI lifecycle and saved recovery; those gates remain NOT RUN.
+After Stop, require the worker's matching successful termination acknowledgment, check `adb -s "$SERIAL" shell pidof com.scope.enginefixture` reports absence, and launch the fresh baseline again. Missing acknowledgment, a surviving PID or unknown termination is a failed cleanup gate; do not kill arbitrary PIDs. Exercise Scope UI Stop/application restart separately to validate the full Rust/UI lifecycle and saved recovery; those current-source interactive gates require their own receipt and are not established by this worker matrix.
 
 Proxy capture is another separate manual phase: run actual Scope on its selected listener and use only the synthetic HTTP URL with an explicitly selected proxy profile. Confirm capture in Scope, then Stop and confirm owned mapping/process cleanup. It supplies no HTTPS/pinning evidence. Do not combine that proxy experiment's CA with the direct fixture matrix.
 

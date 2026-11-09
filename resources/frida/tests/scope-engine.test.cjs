@@ -85,14 +85,26 @@ function javaFixture() {
     'java.io.ByteArrayInputStream': { $new() { return {}; } },
     'java.security.cert.CertificateFactory': { getInstance() { return { generateCertificate() { return ca; } }; } },
     'java.security.KeyStore': { getDefaultType() { return 'BKS'; }, getInstance() { return store; } },
+    'java.security.Key': {},
     'javax.net.ssl.TrustManagerFactory': { getDefaultAlgorithm() { return 'PKIX'; }, getInstance() { return { init(value) { calls.push(['tm-init', value]); }, getTrustManagers() { return [scopeTrust]; } }; } },
     'javax.net.ssl.X509TrustManager': x509,
     'java.security.cert.X509Certificate': { class: { isInstance(value) { return Boolean(value && value.checkValidity); } } },
   };
-  const Java = { use(name) { if (!classes[name]) throw new Error('Missing class ' + name); return classes[name]; }, cast(value) { return value; }, array(type, value) { return value; } };
+  const Java = {
+    use(name) { if (!classes[name]) throw new Error('Missing class ' + name); return classes[name]; },
+    cast(value, type) {
+      if (type === classes['java.security.Key']) {
+        calls.push(['key-cast', value]);
+        return { getAlgorithm() { return value.$h.algorithm; } };
+      }
+      return value;
+    },
+    array(type, value) { return value; }
+  };
   return { Java, calls, ca, scopeTrust, store, classes };
 }
-function leaf(options = {}) { return { checkValidity() { if (options.expired) throw new Error('expired'); }, getBasicConstraints() { return -1; }, getPublicKey() { return { getAlgorithm() { return 'RSA'; } }; }, ...options }; }
+// Model the observed Frida PublicKey wrapper: Key exposes the inherited method.
+function leaf(options = {}) { return { checkValidity() { if (options.expired) throw new Error('expired'); }, getBasicConstraints() { return -1; }, getPublicKey() { return { $h: { algorithm: 'RSA' } }; }, ...options }; }
 
 test('Java validator uses empty keystore with only Scope CA and validates peer signatures and validity', () => {
   const { createJavaAdapter } = api();
@@ -232,6 +244,33 @@ test('OkHttp actual hook preserves unrelated pin exception and rejects unsupport
   const second = createEngine({ profiles: ['certificate', 'unpinning'] }, { installCertificate: () => ['sslcontext-scope-ca'], installUnpinning: adapter.installUnpinning });
   assert.throws(() => second.install(), /Unsupported OkHttp/);
   assert.equal(check.implementation, null);
+});
+
+test('opaque PublicKey wrappers require the Key interface for direct validation and ordinary pinners', () => {
+  const { createJavaAdapter, createEngine } = api();
+  const f = javaFixture();
+  const valid = leaf();
+  assert.equal(typeof valid.getPublicKey().getAlgorithm, 'undefined');
+  const adapter = createJavaAdapter(f.Java, { caPem: 'public certificate' });
+  adapter.validateScopeChain([valid]);
+  assert.equal(f.calls.filter(call => Array.isArray(call) && call[0] === 'key-cast').length, 1);
+  assert.equal(f.calls.find(call => Array.isArray(call) && call[0] === 'validate')[2], 'RSA');
+
+  for (const signature of ['java.util.List', '[Ljava.security.cert.Certificate;']) {
+    const p = javaFixture();
+    const rejection = javaError('pin', 'original pin rejection');
+    const check = method(['java.lang.String', signature], () => { throw rejection; });
+    p.classes['okhttp3.CertificatePinner'] = { check: dispatcher(check) };
+    const pinAdapter = createJavaAdapter(p.Java, { caPem: 'public certificate' });
+    createEngine({ profiles: ['certificate', 'unpinning'] }, {
+      installCertificate: () => ['sslcontext-scope-ca'],
+      installUnpinning: pinAdapter.installUnpinning,
+    }).install();
+    const peer = values => signature === 'java.util.List' ? { toArray: () => values } : values;
+    assert.equal(check.implementation('example.test', peer([valid])), undefined);
+    assert.throws(() => check.implementation('example.test', peer([leaf({ unrelated: true }), p.ca])), error => error === rejection);
+    assert.equal(p.calls.filter(call => Array.isArray(call) && call[0] === 'key-cast').length, 2);
+  }
 });
 
 test('recognized lazy OkHttp refuses readiness and rolls back certificate and ordinary hooks', () => {

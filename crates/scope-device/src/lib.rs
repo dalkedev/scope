@@ -729,6 +729,11 @@ impl DeviceManager {
         }
         let mut status = self.inner.status.lock().unwrap();
         status.running = false;
+        // An identity here signals unfinished cleanup to the UI. Clear it only
+        // after termination and owned settings restoration have succeeded.
+        status.serial = None;
+        status.package = None;
+        status.mode = None;
         status.message = "Device settings restored; instrumented process ended when applicable; saved captures remain available".into();
         Ok(status.clone())
     }
@@ -2171,7 +2176,22 @@ mod tests {
                     target_pid: None,
                 })
                 .unwrap();
+            {
+                let mut status = manager.inner.status.lock().unwrap();
+                status.running = true;
+                status.serial = Some("fixture-01".into());
+                status.package = Some("com.scope.demo".into());
+                status.mode = Some("proxy".into());
+            }
             manager.stop().await.unwrap();
+            let stopped = manager.status();
+            assert!(!stopped.running);
+            assert_eq!(
+                stopped.serial, None,
+                "successful cleanup must allow a new connection"
+            );
+            assert_eq!(stopped.package, None);
+            assert_eq!(stopped.mode, None);
             let commands = fs::read_to_string(log).unwrap();
             assert_eq!(commands.contains("settings put"), !external_change);
             assert_eq!(commands.contains("forward --remove"), !external_change);
@@ -2345,9 +2365,19 @@ mod tests {
         let mut manager = DeviceManager::new(directory.path().to_owned());
         Arc::get_mut(&mut manager.inner).unwrap().adb = directory.path().join("missing-adb");
         manager.save_recovery(&state).unwrap();
+        {
+            let mut status = manager.inner.status.lock().unwrap();
+            status.running = true;
+            status.serial = Some(state.serial.clone());
+            status.package = Some(state.package.clone());
+            status.mode = Some(state.mode.clone());
+        }
         assert!(manager.stop().await.is_err());
         assert!(manager.recovery_path().exists());
         assert!(!manager.status().running);
+        assert_eq!(manager.status().serial.as_deref(), Some("emulator-5554"));
+        assert_eq!(manager.status().package.as_deref(), Some("com.scope.demo"));
+        assert_eq!(manager.status().mode.as_deref(), Some("proxy"));
         assert!(manager.status().message.contains("Cleanup incomplete"));
     }
 

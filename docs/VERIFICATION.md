@@ -1,5 +1,15 @@
 # Recorded verification
 
+## Actual Scope-owned Android acceptance — 2026-11-09
+
+**PASS:** the direct production-worker matrix observed 75/75 expected synthetic outcomes and 2/2 owned-process Stop/restoration gates on AOSP Android 16/API 36 ARM64, Frida 17.9.1 and OkHttp 3.14.9. All phases, original SSL exception classes, pin/hostname markers, initial two failed outcomes, the explicit Java Key-cast correction and exact engine/worker hashes are recorded in [Android acceptance](ANDROID_ACCEPTANCE.md) and its [allowlisted JSON](verification/android-engine-2026-11-09.json).
+
+Fresh baseline requests after both Stops restored original rejection behavior; matching successful termination receipts, worker exit 0, app-process absence and removal of owned reverse mappings were observed. A genuine OkHttp 4.9.3/Kotlin 1.4.10 APK confirmed baseline HTTP 200, then unsupported lazy-pinner rejection before readiness, worker exit 1 and successful owned-process cleanup. This establishes rejection, not Kotlin unpinning support.
+
+**PASS:** a rebuilt, relocated macOS arm64 app completed two Android start–Stop cycles in the same process. Actual platform/OkHttp HTTP requests reached an independent loopback server, appeared as HTTP 200 with the expected JSON, and remained in SQLite after stopping. Both spawned processes and owned reverse mappings disappeared; Start became available again, and an active Frida panel retained its actual mode. The [native UI receipt](verification/android-native-ui-2026-11-09.json) records the source hashes and scope. Full Rust workspace (100 tests), UI (57 tests), Java engine (17 tests), Python worker (23 tests), production build/package and relocated desktop/MCP smoke pass.
+
+Crash/restart recovery with an active Android worker, physical devices, other API/ABI combinations and native TLS remain unverified. No global Android-support claim follows from this measured target. Earlier NOT RUN entries below describe their dated evidence, not the current result.
+
 ## Android worker diagnostic memory follow-up — 2026-11-07
 
 The follow-up to the initial reviewed engine head `4edeb09` bounds worker stdout/stderr framing before JSON parsing and retained device logs. See [exact limits and lifecycle behavior](ANDROID_ENGINE.md#bounded-host-diagnostics).
@@ -13,11 +23,11 @@ A reproducible synthetic profile sends 205 diagnostics of 16,384 bytes and retai
 
 A separate class-wrapper-cache candidate was rejected: the retained Frida bridge already caches successful wrappers, warmed class-factory misses were zero before/after, and bounded Node timing samples were mixed. Fewer Java.use dispatches do not establish a native or Android speedup; no such product change was made.
 
-The emulator prerequisite investigation progressed beyond the earlier crash site using ordinary private directory preparation, but ADB still aborts because its standard user-storage directory is read-only in this executor. No host security setting, standard home directory or system trust store was changed. Actual Android/Frida/TLS/pinning/hostname/Stop acceptance remains **NOT RUN** and the PR stays draft. Exact final hosted check receipts are recorded in the same PR after publication.
+The emulator prerequisite investigation progressed beyond the earlier crash site using ordinary private directory preparation, but ADB still aborts because its standard user-storage directory is read-only in this executor. No host security setting, standard home directory or system trust store was changed. At that point actual Android/Frida/TLS/pinning/hostname/Stop acceptance was **NOT RUN**. The later [9 November target-specific record](ANDROID_ACCEPTANCE.md) supersedes that direct-worker gate; it does not infer other platform or native desktop lifecycle results. Exact final hosted check receipts are recorded in the same PR after publication.
 
 ## Scope-owned Android engine boundary — 2026-11-07
 
-The current source replaces the imported hook backend with Scope-owned Java hooks and ends the owned app process on Frida Stop. Local executable Node/Python policy/adapter and Rust lifecycle tests use simulated Java/Frida or local child processes; they do not execute Android TLS. Real Android/Frida/OkHttp TLS, hostname controls, API/ABI compatibility and Stop restoration acceptance are **NOT RUN**. Earlier emulator receipts below describe the previous backend and remain historical. See [current engine coverage](ANDROID_ENGINE.md).
+The source candidate reviewed on 7 November replaces the imported hook backend with Scope-owned Java hooks and ends the owned app process on Frida Stop. Local executable Node/Python policy/adapter and Rust lifecycle tests use simulated Java/Frida or local child processes; they do not execute Android TLS. At that review, real Android/Frida/OkHttp TLS, hostname controls, API/ABI compatibility and Stop restoration acceptance were **NOT RUN**; the later [9 November measured-target record](ANDROID_ACCEPTANCE.md) is separate. Earlier emulator receipts below describe the previous backend and remain historical. See [current engine coverage](ANDROID_ENGINE.md).
 
 Local source gates passed on Linux: 84 locked headless Rust tests (core/device/MCP), 56 UI tests plus TypeScript/Vite build, 26 Node engine/license/resource tests, 22 device-worker Python tests, 17 integrity-script tests and 10 fixture-helper tests. The final worker preflight regression was observed failing on malformed DER, relabelled synthetic key DER, trailing DER and a non-CA leaf, then passing with complete single-CA parsing before Frida import. The affected Python and embedded-worker Rust suites were rerun after that fix; other checked component source remained unchanged.
 
