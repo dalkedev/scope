@@ -47,7 +47,7 @@ jobs:
           if test -n "$existing"; then
             echo "Review proposal already exists: #$existing"
           else
-            gh pr create --draft --base main --head "$PROPOSAL_BRANCH" --title "Scope $version: maintainer release review" --body-file "$review_file"
+            gh pr create --draft --base main --head "$PROPOSAL_BRANCH" --title "Snurpo $version: maintainer release review" --body-file "$review_file"
           fi
   build:
     if: inputs.mode != 'proposal'
@@ -141,7 +141,7 @@ jobs:
             test "$(cat existing-state.txt)" = true || { echo 'Release is already public; review CI artifacts manually.'; exit 1; }
           else
             printf '%s\n' 'Review candidate. Frida is installed separately with the shipped setup helper. Platform builds require runtime review before publication. See docs/RELEASING.md, docs/VERIFICATION.md and docs/DEPENDENCIES.md.' > release-notes.txt
-            gh release create "$RELEASE_TAG" --verify-tag --draft --prerelease --title "Scope $RELEASE_TAG" --notes-file release-notes.txt
+            gh release create "$RELEASE_TAG" --verify-tag --draft --prerelease --title "Snurpo $RELEASE_TAG" --notes-file release-notes.txt
           fi
       - name: Combine checksums and upload draft assets
         shell: bash

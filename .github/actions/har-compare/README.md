@@ -1,8 +1,8 @@
-# Scope offline HAR comparison Action
+# Snurpo offline HAR comparison Action
 
 Compare two local HAR captures without replaying traffic, opening the desktop,
 calling a model, or sending captures to a service. This composite Action bundles
-Scope's existing [offline comparison CLI](../../../tools/har-compare/README.md)
+Snurpo's existing [offline comparison CLI](../../../tools/har-compare/README.md)
 and generates JSON, standalone offline HTML, and JUnit XML. Observed changes
 are regression candidates; [authored contracts](../../../tools/har-compare/contracts/README.md)
 express explicit required statuses and JSON fields.
@@ -30,7 +30,7 @@ jobs:
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: '22.22.3'
-      - uses: dalkedev/scope/.github/actions/har-compare@v1.2.0
+      - uses: dalkedev/snurpo/.github/actions/har-compare@v1.2.0
         id: compare
         with:
           baseline: private-captures/baseline.har
@@ -50,7 +50,7 @@ fresh output directory for every invocation and manage local retention yourself.
 For a complete example that needs no real captures, copy
 [`github-actions-composite.yml`](../../../tools/har-compare/examples/github-actions-composite.yml)
 into your repository's `.github/workflows/` and run it manually. It checks out
-Scope into a separate directory, uses synthetic fixtures, and runs the local
+Snurpo into a separate directory, uses synthetic fixtures, and runs the local
 composite Action from that checkout. Upload is **off by default** and is a caller
 choice. This example is inactive here; copying/enabling it is your decision.
 
@@ -122,7 +122,7 @@ either result into a clean comparison. The complete synthetic workflow shows an
 explicit upload toggle and a final gate which also rejects missing outputs:
 
 ```yaml
-- uses: dalkedev/scope/.github/actions/har-compare@v1.2.0
+- uses: dalkedev/snurpo/.github/actions/har-compare@v1.2.0
   id: compare
   with:
     baseline: private-captures/baseline.har
@@ -169,7 +169,7 @@ implied by an Action result.
 
 ## Local verification
 
-From a Scope checkout with Node 22.22.3:
+From a Snurpo checkout with Node 22.22.3:
 
 ```sh
 npm test --prefix tools/har-compare

@@ -64,7 +64,7 @@ await run(tauri, [
   ...(mode === 'build' ? ['--bundles', bundles, '--config', publicConfig] : []),
 ]);
 if (mode === 'build' && process.platform === 'darwin') {
-  const application = join(root, 'target/release/bundle/macos/Scope.app');
+  const application = join(root, 'target/release/bundle/macos/Snurpo.app');
   // Tauri may reuse an earlier bundle's resource envelope. Sign the complete
   // final app after resources are staged, then verify exactly what we ship.
   await run('/usr/bin/codesign', ['--force', '--deep', '--sign', '-', application]);

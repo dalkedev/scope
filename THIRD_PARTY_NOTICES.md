@@ -20,9 +20,9 @@ Each collection records its source lockfile hash; regeneration is described in
 
 `vendor/glib` contains GLib **0.18.5**, copyright its gtk-rs contributors,
 under its original [MIT license](vendor/glib/LICENSE) and
-[copyright notice](vendor/glib/COPYRIGHT). Scope applies only gtk-rs upstream
+[copyright notice](vendor/glib/COPYRIGHT). Snurpo applies only gtk-rs upstream
 commit `b5a4071e439bef2b5eea76c3aa25e5ae84839e34` to repair
-`VariantStrIter` unsoundness (RUSTSEC-2024-0429). This is a Scope-maintained
+`VariantStrIter` unsoundness (RUSTSEC-2024-0429). This is a Snurpo-maintained
 backport; it is not an upstream 0.18.5 release update.
 
 The [provenance and verification instructions](vendor/glib-provenance/README.md)
@@ -31,9 +31,9 @@ hashes. Both directories must be retained in corresponding source archives.
 GLib's original license and authorship remain applicable; linked native GNOME
 libraries have their own license terms described in GLib's `COPYRIGHT`.
 
-## Original Scope engine and historical migration
+## Original Snurpo engine and historical migration
 
-`resources/frida/scope-engine.js` and the Python worker are original Scope integration code under the project AGPL-3.0-or-later license. The current runtime no longer includes the six HTTP Toolkit hook/config files or its extracted system-CA installation template. The project previously distributed them from the owner's `SculptTechProject/bypass-scripts-adb` repository, originating in HTTP Toolkit Server v1.26.1 (`1abef0adc96d07bd64377e85e847025a55bac2ac`). Their historical copyright, provenance and AGPL notices remain in public Git history. No history rewrite or project license change is part of this migration. This is not a legally certified clean-room claim.
+`resources/frida/scope-engine.js` and the Python worker are original Snurpo integration code under the project AGPL-3.0-or-later license. The current runtime no longer includes the six HTTP Toolkit hook/config files or its extracted system-CA installation template. The project previously distributed them from the owner's `SculptTechProject/bypass-scripts-adb` repository, originating in HTTP Toolkit Server v1.26.1 (`1abef0adc96d07bd64377e85e847025a55bac2ac`). Their historical copyright, provenance and AGPL notices remain in public Git history. No history rewrite or project license change is part of this migration. This is not a legally certified clean-room claim.
 
 ## Frida Java bridge
 
@@ -68,7 +68,7 @@ The GNU Library GPL text was obtained from [GNU](https://www.gnu.org/licenses/ol
 
 ## Retained JavaScript integrity
 
-The unchanged retained bridge distributed by HTTP Toolkit Server v1.26.1 has SHA-256 `88f0ca1fb34d2bd7b589f3d4c44aa0077780473530922887a53311ec55d9c214`. The exact bridge distribution source and corresponding source are listed above; retention does not make it original Scope code.
+The unchanged retained bridge distributed by HTTP Toolkit Server v1.26.1 has SHA-256 `88f0ca1fb34d2bd7b589f3d4c44aa0077780473530922887a53311ec55d9c214`. The exact bridge distribution source and corresponding source are listed above; retention does not make it original Snurpo code.
 
 ## Optional packaged Frida runtime
 
@@ -83,7 +83,7 @@ A previously verified local macOS arm64 experiment included
 `resources/bin/scope-frida-worker` and the unmodified official
 `frida-server-17.9.1-android-arm64` binary. The following provenance is retained
 for that local experiment and future review; those native components are absent
-from public release artifacts and are not relicensed as Scope code.
+from public release artifacts and are not relicensed as Snurpo code.
 
 | Component | Version / origin | License text |
 | --- | --- | --- |
@@ -96,8 +96,8 @@ from public release artifacts and are not relicensed as Scope code.
 The main Frida licenses incorporate GNU Library GPL 2 or later, with an explicit
 exception permitting binary object code distribution under the distributor's
 own terms. The [GNU Library GPL text](resources/device/licenses/LGPL-2.0.txt)
-is included alongside those exceptions. Scope does not modify Frida, CPython or
-PyInstaller. The original Scope engine remains under the project AGPL license.
+is included alongside those exceptions. Snurpo does not modify Frida, CPython or
+PyInstaller. The original Snurpo engine remains under the project AGPL license.
 
 The older Python 3.9 developer environment optionally installs
 `typing_extensions` 4.16.0; its [license](resources/device/licenses/typing_extensions-4.16.0-LICENSE.txt)
@@ -112,4 +112,4 @@ corresponding-source review. The public packaging checks currently reject it.
 
 ## Owned Android acceptance APK (test only)
 
-The original [lab fixture](examples/android-engine-fixture/README.md) downloads checksum-locked OkHttp 3.14.9 and Okio 1.17.2 only into an explicit external build directory. Its APK includes [dependency notices](examples/android-engine-fixture/THIRD_PARTY_NOTICES.txt), Apache-2.0 text and any embedded JAR notices, including the Public Suffix List MPL-2.0 notice. These JARs and APKs are excluded from source control and Scope production resources.
+The original [lab fixture](examples/android-engine-fixture/README.md) downloads checksum-locked OkHttp 3.14.9 and Okio 1.17.2 only into an explicit external build directory. Its APK includes [dependency notices](examples/android-engine-fixture/THIRD_PARTY_NOTICES.txt), Apache-2.0 text and any embedded JAR notices, including the Public Suffix List MPL-2.0 notice. These JARs and APKs are excluded from source control and Snurpo production resources.

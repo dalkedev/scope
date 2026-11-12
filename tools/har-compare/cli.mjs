@@ -10,7 +10,7 @@ import { compareHar } from './src/compare.mjs';
 import { junitReport } from './formats/junit.mjs';
 import { jsonReport, htmlReport, writeReports } from './src/report.mjs';
 
-const help = `Scope HAR compare (offline prototype)
+const help = `Snurpo HAR compare (offline prototype)
 Usage:
   node cli.mjs compare --baseline FILE --candidate FILE [--config FILE]
                       [--json NEW_FILE] [--html NEW_FILE] [--junit NEW_FILE]

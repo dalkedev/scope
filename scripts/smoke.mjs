@@ -112,7 +112,7 @@ async function requireFreePort(port) {
     probe.once('error', (error) =>
       reject(
         new Error(
-          `Port ${port} is busy. Stop an existing Scope demo before running this test. ${error.message}`,
+          `Port ${port} is busy. Stop an existing Snurpo demo before running this test. ${error.message}`,
         ),
       ),
     );
@@ -138,7 +138,7 @@ async function startDesktop(dataDirectory, demo) {
   child.once('error', ready.reject);
   child.once('exit', (code, signal) =>
     ready.reject(
-      new Error(`Scope exited before readiness (${code ?? signal}): ${child.diagnostics}`),
+      new Error(`Snurpo exited before readiness (${code ?? signal}): ${child.diagnostics}`),
     ),
   );
   try {
@@ -495,7 +495,7 @@ try {
   );
   completed = true;
   console.log(
-    'Scope MCP smoke test passed. All traffic stayed on localhost; no Android device was modified.',
+    'Snurpo MCP smoke test passed. All traffic stayed on localhost; no Android device was modified.',
   );
 } catch (error) {
   console.error(`FAIL ${error.stack ?? error}`);

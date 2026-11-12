@@ -1,6 +1,6 @@
 # Architecture
 
-Scope is a local desktop application. A single Rust engine owns capture, session storage, edits and analysis. The Tauri UI and MCP bridge use that same engine, so an agent inspects the archive visible in the app.
+Snurpo is a local desktop application. A single Rust engine owns capture, session storage, edits and analysis. The Tauri UI and MCP bridge use that same engine, so an agent inspects the archive visible in the app.
 
 ```mermaid
 flowchart LR
@@ -28,13 +28,13 @@ flowchart LR
 | `src-tauri`             | Desktop lifecycle, native dialogs, command dispatch, MCP access policy and local demo server               |
 | `src`                   | React inspector, sessions, device setup, analysis, comparison and MCP settings                             |
 | `resources/device`      | Frida worker, runtime setup helpers and retained third-party licenses                                             |
-| `resources/frida`       | Original Scope Java engine and attributed unchanged Frida Java bridge                                               |
+| `resources/frida`       | Original Snurpo Java engine and attributed unchanged Frida Java bridge                                               |
 | `examples/android-demo` | Small Java/Android localhost test target                                                                   |
 | `scripts/smoke.mjs`     | Real-process MCP/capture/persistence/redaction smoke test                                                  |
 
 ## Capture and persistence
 
-The proxy binds loopback by default (`127.0.0.1:17890`). HTTPS uses a Scope-generated CA and generated destination certificates; upstream connections verify their certificates. ADB reverse makes the host proxy reachable from an attached Android device without opening a public listener.
+The proxy binds loopback by default (`127.0.0.1:17890`). HTTPS uses a Snurpo-generated CA and generated destination certificates; upstream connections verify their certificates. ADB reverse makes the host proxy reachable from an attached Android device without opening a public listener.
 
 Each exchange has a stable ID and belongs to a saved session. Repeated headers are arrays, and non-UTF-8 bodies use base64. The SQLite database uses WAL mode. Session revisions change when an existing exchange completes or is edited, allowing the UI to refresh a row even when the exchange count stays constant.
 
@@ -62,7 +62,7 @@ System proxy mode is device-wide. Frida mode spawns/attaches to the selected pac
 
 Frida Stop terminates the exact process spawned by the worker, because created proxy/TLS objects can survive unhooking. Typed capability readiness follows durable spawned-PID recording. A successful exit and matching cleanup receipt are required; worker failure or missing acknowledgment retains target recovery. After restart, only observed absence of a recorded PID in a readable root procfs view can reconcile it automatically; unknown spawn completion requires manual reconciliation. Saved target PIDs are never killed. System proxy mode does not install certificates; legacy owned-CA removal remains supported.
 
-A failed cleanup retains its recovery record and blocks a conflicting new start. Reconnect the same device and retry Stop. Cleanup removes Scope-owned resources and restores recorded settings; it does not stop unrelated Frida servers. [Android details](ANDROID.md)
+A failed cleanup retains its recovery record and blocks a conflicting new start. Reconnect the same device and retry Stop. Cleanup removes Snurpo-owned resources and restores recorded settings; it does not stop unrelated Frida servers. [Android details](ANDROID.md)
 
 ## MCP boundary
 
@@ -92,6 +92,6 @@ The application settings expose the actual data directory. `--data-dir` or `SCOP
 
 ## Verification and design choices
 
-Tests exercise actual local HTTP and CA-signed HTTPS, rather than only proxy parsers. The release smoke launches the actual desktop engine and MCP executable, tests access/redaction, and reopens the same SQLite archive. Native UI and one rooted Android emulator were checked separately for earlier versions. These historical receipts do not validate the current Scope-owned engine; its real-device acceptance remains NOT RUN. [Recorded results and limits](VERIFICATION.md)
+Tests exercise actual local HTTP and CA-signed HTTPS, rather than only proxy parsers. The release smoke launches the actual desktop engine and MCP executable, tests access/redaction, and reopens the same SQLite archive. Native UI and one rooted Android emulator were checked separately for earlier versions. These historical receipts do not validate the current Snurpo-owned engine; its real-device acceptance remains NOT RUN. [Recorded results and limits](VERIFICATION.md)
 
-Scope 1.0.0 does not capture WebSocket frames, HTTP trailers, QUIC/HTTP3 or arbitrary TCP/UDP. Windows/Linux runtime parity and physical Android support need evidence from those environments. New networking-stack support should include a minimal reproducible client/server fixture and a cleanup test.
+Snurpo does not capture WebSocket frames, HTTP trailers, QUIC/HTTP3 or arbitrary TCP/UDP. Windows/Linux runtime parity and physical Android support need evidence from those environments. New networking-stack support should include a minimal reproducible client/server fixture and a cleanup test.

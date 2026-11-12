@@ -151,7 +151,7 @@ describe('Proxy listener settings', () => {
       fireEvent.click(screen.getByRole('button', { name: /Demo app com.example.demo/ }));
     });
     fireEvent.click(screen.getByRole('button', { name: /Frida Optional instrumentation/ }));
-    fireEvent.click(screen.getByRole('checkbox', { name: 'Trust the Scope CA' }));
+    fireEvent.click(screen.getByRole('checkbox', { name: 'Trust the Snurpo CA' }));
     expect(screen.getByRole('checkbox', { name: 'TLS certificate unpinning' })).not.toBeChecked();
     expect(screen.getByRole('checkbox', { name: 'TLS certificate unpinning' })).toBeDisabled();
     fireEvent.click(screen.getByRole('checkbox', { name: 'Proxy configuration' }));

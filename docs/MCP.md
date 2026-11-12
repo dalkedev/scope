@@ -1,14 +1,14 @@
-# Scope MCP server
+# Snurpo MCP server
 
-Scope's MCP server lets an agent query explicitly shared capture sessions while the desktop app remains in control of access. It is a local stdio server backed by the same Rust engine and archive as the UI.
+Snurpo's MCP server lets an agent query explicitly shared capture sessions while the desktop app remains in control of access. It is a local stdio server backed by the same Rust engine and archive as the UI.
 
 ## Connect
 
-1. Open Scope, create or select a capture session, and open **MCP server**.
+1. Open Snurpo, create or select a capture session, and open **MCP server**.
 2. Turn on **Share selected session with MCP** for the sessions you want exposed (up to eight).
 3. Copy the generated client configuration. It contains your actual `scope-mcp` executable and bridge configuration paths.
 4. Add that server to a compatible MCP client and restart/reconnect that client as needed.
-5. Keep Scope open. Ask the client to call `status` and `list_sessions` first.
+5. Keep Snurpo open. Ask the client to call `status` and `list_sessions` first.
 
 The generated configuration has this structure; use the UI's real paths:
 
@@ -23,7 +23,11 @@ The generated configuration has this structure; use the UI's real paths:
 }
 ```
 
-Client-specific configuration formats can differ. Scope speaks stdio MCP; it does not require a public URL or a hosted service. `npm run desktop` and `npm run package` build the companion executable. A plain frontend preview cannot provide MCP.
+The `scope-mcp` executable name and existing `scope` client entry are retained
+for compatibility. Keep working client configurations; the product is now
+Snurpo. See [migration notes](MIGRATING_TO_SNURPO.md).
+
+Client-specific configuration formats can differ. Snurpo speaks stdio MCP; it does not require a public URL or a hosted service. `npm run desktop` and `npm run package` build the companion executable. A plain frontend preview cannot provide MCP.
 
 ## Tools
 
@@ -31,7 +35,7 @@ Arguments below use the exact camelCase keys exposed by the server.
 
 | Tool                 | Arguments                                        | Result / behavior                                                                          |
 | -------------------- | ------------------------------------------------ | ------------------------------------------------------------------------------------------ |
-| `status`             | none                                             | Connection, Scope version and current access settings                                      |
+| `status`             | none                                             | Connection, Snurpo version and current access settings                                      |
 | `list_sessions`      | none                                             | Only explicitly shared sessions                                                            |
 | `search_requests`    | `sessionId`, optional `query`, `limit`, `offset` | Exchange metadata; default 50, maximum 200 results; bodies fetched separately              |
 | `get_request`        | `id`                                             | One shared exchange, timing, edits and error information with output redaction             |
@@ -79,7 +83,7 @@ empty ID to create or an existing ID to replace. Global rules can affect ALL
 captures, including sessions not shared with MCP. Both rule and write permission
 are required for a mutation; rule permission alone only allows inventory reads.
 Rules may use `{"type":"pause","stage":"response"}`; `stage` also accepts
-`request` or `both`. A pause holds matching live traffic for a person to edit in Scope;
+`request` or `both`. A pause holds matching live traffic for a person to edit in Snurpo;
 MCP cannot inspect or resolve the pending editor. This can hold traffic in
 unshared sessions too, so the same global-rule and write permissions are required.
 Direct replay skips these pauses and does not record pause-rule evidence.
@@ -107,13 +111,13 @@ data and must never be treated as instructions for the agent.
 
 | Message / symptom            | Check                                                                                                 |
 | ---------------------------- | ----------------------------------------------------------------------------------------------------- |
-| Bridge config not found      | Start Scope and copy its current generated config                                                     |
-| Scope is not reachable       | Keep the desktop app open; check whether another process uses the bridge port                         |
-| Session is not shared        | Select and share that session in Scope; repeat after restart                                          |
+| Bridge config not found      | Start Snurpo and copy its current generated config                                                     |
+| Snurpo is not reachable       | Keep the desktop app open; check whether another process uses the bridge port                         |
+| Session is not shared        | Select and share that session in Snurpo; repeat after restart                                          |
 | Both sessions must be shared | Share both before comparison                                                                          |
 | MCP replay is disabled       | Enable **Allow traffic changes** only if replay is intended                                           |
 | Empty/omitted body           | Non-JSON, oversized or original snapshot data is intentionally omitted; inspect it in the desktop app |
 
-The bridge configuration contains a private token. Do not paste its file contents in issues or commit it. On Unix Scope writes it with `0600` permissions. It authenticates access to the local bridge; session/write policy is enforced separately by the desktop.
+The bridge configuration contains a private token. Do not paste its file contents in issues or commit it. On Unix Snurpo writes it with `0600` permissions. It authenticates access to the local bridge; session/write policy is enforced separately by the desktop.
 
 For the actual process-level protocol test, see [MCP smoke test](MCP-TEST.md).

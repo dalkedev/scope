@@ -1,4 +1,4 @@
-name: Scope offline HAR comparison
+name: Snurpo offline HAR comparison
 description: Compare local HAR captures with authored contracts and offline JSON, HTML and JUnit reports.
 inputs:
   baseline:

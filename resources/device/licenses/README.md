@@ -3,7 +3,7 @@
 This folder records the provenance of Scope's prior local Frida packaging
 experiment. Public alpha releases exclude the standalone worker, embedded Python
 and Android `frida-server` binary. Users can explicitly install upstream Frida
-into Scope's private user runtime with `device/install-runtime.py`; the public
+into Snurpo's private user runtime with `device/install-runtime.py`; the public
 application does not redistribute those native downloads. The integration source
 and the third-party interception scripts keep the separate licenses described in the root
 [`THIRD_PARTY_NOTICES.md`](../../../THIRD_PARTY_NOTICES.md).
@@ -70,11 +70,11 @@ To obtain the full source checkout, including the pinned submodules, use
 A GitHub top-level source archive alone does not contain submodule contents.
 The main Frida components use the wxWindows Library Licence 3.1, based on the
 GNU Library GPL 2 or later with its binary-distribution exception. The license
-copies above retain that exception verbatim. Scope does not modify Frida.
+copies above retain that exception verbatim. Snurpo does not modify Frida.
 
 ## Distribution scope
 
-The release boundary is enforced by `scripts/public-resources.mjs`: no
+Snurpo's release boundary is enforced by `scripts/public-resources.mjs`: no
 `scope-frida-worker` or `frida-server-*` binary is copied into public packages,
 even when local ignored experimental binaries exist. The public setup helper
 downloads the official version only when the user runs it, validates its pinned

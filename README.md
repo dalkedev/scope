@@ -1,32 +1,32 @@
 <p align="center">
-  <img src="assets/brand/scope-banner.png" alt="Scope — See what your app is saying. HTTP(S) debugging: capture, inspect and compare." width="100%">
+  <img src="assets/brand/snurpo-banner.png" alt="Snurpo — A nosy little HTTP debugger. Capture, inspect and compare HTTP(S) traffic." width="100%">
 </p>
 
 <p align="center">
-  <strong>The HTTP conversation is yours to inspect.</strong><br>
+  <strong>Snurpo — A nosy little HTTP debugger.</strong><br>
   A desktop workbench for HTTP(S), Android instrumentation and agent-assisted debugging.
 </p>
 
 <p align="center">
   <a href="docs/GETTING_STARTED.md">Get started</a> ·
-  <a href="https://github.com/dalkedev/scope/releases">Downloads</a> ·
+  <a href="https://github.com/dalkedev/snurpo/releases">Downloads</a> ·
   <a href="docs/SCREENSHOTS.md">Screenshots</a> ·
   <a href="docs/MCP.md">MCP</a> ·
   <a href="CONTRIBUTING.md">Contribute</a>
 </p>
 
 <p align="center">
-  <a href="https://github.com/dalkedev/scope/actions/workflows/checks.yml"><img src="https://github.com/dalkedev/scope/actions/workflows/checks.yml/badge.svg?branch=main" alt="Build and check"></a>
+  <a href="https://github.com/dalkedev/snurpo/actions/workflows/checks.yml"><img src="https://github.com/dalkedev/snurpo/actions/workflows/checks.yml/badge.svg?branch=main" alt="Build and check"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-AGPL--3.0--or--later-2f64ed" alt="AGPL-3.0-or-later license"></a>
 </p>
 
-Scope routes traffic through a Rust engine, gives you control over requests and responses, and saves the result in a local SQLite archive. Inspect it yourself, reopen it tomorrow, or let an MCP client work from the same captured evidence.
+**Snurpo (formerly Scope)** routes traffic through a Rust engine, gives you control over requests and responses, and saves the result in a local SQLite archive. Inspect it yourself, reopen it tomorrow, or let an MCP client work from the same captured evidence.
 
 **Local capture, saved sessions and export need no account or subscription.** Built-in analysis runs locally. You choose which sessions an external agent can access.
 
-> **Scope 1.4.1:** Light/Dark/System appearance, an experimental Scope-owned Android Java engine with owned-process Stop cleanup, and reproducible archive diagnostics. Endpoint pause/edit rules, the offline HAR Action and verified GLib backport remain included. Check [Releases](https://github.com/dalkedev/scope/releases) for published builds and platform notes. [Android acceptance →](docs/ANDROID_ACCEPTANCE.md) · [Archive measurements →](docs/ARCHIVE_RESPONSIVENESS.md) · [Verification record →](docs/VERIFICATION.md)
+> **Latest published release: Scope 1.4.1.** This source tree introduces the Snurpo name; existing downloads retain their original Scope branding. The real screenshots below show the current Snurpo source build, not a newly published installer. Saved sessions, certificate trust and MCP configuration remain compatible — see [migration notes](docs/MIGRATING_TO_SNURPO.md). Version 1.4.1 includes Light/Dark/System appearance, an experimental project-owned Android Java engine with owned-process Stop cleanup, and reproducible archive diagnostics. Endpoint pause/edit rules, the offline HAR Action and verified GLib backport remain included. Check [Releases](https://github.com/dalkedev/snurpo/releases) for published builds and platform notes. [Android acceptance →](docs/ANDROID_ACCEPTANCE.md) · [Archive measurements →](docs/ARCHIVE_RESPONSIVENESS.md) · [Verification record →](docs/VERIFICATION.md)
 
-<a href="docs/SCREENSHOTS.md"><img src="docs/images/traffic-inspector.jpg" alt="Real captured traffic: a products request returns a local HTTP 503 mock, with its rule and response JSON visible." width="100%"></a>
+<a href="docs/SCREENSHOTS.md"><img src="docs/images/snurpo/mocked-response.jpg" alt="Real captured traffic: a products request returns a local HTTP 503 mock, with its rule and response JSON visible." width="100%"></a>
 
 ## Follow a request all the way through
 
@@ -38,19 +38,19 @@ Scope routes traffic through a Rust engine, gives you control over requests and 
 A rule-generated response is marked as a **mock**. Rewrites retain the **original** message. A replay creates a **new exchange**. The inspector keeps those distinctions visible so your evidence stays useful.
 
 Prefer a darker workspace? Choose **Light**, **Dark** or **System** under
-**Appearance** in the sidebar. Scope remembers your local choice; System follows
-your desktop's current appearance, including changes while Scope is running.
+**Appearance** in the sidebar. Snurpo remembers your local choice; System follows
+your desktop's current appearance, including changes while Snurpo is running.
 
 <table>
   <tr>
-    <td width="50%"><a href="docs/RULES.md"><img src="docs/images/traffic-rules.jpg" alt="Persistent rule editor: match the local products endpoint and return a maintenance response."></a><br><strong>Your rules, saved.</strong><br>Match method, host, path or URL. Rewrite, mock or block.</td>
-    <td width="50%"><a href="docs/GETTING_STARTED.md#automate-a-local-mock"><img src="docs/images/replay-composer.jpg" alt="Replay composer with an edited POST destination and JSON body."></a><br><strong>Change it. Send it again.</strong><br>Edit the destination, method, full headers and body.</td>
+    <td width="50%"><a href="docs/RULES.md"><img src="docs/images/snurpo/traffic-rules.jpg" alt="Saved Snurpo maintenance rule with the localhost matcher, HTTP 503 status and JSON body."></a><br><strong>Your rules, saved.</strong><br>Match an endpoint, then rewrite, mock or block its traffic.</td>
+    <td width="50%"><a href="docs/GETTING_STARTED.md#automate-a-local-mock"><img src="docs/images/snurpo/replay-composer.jpg" alt="Replay composer with an edited POST destination and JSON body."></a><br><strong>Change it. Send it again.</strong><br>Edit the destination, method, full headers and body.</td>
   </tr>
 </table>
 
 ## A real capture in a minute
 
-Open Scope and select **Generate real test traffic** — the lightning bolt beside **New session**. It sends six real localhost requests through the proxy, including an intentional sign-in error and repeated product calls.
+Open Snurpo and select **Generate test traffic** in the empty inspector, or the lightning bolt beside **New session**. It sends six real localhost requests through the proxy, including an intentional sign-in error and repeated product calls.
 
 1. Select a row and inspect the response, headers and timing.
 2. Open **Analysis** to follow an observation back to its exchanges.
@@ -89,8 +89,8 @@ review reports before choosing to share them.
 Install Rust, Node.js **22.13+** and [Tauri's native prerequisites](https://v2.tauri.app/start/prerequisites/). The repository pins the Rust compiler and dependency lockfiles.
 
 ```sh
-git clone https://github.com/dalkedev/scope.git
-cd scope
+git clone https://github.com/dalkedev/snurpo.git
+cd snurpo
 npm ci
 npm run desktop
 ```
@@ -101,7 +101,7 @@ npm run desktop
 
 Discover connected devices and installed apps over ADB. Use the **device-wide proxy** path, or instrument a **selected process with Frida** and explicit hook profiles. Read-only diagnostics explain authorization, root, ABI, runtime/server versions, mappings and recovery state before you connect.
 
-Frida is an optional, separate runtime installation. The experimental Scope-owned engine supports selected Java URL, SSLContext and OkHttp3 seams; native TLS and custom pinners are unsupported. **Stop ends the instrumented app process** before restoring recorded Scope-owned state and preserving external changes. System proxy mode requires manually configured app trust for HTTPS and never installs a system CA. [Setup, supported paths and recovery →](docs/ANDROID.md) · [Diagnostic reference →](docs/DIAGNOSTICS.md)
+Frida is an optional, separate runtime installation. The experimental Snurpo-owned engine supports selected Java URL, SSLContext and OkHttp3 seams; native TLS and custom pinners are unsupported. **Stop ends the instrumented app process** before restoring recorded Snurpo-owned state and preserving external changes. System proxy mode requires manually configured app trust for HTTPS and never installs a system CA. [Setup, supported paths and recovery →](docs/ANDROID.md) · [Diagnostic reference →](docs/DIAGNOSTICS.md)
 
 ## An agent can read the evidence. You set the scope.
 
@@ -122,7 +122,7 @@ Everything starts off and resets on restart. Known credentials are redacted from
 
 The same engine powers the native inspector and MCP. Real HTTP/TLS fixtures test interception, rules and replay; device fixtures test setup and ownership; the process smoke reopens an actual archive and checks agent access after restart.
 
-<a href="docs/SCREENSHOTS.md"><img src="docs/images/analysis.jpg" alt="Analysis of the real local capture: observed endpoints, intentional errors, timings and synthetic response provenance." width="100%"></a>
+<a href="docs/SCREENSHOTS.md"><img src="docs/images/snurpo/session-analysis.jpg" alt="Analysis of the real local capture: observed endpoints, intentional errors, timings and synthetic response provenance." width="100%"></a>
 
 | Today                   | Boundary                                                                                                                                                                                                                                                       |
 | ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -131,7 +131,7 @@ The same engine powers the native inspector and MCP. Real HTTP/TLS fixtures test
 | Android / Frida         | AOSP API 36 ARM64, Frida 17.9.1 and OkHttp 3.14.9 passed 75 direct-worker outcomes plus two native UI Start/Stop capture cycles. Other targets and active-worker crash/restart recovery remain unverified; native TLS and lazy Kotlin pinners are unsupported. |
 | Capture                 | Bodies are buffered up to **16 MiB each**. Streaming, WebSocket frames, trailers and HTTP3 are not implemented.                                                                                                                                                |
 | Archives & analysis     | Records currently load into memory. Large-session streaming/export is planned. Observed schemas are not complete API contracts.                                                                                                                                |
-| Dependencies            | A Linux glib unsoundness advisory remains tracked in [#11](https://github.com/dalkedev/scope/issues/11). See the full [dependency record](docs/DEPENDENCIES.md).                                                                                               |
+| Dependencies            | A Linux glib unsoundness advisory remains tracked in [#11](https://github.com/dalkedev/snurpo/issues/11). See the full [dependency record](docs/DEPENDENCIES.md).                                                                                               |
 
 Breakpoints expire after 60 seconds. [What was actually tested →](docs/VERIFICATION.md)
 
@@ -139,16 +139,16 @@ Breakpoints expire after 60 seconds. [What was actually tested →](docs/VERIFIC
 
 Useful contributions include reproducible device/OS reports, protocol fixtures, platform validation and improvements to large-capture handling. The roadmap connects proposals to [real public user feedback](docs/USER-NEEDS.md), with a clear distinction between delivered features and planned work.
 
-[Contributing](CONTRIBUTING.md) · [Roadmap](ROADMAP.md) · [Report a bug](https://github.com/dalkedev/scope/issues/new/choose) · [Security](SECURITY.md) · [Changelog](CHANGELOG.md)
+[Contributing](CONTRIBUTING.md) · [Roadmap](ROADMAP.md) · [Report a bug](https://github.com/dalkedev/snurpo/issues/new/choose) · [Security](SECURITY.md) · [Changelog](CHANGELOG.md)
 
 Every change goes through maintainer review and required platform checks. [Ownership & release process →](docs/GOVERNANCE.md)
 
 ---
 
 <p align="center">
-  <a href="docs/BRAND.md"><img src="assets/brand/scope-logo.svg" alt="Scope logo and brand assets" width="48" height="48"></a>
+  <a href="docs/BRAND.md"><img src="assets/brand/snurpo-logo.png" alt="Snurpo logo and brand assets" width="48" height="48"></a>
 </p>
 
-An independent project by **[dalkedev](https://github.com/dalkedev)**. Scope uses its original Java interception engine with Frida and an unchanged, attributed Frida Java bridge. The bridge distribution provenance and third-party licenses remain in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+An independent project by **[dalkedev](https://github.com/dalkedev)**. Snurpo uses its original Java interception engine with Frida and an unchanged, attributed Frida Java bridge. The bridge distribution provenance and third-party licenses remain in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
 **AGPL-3.0-or-later** · [License](LICENSE) · [Third-party notices](THIRD_PARTY_NOTICES.md) · [Brand assets](docs/BRAND.md)

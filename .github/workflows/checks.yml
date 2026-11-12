@@ -72,7 +72,7 @@ jobs:
         run: node scripts/public-resources.mjs .runtime/public-resources
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
-          name: scope-check-${{ runner.os }}-${{ runner.arch }}
+          name: snurpo-check-${{ runner.os }}-${{ runner.arch }}
           path: |
             target/release/bundle/
             target/release/scope-mcp*

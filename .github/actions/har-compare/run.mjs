@@ -87,14 +87,14 @@ try {
   // checked for CR/LF and NUL, so each output remains exactly one scalar line.
   appendFileSync(process.env.GITHUB_OUTPUT, Object.entries(outputs).map(([key, value]) => `${key}=${value}\n`).join(''));
 } catch {
-  process.stderr.write('::error::Scope HAR comparison invalid: ACTION_OUTPUT. Could not write result outputs.\n');
+  process.stderr.write('::error::Snurpo HAR comparison invalid: ACTION_OUTPUT. Could not write result outputs.\n');
   process.exit(2);
 }
 if (code === 2) {
-  process.stderr.write(`::error::Scope HAR comparison invalid: ${escapeCommand(outputs['error-code'])}. ${escapeCommand(diagnostic)}\n`);
+  process.stderr.write(`::error::Snurpo HAR comparison invalid: ${escapeCommand(outputs['error-code'])}. ${escapeCommand(diagnostic)}\n`);
 } else if (code === 1) {
-  process.stderr.write(`::warning::Scope HAR comparison: regression; ${outputs.regressions} regression candidates. Review local derived reports.\n`);
+  process.stderr.write(`::warning::Snurpo HAR comparison: regression; ${outputs.regressions} regression candidates. Review local derived reports.\n`);
 } else {
-  process.stdout.write(`Scope HAR comparison: clean; ${outputs.informational} informational findings.\n`);
+  process.stdout.write(`Snurpo HAR comparison: clean; ${outputs.informational} informational findings.\n`);
 }
 process.exitCode = defer ? 0 : code;

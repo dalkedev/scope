@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Install optional Frida into Scope's private user runtime, without system pip.
+"""Install optional Frida into Snurpo's private user runtime, without system pip.
 
 This is an explicit user-side download from PyPI and Frida's official release.
-It does not contact, install to, or start an Android device. Scope pushes/starts
+It does not contact, install to, or start an Android device. Snurpo pushes/starts
 the server only when the user starts interception for a selected device/app.
 """
 import argparse
@@ -51,7 +51,7 @@ def download_server(arch, directory):
     payload = cached.read_bytes() if cached.is_file() else b""
     if hashlib.sha256(payload).hexdigest() != HASHES[arch]:
         print("Downloading official Android %s server..." % arch, flush=True)
-        request = urllib.request.Request(url, headers={"User-Agent": "Scope-runtime-setup/0.1"})
+        request = urllib.request.Request(url, headers={"User-Agent": "Snurpo-runtime-setup/0.1"})
         with urllib.request.urlopen(request, timeout=60) as response:
             payload = response.read(100 * 1024 * 1024)
         if hashlib.sha256(payload).hexdigest() != HASHES[arch]:
@@ -69,7 +69,7 @@ def download_server(arch, directory):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--abi", choices=sorted(ARCHES), required=True, help="From adb shell getprop ro.product.cpu.abi")
-    parser.add_argument("--runtime-dir", type=Path, default=default_runtime(), help="Scope's device runtime directory")
+    parser.add_argument("--runtime-dir", type=Path, default=default_runtime(), help="Snurpo's device runtime directory")
     args = parser.parse_args()
     if sys.version_info < (3, 9):
         parser.error("Python 3.9 or newer is required for this optional setup")
@@ -97,7 +97,7 @@ def main():
         "setup": "Explicit user-side installation; no Android device changed",
     }
     (root / "runtime-info.json").write_text(json.dumps(info, indent=2) + "\n")
-    print("Ready. Reopen Scope or press Start interception again. No environment variables are needed.", flush=True)
+    print("Ready. Reopen Snurpo or press Start interception again. No environment variables are needed.", flush=True)
     print("Runtime: %s" % root, flush=True)
 
 

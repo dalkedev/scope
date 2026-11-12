@@ -1,6 +1,6 @@
 # JUnit XML export
 
-`junitReport(report)` in `junit.mjs` renders an already-produced Scope comparison report as deterministic JUnit-style XML. It has no runtime dependencies, file IO, network requests or model calls. The CLI coordinator owns output path creation and exit codes.
+`junitReport(report)` in `junit.mjs` renders an already-produced Snurpo comparison report as deterministic JUnit-style XML. It has no runtime dependencies, file IO, network requests or model calls. The CLI coordinator owns output path creation and exit codes.
 
 ```js
 import { junitReport } from './formats/junit.mjs';

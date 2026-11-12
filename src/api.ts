@@ -20,7 +20,7 @@ export const isNative = () => '__TAURI_INTERNALS__' in window;
 async function call<T>(command: string, args?: Record<string, unknown>): Promise<T> {
   if (!isNative())
     throw new Error(
-      'Open the Scope desktop app to connect devices and capture traffic. This browser preview shows the interface only.',
+      'Open the Snurpo desktop app to connect devices and capture traffic. This browser preview shows the interface only.',
     );
   return invoke<T>('scope_command', { command, args: args || {} });
 }

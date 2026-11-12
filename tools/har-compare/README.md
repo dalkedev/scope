@@ -1,12 +1,12 @@
-# Scope HAR comparison — local CI experiment
+# Snurpo HAR comparison — local CI experiment
 
-Compare a baseline HAR with a new run, without opening Scope or replaying traffic.
+Compare a baseline HAR with a new run, without opening Snurpo or replaying traffic.
 The CLI reports **observed regression candidates**, returns a CI exit status, and
 creates a self-contained HTML report that a reviewer can open offline. It does
 not infer required schema fields or prove that a client will break.
 
 This is an isolated product demonstrator, not a production release or paid gate.
-Scope's existing free capture, storage, export and comparison remain unchanged.
+Snurpo's existing free capture, storage, export and comparison remain unchanged.
 The repository's [AGPL-3.0-or-later license](../../LICENSE) applies.
 
 ## Quick start
@@ -303,10 +303,10 @@ body merely because a size is declared. Informational responses and protocol
 upgrades (1xx) lack a supported final response and fail with exit 2.
 An empty body is distinct from JSON `null`.
 
-Scope exports may include `_scope`: only validated `provenance`
+Snurpo exports may include `_scope`: only validated `provenance`
 (`upstream`/`mock`/`blocked`) and boolean `edited` reach the evidence. Incomplete
 captures or non-null errors fail. Original payloads, rule names, arbitrary IDs
-and other extension data are omitted. Native Scope archives are not supported;
+and other extension data are omitted. Native Snurpo archives are not supported;
 no archive, CA state or `Engine::open` is used.
 
 | Bound | Limit |
@@ -386,7 +386,7 @@ It is not a real-browser, CSP-enforcement or perceptual screenshot test.
 
 The tests run actual subprocesses and temporary files: regression evidence,
 strict negative control, repeat pairing, query/origin boundaries, base64,
-malformed/missing bodies, Scope extensions, config typos, resource limits,
+malformed/missing bodies, Snurpo extensions, config typos, resource limits,
 privacy, deterministic report bytes, HTML escaping and non-overwriting outputs.
 See [design and support boundaries](docs/design.md) and the
 [verification record](docs/verification.md) for reproducible checks and limits.

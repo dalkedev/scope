@@ -9,7 +9,7 @@ body:
   - type: input
     id: version
     attributes:
-      label: Scope version or commit
+      label: Snurpo version or commit
       placeholder: 0.1.0 / commit hash
     validations:
       required: true

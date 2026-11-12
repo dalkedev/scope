@@ -1,6 +1,6 @@
 # INACTIVE EXAMPLE: copy into your repository's .github/workflows/ to enable.
 # Runs with synthetic captures in any consumer repository; no real HAR needed.
-name: Scope composite HAR comparison example
+name: Snurpo composite HAR comparison example
 on:
   workflow_dispatch:
     inputs:
@@ -21,7 +21,7 @@ jobs:
       - name: Check out the Action and its synthetic fixtures separately
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          repository: dalkedev/scope
+          repository: dalkedev/snurpo
           # Planned release tag; use after publication, then pin an inspected full SHA.
           # v1.1.0 predates the Action and cannot be used here.
           ref: v1.2.0

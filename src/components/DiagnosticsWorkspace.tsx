@@ -91,11 +91,11 @@ export function DiagnosticsWorkspace({
         <div>
           <strong>Read-only preflight</strong>
           <p>
-            Checks ADB, device authorization, runtime versions and Scope-owned mappings. Does not
+            Checks ADB, device authorization, runtime versions and Snurpo-owned mappings. Does not
             boot an emulator, install software or change device settings.
           </p>
         </div>
-        <span className="mini-badge">{version ? `Scope ${version}` : 'Local engine'}</span>
+        <span className="mini-badge">{version ? `Snurpo ${version}` : 'Local engine'}</span>
       </div>
       <div className="diagnostic-engine-line">
         <span className={`tiny-dot ${proxy.running ? 'green' : ''}`} />
@@ -108,7 +108,7 @@ export function DiagnosticsWorkspace({
           <Stethoscope size={32} />
           <h2>Start with evidence.</h2>
           <p>
-            Run the preflight to get actionable checks for your current environment. Scope will
+            Run the preflight to get actionable checks for your current environment. Snurpo will
             report missing tools and unsupported combinations explicitly.
           </p>
           <button className="button" disabled={!native || busy} onClick={() => void run()}>
@@ -260,7 +260,7 @@ export function DiagnosticsWorkspace({
                       <td>{m.kind}</td>
                       <td>{m.local}</td>
                       <td>{m.remote}</td>
-                      <td>{m.owned ? 'Scope' : 'Other'}</td>
+                      <td>{m.owned ? 'Snurpo' : 'Other'}</td>
                     </tr>
                   ))}
                 </tbody>

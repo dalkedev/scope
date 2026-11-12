@@ -1,16 +1,20 @@
-# Scope 1.4.1 release candidate
+# Snurpo — branding update on the 1.4.1 source line
 
-Application version: `1.4.1`. This source branch combines the Scope-owned
-experimental Android Java engine with an opt-in archive measurement harness.
-The reviewed runtime sources passed 75 direct-worker Android outcomes and two
+Snurpo is the new name for Scope. This source tree updates the application identity,
+artwork and project links. The application version remains `1.4.1`; this rebrand
+alone does not create a new tagged release or replace a published download.
+The latest published release is **Scope 1.4.1**, whose original asset names and
+checksums remain available from [Releases](https://github.com/dalkedev/snurpo/releases).
+See [migration notes](docs/MIGRATING_TO_SNURPO.md) for the unchanged data directory,
+CA keys, archive formats and MCP compatibility identifiers.
+
+The reviewed 1.4.1 runtime sources passed 75 direct-worker Android outcomes and two
 native macOS Android Start/Stop capture cycles on AOSP API 36 ARM64, Frida
-17.9.1 and OkHttp 3.14.9. The final versioned package, exact-head hosted checks,
-maintainer review and draft asset verification are separate release gates.
-A version in source does not establish a published release; see
-[Releases](https://github.com/dalkedev/scope/releases) for downloads and exact
-platform manifests/checksums.
+17.9.1 and OkHttp 3.14.9. Those are recorded historical checks, not a claim of new
+Snurpo package or device verification. New artifacts need their own exact-commit
+checks, maintainer review and asset verification.
 
-Scope includes persistent HTTP(S) capture, request/response rules, editing and
+Snurpo includes persistent HTTP(S) capture, request/response rules, editing and
 replay, structured traffic filters, HAR/native archives, observed-traffic
 analysis, Android proxy/Frida integration and twelve scoped MCP tools. The
 separate HAR CLI and composite Action compare local captures; authored contracts

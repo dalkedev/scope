@@ -121,7 +121,7 @@ MCP's global rule inventory requires **Global rule access**; creating/replacing
 or deleting also requires **Allow traffic changes**. This access affects all
 captures, including unshared sessions. Inventory reads omit names, matchers and
 replacement payloads. Supply a full definition when updating; an inventory row
-is not a restorable rule. All permissions reset when Scope restarts.
+is not a restorable rule. All permissions reset when Snurpo restarts.
 
 See [MCP](MCP.md), [architecture](ARCHITECTURE.md) and the real HTTP/TLS
 integration tests in `crates/scope-core/tests/rules.rs`.

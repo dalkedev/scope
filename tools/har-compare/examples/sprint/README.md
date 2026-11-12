@@ -51,7 +51,7 @@ The inspect result is an inventory. Its successful exit is not a regression test
 Its exact suggested `configTemplate` contains `/billing` and `/health`; it does
 not silently select the HTML document or analyze response bodies.
 
-For a separate real Scope proxy → native HAR export → CLI proof using only
+For a separate real Snurpo proxy → native HAR export → CLI proof using only
 synthetic loopback HTTP, see the [optional native capture harness](../../toolchains/README.md#optional-native-capture-interoperability-proof).
 Its evidence is distinct from these static fixtures.
 

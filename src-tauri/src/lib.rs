@@ -223,7 +223,7 @@ async fn execute(app: &AppCore, command: &str, args: Value) -> Result<Value> {
             app.generate_demo(string(&args, "sessionId")?.to_string())
                 .await?
         }
-        _ => anyhow::bail!("Unknown Scope command: {command}"),
+        _ => anyhow::bail!("Unknown Snurpo command: {command}"),
     })
 }
 
@@ -337,6 +337,49 @@ pub async fn headless() -> Result<()> {
     Ok(())
 }
 
+#[cfg(target_os = "macos")]
+fn show_main_window(app: &tauri::AppHandle) -> Result<()> {
+    if let Some(window) = app.get_webview_window("main") {
+        window.show()?;
+        window.unminimize()?;
+        window.set_focus()?;
+    } else if let Some(config) = app.config().app.windows.first() {
+        tauri::WebviewWindowBuilder::from_config(app, config)?.build()?;
+    }
+    Ok(())
+}
+
+#[cfg(target_os = "macos")]
+fn setup_menu_bar(app: &tauri::App) -> Result<()> {
+    use tauri::{
+        menu::{Menu, MenuItem, PredefinedMenuItem},
+        tray::TrayIconBuilder,
+    };
+
+    let show = MenuItem::with_id(app, "snurpo.show", "Show Snurpo", true, None::<&str>)?;
+    let separator = PredefinedMenuItem::separator(app)?;
+    let quit = MenuItem::with_id(app, "snurpo.quit", "Quit Snurpo", true, None::<&str>)?;
+    let menu = Menu::with_items(app, &[&show, &separator, &quit])?;
+    TrayIconBuilder::with_id("snurpo-status")
+        .icon(tauri::include_image!("icons/snurpo-tray-template.png"))
+        .icon_as_template(true)
+        .tooltip("Snurpo — A nosy little HTTP debugger.")
+        .menu(&menu)
+        .show_menu_on_left_click(true)
+        .on_menu_event(|app, event| match event.id.as_ref() {
+            "snurpo.show" => {
+                if let Err(error) = show_main_window(app) {
+                    eprintln!("Snurpo: could not show the window: {error:#}");
+                }
+            }
+            // AppHandle::exit goes through the existing RunEvent::Exit cleanup.
+            "snurpo.quit" => app.exit(0),
+            _ => {}
+        })
+        .build(app)?;
+    Ok(())
+}
+
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_dialog::init())
@@ -346,20 +389,17 @@ pub fn run() {
             let core =
                 tauri::async_runtime::block_on(AppCore::open(data_dir(), resources, port()))?;
             app.manage(core);
+            #[cfg(target_os = "macos")]
+            setup_menu_bar(app)?;
             Ok(())
         })
         .build(app_context())
-        .expect("build Scope desktop")
+        .expect("build Snurpo desktop")
         .run(|app, event| {
             #[cfg(target_os = "macos")]
             if let tauri::RunEvent::Reopen { .. } = event {
-                if let Some(window) = app.get_webview_window("main") {
-                    let _ = window.show();
-                    let _ = window.set_focus();
-                } else if let Some(config) = app.config().app.windows.first() {
-                    if let Ok(builder) = tauri::WebviewWindowBuilder::from_config(app, config) {
-                        let _ = builder.build();
-                    }
+                if let Err(error) = show_main_window(app) {
+                    eprintln!("Snurpo: could not reopen the window: {error:#}");
                 }
             }
             if let tauri::RunEvent::Exit = event {

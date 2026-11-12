@@ -1,26 +1,30 @@
-# Releasing Scope
+# Releasing Snurpo
 
 ## Review, tag and publication
 
-The `release/<version>` branch carries the proposed changes, currently
-`release/1.4.1`. Opening a proposal does not
-create a tag or a public release. [Governance](GOVERNANCE.md) describes the required
-maintainer review and bot-authored PR, which lets the maintainer use native
+The `release/<version>` branch carries the proposed changes. Replace the
+`<version>` placeholders below with the next reviewed release version. Opening a
+proposal does not create a tag or a public release. [Governance](GOVERNANCE.md)
+describes the required maintainer review and bot-authored PR, which lets the maintainer use native
 GitHub approval. Dispatch `release.yml` on this branch with `mode: proposal`
 with the matching `tag: v<version>` to open that PR. The workflow validates that
 the branch matches the version and reads `docs/releases/<version>-review.md`.
 This mode skips all release build/upload jobs and creates no tag.
 
 After review and successful required checks, merge the PR and tag the reviewed
-main commit. Dispatch the same workflow with `mode: draft` and `tag: v1.4.1` to
-build the existing tag into a draft prerelease. Inspect the assets and use
-[the 1.4.1 release notes](releases/1.4.1.md) as the publication body. Publication
-is a separate maintainer action; for a stable release, clear both the draft and
+main commit. Dispatch the same workflow with `mode: draft` and `tag: v<version>`
+to build that existing tag into a draft prerelease. Inspect the assets and use
+the matching reviewed release notes in `docs/releases/` as the publication body.
+Publication is a separate maintainer action; for a stable release, clear both the draft and
 prerelease flags. Keep historical release assets attached to their original tags.
 
 The first public prerelease, `v0.1.0-alpha.1`, used application version `0.1.0`;
-the current source uses application version `1.4.1`.
-Repository: [dalkedev/scope](https://github.com/dalkedev/scope).
+the current source uses application version `1.4.1`. The Snurpo rebrand is
+currently a source change, not a new published release. The latest published
+release, **Scope 1.4.1**, keeps its original `Scope-…` artifact names and
+checksums. Do not move its tag or replace those assets with a renamed build.
+[Migration notes](MIGRATING_TO_SNURPO.md) describe the compatibility identifiers.
+Repository: [dalkedev/snurpo](https://github.com/dalkedev/snurpo).
 The recorded 1.0.0 interactive host was macOS Apple Silicon; this does not establish
 new-version interactive validation. Windows/Linux packages
 have CI build and headless-protocol coverage; their interactive installers and
@@ -41,12 +45,15 @@ requirements were not established for the prior local prebuilt experiment.
 Those native files are therefore not redistributed in public packages. See
 the [runtime provenance record](../resources/device/licenses/README.md).
 
-Users can explicitly install Frida from upstream into Scope's private user runtime.
+Users can explicitly install Frida from upstream into Snurpo's private user runtime.
 For an app installed in `/Applications` and an Android arm64 device:
 
 ```sh
-python3 "/Applications/Scope.app/Contents/Resources/resources/device/install-runtime.py" --abi arm64-v8a
+python3 "/Applications/Snurpo.app/Contents/Resources/resources/device/install-runtime.py" --abi arm64-v8a
 ```
+
+For the published Scope 1.4.1 package, substitute `Scope.app`. The app reports
+the exact command for its actual installation.
 
 Python 3.9+ with `venv` is required for this optional step. The helper creates a
 private virtualenv, installs pinned Frida 17.9.1 from PyPI and downloads the
@@ -81,7 +88,7 @@ node scripts/public-resources.mjs .runtime/public-resources
 
 `scripts/desktop.mjs` builds MCP with `--locked`, stages safe public resources and
 selects a macOS `.app`, Windows NSIS installer or Linux AppImage/deb. The resource
-configuration includes Scope's `LICENSE` and `THIRD_PARTY_NOTICES.md` alongside
+configuration includes Snurpo's `LICENSE` and `THIRD_PARTY_NOTICES.md` alongside
 the resource directory, so links to the included notices resolve in the bundle.
 
 Linux build prerequisites used by CI are `libwebkit2gtk-4.1-dev`, `build-essential`,
@@ -103,13 +110,15 @@ before preparing release assets. The helper refuses a dirty tracked checkout or
 a mismatched tag, preventing a source archive from describing different code.
 
 ```sh
-node scripts/release-assets.mjs v1.4.1
+RELEASE_TAG=vX.Y.Z # Replace with the next reviewed version tag.
+node scripts/release-assets.mjs "$RELEASE_TAG"
 ```
 
-On macOS this produces:
+For a future reviewed Snurpo release, the macOS helper produces the following
+filenames, with `<version>` replaced by the chosen version:
 
-- `Scope-v1.4.1-macOS-arm64.zip`, preserving the app bundle with `ditto`;
-- `Scope-v1.4.1-source.zip`, produced by `git archive` from the exact tag;
+- `Snurpo-v<version>-macOS-arm64.zip`, preserving the app bundle with `ditto`;
+- `Snurpo-v<version>-source.zip`, produced by `git archive` from the exact tag;
 - platform checksums and a build manifest recording the commit and exclusion of
   optional Frida binaries.
 

@@ -1,6 +1,6 @@
 # Maintainer review and releases
 
-Scope is maintained by [dalkedev](https://github.com/dalkedev).
+Snurpo is maintained by [dalkedev](https://github.com/dalkedev).
 Every source change goes through a pull request. The default branch requires
 one approving review, dismisses stale approvals after new commits, requires
 resolved review conversations and successful checks on macOS, Windows and Linux.
@@ -22,7 +22,7 @@ or create the future version tag.
 The repository's Actions setting permits PR creation by the workflow token.
 The token has read access by default; only the proposal job receives
 `pull-requests: write`. This setting does not authorize automated approval in
-Scope's workflow. Commits retain their actual Git authorship.
+Snurpo's workflow. Commits retain their actual Git authorship.
 
 CI also runs on `release/**` pushes: events generated with `GITHUB_TOKEN` do not
 trigger ordinary PR workflows, so the proposal relies on checks from that exact

@@ -5,7 +5,7 @@ input before deserialization. Previously it cloned every exchange, including
 body strings and originals. Validation still finishes before the existing atomic
 SQLite transaction, and the public API and import format are unchanged.
 
-This is a measured, bounded improvement toward [issue #12](https://github.com/dalkedev/scope/issues/12).
+This is a measured, bounded improvement toward [issue #12](https://github.com/dalkedev/snurpo/issues/12).
 Bodies remain limited to 16 MiB each; native imports still materialize their
 input and validated exchanges. Disk-backed bodies, streaming/backpressure and
 long-session scalability remain future work.

@@ -1,8 +1,8 @@
 blank_issues_enabled: false
 contact_links:
   - name: Security vulnerability
-    url: https://github.com/SculptTechProject/scope/security/advisories/new
+    url: https://github.com/dalkedev/snurpo/security/advisories/new
     about: Report vulnerabilities privately; do not publish real captures or secrets.
   - name: Setup and troubleshooting
-    url: https://github.com/SculptTechProject/scope/blob/main/docs/GETTING_STARTED.md
+    url: https://github.com/dalkedev/snurpo/blob/main/docs/GETTING_STARTED.md
     about: Capture walkthrough, Android setup, MCP and recovery.

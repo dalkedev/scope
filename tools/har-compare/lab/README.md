@@ -1,4 +1,4 @@
-# Scope HAR comparison local lab
+# Snurpo HAR comparison local lab
 
 An optional, isolated development lab for the dependency-free CLI in `../cli.mjs`.
 It uses synthetic localhost traffic only. Installing this lab does not change the
@@ -419,7 +419,7 @@ runnable on a compatible host. Existing jsdom checks are separate evidence.
 | HTML security | Real browser with unsafe detector control | Text escaping, request interception, CSP CSS, interaction |
 | Browser capture | Playwright full HAR | Mixed page assets and selected API on a compatible host |
 
-This lab does not prove native Scope interception, full HAR standards
+This lab does not prove native Snurpo interception, full HAR standards
 conformance, OS-wide network silence, browser coverage across operating systems,
 performance regression detection, or release readiness. The core CLI tests cover
 parser/config/resource limits separately; run them with `node --test

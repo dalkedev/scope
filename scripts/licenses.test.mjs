@@ -105,16 +105,16 @@ syncBuiltinESMExports();
   }
 }
 
-test('workspace path dependencies use the current Scope repository', () => {
+test('workspace path dependencies use the current Snurpo repository', () => {
   const { result, packages } = generateNotices(
     [{ name: 'scope-core', version: '1.2.1', directory: 'crates/scope-core' }],
     ['scope-core'],
   );
   assert.equal(result.status, 0, result.stderr);
-  assert.equal(packages[0].source, 'https://github.com/dalkedev/scope');
+  assert.equal(packages[0].source, 'https://github.com/dalkedev/snurpo');
 });
 
-test('vendored GLib preserves upstream attribution and identifies the Scope backport', () => {
+test('vendored GLib preserves upstream attribution and identifies the Snurpo backport', () => {
   const { result, packages, html } = generateNotices([
     {
       name: 'glib',
@@ -125,20 +125,20 @@ test('vendored GLib preserves upstream attribution and identifies the Scope back
   ]);
   assert.equal(result.status, 0, result.stderr);
   assert.equal(packages[0].repository, 'https://github.com/gtk-rs/gtk-rs-core');
-  assert.equal(packages[0].source, 'https://github.com/dalkedev/scope/tree/main/vendor/glib');
+  assert.equal(packages[0].source, 'https://github.com/dalkedev/snurpo/tree/main/vendor/glib');
   assert.equal(packages[0].upstreamSource, 'https://crates.io/crates/glib/0.18.5');
   assert.equal(
     packages[0].provenance,
-    'https://github.com/dalkedev/scope/blob/main/vendor/glib-provenance/README.md',
+    'https://github.com/dalkedev/snurpo/blob/main/vendor/glib-provenance/README.md',
   );
   assert.match(html, /href="https:\/\/crates\.io\/crates\/glib\/0\.18\.5">upstream<\/a>/);
   assert.match(
     html,
-    /href="https:\/\/github\.com\/dalkedev\/scope\/blob\/main\/vendor\/glib-provenance\/README\.md">Scope backport provenance<\/a>/,
+    /href="https:\/\/github\.com\/dalkedev\/snurpo\/blob\/main\/vendor\/glib-provenance\/README\.md">Snurpo backport provenance<\/a>/,
   );
 });
 
-test('other local path dependencies retain their declared repository instead of becoming Scope', () => {
+test('other local path dependencies retain their declared repository instead of becoming Snurpo', () => {
   const { result, packages } = generateNotices([
     {
       name: 'scope-helper',
@@ -166,7 +166,7 @@ test('registry packages keep their exact published package source', () => {
   assert.equal(packages[0].provenance, undefined);
 });
 
-test('unknown local dependencies without a public source fail rather than claiming Scope ownership', () => {
+test('unknown local dependencies without a public source fail rather than claiming Snurpo ownership', () => {
   const { result } = generateNotices([
     { name: 'unattributed', version: '0.1.0', directory: 'vendor/unattributed' },
   ]);
@@ -201,10 +201,10 @@ test('vendored GLib attribution follows a real directory alias to the canonical 
     { aliasManifest: true },
   );
   assert.equal(result.status, 0, result.stderr);
-  assert.equal(packages[0].source, 'https://github.com/dalkedev/scope/tree/main/vendor/glib');
+  assert.equal(packages[0].source, 'https://github.com/dalkedev/snurpo/tree/main/vendor/glib');
   assert.equal(
     packages[0].provenance,
-    'https://github.com/dalkedev/scope/blob/main/vendor/glib-provenance/README.md',
+    'https://github.com/dalkedev/snurpo/blob/main/vendor/glib-provenance/README.md',
   );
 });
 
