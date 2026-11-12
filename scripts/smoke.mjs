@@ -112,7 +112,7 @@ async function requireFreePort(port) {
     probe.once('error', (error) =>
       reject(
         new Error(
-          `Port ${port} is busy. Stop an existing Scope demo before running this test. ${error.message}`,
+          `Port ${port} is busy. Stop an existing Snurpo demo before running this test. ${error.message}`,
         ),
       ),
     );
@@ -138,7 +138,7 @@ async function startDesktop(dataDirectory, demo) {
   child.once('error', ready.reject);
   child.once('exit', (code, signal) =>
     ready.reject(
-      new Error(`Scope exited before readiness (${code ?? signal}): ${child.diagnostics}`),
+      new Error(`Snurpo exited before readiness (${code ?? signal}): ${child.diagnostics}`),
     ),
   );
   try {
@@ -295,7 +295,7 @@ try {
     ({ DatabaseSync } = await import('node:sqlite'));
   } catch {
     throw new Error(
-      'This smoke test requires Node.js 22.13 or newer with node:sqlite (Node.js 24 LTS recommended).',
+      'This smoke test requires Node.js 26.13.1 or newer with node:sqlite (Node.js 26 LTS selected).',
     );
   }
   await Promise.all([access(scopeBinary), access(mcpBinary)]).catch(() => {
@@ -495,7 +495,7 @@ try {
   );
   completed = true;
   console.log(
-    'Scope MCP smoke test passed. All traffic stayed on localhost; no Android device was modified.',
+    'Snurpo MCP smoke test passed. All traffic stayed on localhost; no Android device was modified.',
   );
 } catch (error) {
   console.error(`FAIL ${error.stack ?? error}`);

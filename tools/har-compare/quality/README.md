@@ -5,7 +5,7 @@ This optional dependency-free quality harness asks whether existing process-leve
 From the repository root, using the pinned runtime:
 
 ```sh
-/opt/scope-lab/toolchains/node-v22.22.3-linux-x64/bin/node \
+/opt/scope-lab/toolchains/node-v26.13.1-linux-x64/bin/node \
   tools/har-compare/quality/mutation-check.mjs \
   --output /tmp/scope-mutation-run-NEW
 ```
@@ -64,7 +64,7 @@ This runs authorized local source/tests. It does not sandbox malicious test code
 ## Harness tests
 
 ```sh
-/opt/scope-lab/toolchains/node-v22.22.3-linux-x64/bin/node --test \
+/opt/scope-lab/toolchains/node-v26.13.1-linux-x64/bin/node --test \
   tools/har-compare/quality/*.test.mjs
 ```
 
@@ -75,7 +75,7 @@ Thirteen tests use real subprocesses and small synthetic source fixtures to esta
 `query-corpus.mjs` exercises 39 fixed synthetic query pairs through both product CLI commands. It checks lossless non-UTF8 name/value matching, UTF-8 aliases, form spaces and plus signs, duplicate order, one decoding pass, malformed percent literals, Unicode/BOM distinctions and rejected raw URL surrogates. Each case compares exit status and inventory variant count; synthetic header/body sentinel values must remain absent from both outputs.
 
 ```sh
-/opt/scope-lab/toolchains/node-v22.22.3-linux-x64/bin/node \
+/opt/scope-lab/toolchains/node-v26.13.1-linux-x64/bin/node \
   tools/har-compare/quality/query-corpus.mjs \
   --output /tmp/scope-query-corpus-NEW
 ```
@@ -89,7 +89,7 @@ CLI exits are `0` for all fixed cases passing, `1` for an observed mismatch and 
 `resource-check.mjs` runs eleven fixed synthetic controls around the documented URL, entry, selected-node, file-size and body-depth limits. Three controls combine 2,000 entries with 4,096-code-unit URLs, including non-UTF8 query bytes. Each input is compared with itself; accepted controls must return valid JSON, exit 0 and zero regressions, and rejected controls must return the expected analysis error and exit 2.
 
 ```sh
-/opt/scope-lab/toolchains/node-v22.22.3-linux-x64/bin/node \
+/opt/scope-lab/toolchains/node-v26.13.1-linux-x64/bin/node \
   tools/har-compare/quality/resource-check.mjs \
   --output /tmp/scope-resource-controls-NEW
 ```

@@ -1,11 +1,11 @@
 {
-  "name": "scope-har-compare-local-lab",
+  "name": "snurpo-har-compare-local-lab",
   "version": "0.1.0",
   "private": true,
   "type": "module",
   "license": "AGPL-3.0-or-later",
   "engines": {
-    "node": ">=22.22.3"
+    "node": ">=26.13.1"
   },
   "scripts": {
     "test": "node --test --test-timeout=10000 test/*.test.mjs",

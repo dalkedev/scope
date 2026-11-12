@@ -1,14 +1,20 @@
-# Contributing to Scope
+# Contributing to Snurpo
 
-Scope is an early local HTTP debugger. Useful contributions include reproducible bugs, platform/device validation, minimal network fixtures, clearer docs and focused fixes. Check [open issues](https://github.com/SculptTechProject/scope/issues) and the [roadmap](ROADMAP.md) before starting a large feature.
+Snurpo is an early local HTTP debugger. Useful contributions include reproducible bugs, platform/device validation, minimal network fixtures, clearer docs and focused fixes. Check [open issues](https://github.com/dalkedev/snurpo/issues) and the [roadmap](ROADMAP.md) before starting a large feature.
 
 ## Development setup
 
-Install Rust, Node.js 22.13+ and [Tauri's prerequisites](https://v2.tauri.app/start/prerequisites/) for your host. Android changes also need SDK Platform Tools. The optional Frida runtime is described in [Android setup](docs/ANDROID.md#frida-runtime).
+Source builds, CI, the HAR CLI and its development lab now use Node 26 LTS.
+`.nvmrc` and the workflows pin 26.13.1; package metadata and runtime checks require
+at least that version. This source-tooling requirement does not add Node to the
+packaged native application's runtime requirements. Earlier verification records
+keep the Node versions actually used for those runs.
+
+Install Rust, Node.js 26.13.1+ and [Tauri's prerequisites](https://v2.tauri.app/start/prerequisites/) for your host. Android changes also need SDK Platform Tools. The optional Frida runtime is described in [Android setup](docs/ANDROID.md#frida-runtime).
 
 ```sh
-git clone https://github.com/SculptTechProject/scope.git
-cd scope
+git clone https://github.com/dalkedev/snurpo.git
+cd snurpo
 npm ci
 npm run desktop
 ```
@@ -29,7 +35,7 @@ npm run build
 
 For frontend formatting, run `npx prettier --check "src/**/*.{ts,tsx,css}"`. For packaging changes, also run `npm run package` on the relevant host. If a check needs a device or another OS you do not have, state that limitation in the PR.
 
-Capture changes need an integration test with a real local client/server and the relevant protocol. Parser tests, screenshots and a successful build alone do not establish end-to-end interception. Use synthetic data and localhost fixtures. For Android changes, verify that Stop restores proxy/certificate/forwarding state and preserves resources Scope does not own.
+Capture changes need an integration test with a real local client/server and the relevant protocol. Parser tests, screenshots and a successful build alone do not establish end-to-end interception. Use synthetic data and localhost fixtures. For Android changes, verify that Stop restores proxy/certificate/forwarding state and preserves resources Snurpo does not own.
 
 Avoid unrelated refactors in a bug fix. Explain the user-visible trigger, resulting behavior, validation and remaining limits. Update docs when configuration or coverage changes. Preserve vendored copyrights/licenses and refresh provenance when upstream resources change.
 
@@ -56,7 +62,7 @@ cargo run -p scope-desktop -- --headless --data-dir .scope/qa --demo
 
 For a bug, include version/commit, host OS/architecture, exact steps, expected/actual behavior and sanitized logs. For Android also include Android version, device ABI, capture mode, root state and both Frida versions. Distinguish “request captured,” “edited response reached the app,” and “cleanup restored the device.”
 
-Use the [bug form](https://github.com/SculptTechProject/scope/issues/new?template=bug_report.yml). For a suspected security problem follow [SECURITY.md](SECURITY.md), not a public capture attachment. Never include credentials, private CA keys, bridge tokens or personal traffic. Small synthetic reproductions are much easier to review.
+Use the [bug form](https://github.com/dalkedev/snurpo/issues/new?template=bug_report.yml). For a suspected security problem follow [SECURITY.md](SECURITY.md), not a public capture attachment. Never include credentials, private CA keys, bridge tokens or personal traffic. Small synthetic reproductions are much easier to review.
 
 ## Project principles
 

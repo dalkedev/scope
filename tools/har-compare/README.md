@@ -1,17 +1,17 @@
-# Scope HAR comparison — local CI experiment
+# Snurpo HAR comparison: local CI experiment
 
-Compare a baseline HAR with a new run, without opening Scope or replaying traffic.
+Compare a baseline HAR with a new run, without opening Snurpo or replaying traffic.
 The CLI reports **observed regression candidates**, returns a CI exit status, and
 creates a self-contained HTML report that a reviewer can open offline. It does
 not infer required schema fields or prove that a client will break.
 
 This is an isolated product demonstrator, not a production release or paid gate.
-Scope's existing free capture, storage, export and comparison remain unchanged.
+Snurpo's existing free capture, storage, export and comparison remain unchanged.
 The repository's [AGPL-3.0-or-later license](../../LICENSE) applies.
 
 ## Quick start
 
-Requires Node.js 22.22.3 (the tested runtime). No npm install, dependencies, model,
+Requires Node.js 26.13.1 or newer; CI pins 26.13.1. No npm install, dependencies, model,
 authentication, network access or running desktop/database is required.
 From the repository root:
 
@@ -39,7 +39,7 @@ mixed-unfiltered: exit 2, unsupported body analysis rejected
 For a separately installed runtime, select its bin directory, for example:
 
 ```sh
-export PATH=/opt/scope-lab/toolchains/node-v22.22.3-linux-x64/bin:$PATH
+export PATH=/opt/scope-lab/toolchains/node-v26.13.1-linux-x64/bin:$PATH
 ```
 
 All CLI paths resolve from the caller's working directory; an absolute path to
@@ -303,10 +303,10 @@ body merely because a size is declared. Informational responses and protocol
 upgrades (1xx) lack a supported final response and fail with exit 2.
 An empty body is distinct from JSON `null`.
 
-Scope exports may include `_scope`: only validated `provenance`
+Snurpo exports may include `_scope`: only validated `provenance`
 (`upstream`/`mock`/`blocked`) and boolean `edited` reach the evidence. Incomplete
 captures or non-null errors fail. Original payloads, rule names, arbitrary IDs
-and other extension data are omitted. Native Scope archives are not supported;
+and other extension data are omitted. Native Snurpo archives are not supported;
 no archive, CA state or `Engine::open` is used.
 
 | Bound | Limit |
@@ -386,7 +386,7 @@ It is not a real-browser, CSP-enforcement or perceptual screenshot test.
 
 The tests run actual subprocesses and temporary files: regression evidence,
 strict negative control, repeat pairing, query/origin boundaries, base64,
-malformed/missing bodies, Scope extensions, config typos, resource limits,
+malformed/missing bodies, Snurpo extensions, config typos, resource limits,
 privacy, deterministic report bytes, HTML escaping and non-overwriting outputs.
 See [design and support boundaries](docs/design.md) and the
 [verification record](docs/verification.md) for reproducible checks and limits.

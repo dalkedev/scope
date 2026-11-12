@@ -108,54 +108,14 @@ textarea::placeholder {
   color: #fff;
 }
 .brand-mark {
-  position: relative;
-  width: 27px;
-  height: 27px;
+  width: 42px;
+  height: 42px;
+  object-fit: contain;
+  flex-shrink: 0;
 }
-.brand-mark span {
-  position: absolute;
-  border: 2px solid #85bbff;
-  border-radius: 50%;
-  width: 23px;
-  height: 23px;
-  left: 1px;
-  top: 1px;
-}
-.brand-mark span:nth-child(2) {
-  width: 13px;
-  height: 13px;
-  left: 6px;
-  top: 6px;
-  border-color: #c2dcff;
-}
-.brand-mark span:nth-child(3) {
-  width: 5px;
-  height: 5px;
-  left: 10px;
-  top: 10px;
-  background: #fff;
-  border: 0;
-}
-.brand-mark:after {
-  content: '';
-  width: 12px;
-  height: 3px;
-  position: absolute;
-  right: -4px;
-  bottom: 3px;
-  background: #85bbff;
-  transform: rotate(45deg);
-  border-radius: 2px;
-}
-.preview-badge {
-  font-size: 9px;
-  letter-spacing: 0.2px;
-  padding: 3px 6px;
-  background: #273748;
-  color: #a7b9ca;
-  border: 1px solid #3b4b5c;
-  border-radius: 5px;
-  margin: 5px 0 0 3px;
+@media (prefers-reduced-motion: no-preference) {
+  .brand-mark { transition: transform 180ms ease-out; }
+  .brand-row:hover .brand-mark { transform: translateY(-2px) rotate(-5deg); }
 }
 .device-switch {
   display: flex;
@@ -233,17 +193,17 @@ textarea::placeholder {
 }
 .primary-nav button.selected,
 .sidebar-bottom > button.selected {
-  color: #eef5ff;
-  background: #2d3d52;
+  color: #f3ecff;
+  background: #342d4c;
 }
 .primary-nav button.selected > svg {
-  color: #a5c4ff;
+  color: #a9dfc8;
 }
 .nav-count {
   margin-left: auto;
   border-radius: 4px;
-  background: #4f6380;
-  color: #e1eaff;
+  background: #55466d;
+  color: #f0e8ff;
   padding: 1px 6px;
   font-size: 10px;
 }
@@ -285,14 +245,14 @@ textarea::placeholder {
   background: #202e3b;
 }
 .session-item.current {
-  background: #253348;
-  color: #a8c7ff;
+  background: #2d2940;
+  color: #d1bdff;
 }
 .session-item.current:before {
   content: '';
   position: absolute;
   width: 2px;
-  background: #84b0ff;
+  background: #c6adff;
   height: 18px;
   left: 0;
   top: 20px;
@@ -449,14 +409,18 @@ textarea::placeholder {
   color: #fff;
   box-shadow: 0 2px 3px var(--scope-shadow, #234fc91a);
 }
-.button.primary:hover:not(:disabled) {
-  background: var(--scope-accent, #2057df);
-  border-color: var(--scope-control-border, #2057df);
+.button.primary:not(.is-capturing):hover:not(:disabled) {
+  background: var(--scope-accent-hover, #593fb1);
+  border-color: var(--scope-accent-hover, #593fb1);
 }
 .button.primary.is-capturing {
   background: var(--scope-surface, #fff);
   color: var(--scope-danger, #d34a45);
   border-color: var(--scope-danger-border, #edc6c3);
+}
+.button.primary.is-capturing:hover:not(:disabled) {
+  background: var(--scope-danger-surface, #fff0ee);
+  border-color: var(--scope-danger-border, #c78f90);
 }
 .button.small {
   min-height: 29px;
@@ -803,7 +767,7 @@ textarea::placeholder {
 }
 .method-put,
 .method-patch {
-  color: var(--scope-text-secondary, #6a6fbc);
+  color: var(--scope-violet, #6a6fbc);
 }
 .method-delete {
   color: var(--scope-danger, #c37670);
@@ -1049,10 +1013,6 @@ textarea::placeholder {
 .text-button:hover:not(:disabled) {
   color: var(--scope-accent-text, var(--blue));
 }
-.text-button.demo-button {
-  font-size: 9px;
-  color: var(--scope-text-muted, #8d9eb1);
-}
 .traffic-footer {
   border-top: 1px solid var(--scope-border, #e4e9f0);
   display: flex;
@@ -1108,22 +1068,10 @@ textarea::placeholder {
   font-weight: 600;
   color: var(--scope-text-muted, #9daab8);
 }
-.tiny-scope {
-  width: 9px;
-  height: 9px;
-  border: 1px solid var(--scope-border, #a1afbd);
-  border-radius: 50%;
-  position: relative;
-}
-.tiny-scope:after {
-  content: '';
-  position: absolute;
-  width: 3px;
-  height: 1px;
-  background: var(--scope-inset, #a1afbd);
-  transform: rotate(45deg);
-  right: -2px;
-  bottom: -1px;
+.tiny-snurpo {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
 }
 .status-right {
   margin-left: auto;
@@ -1221,13 +1169,13 @@ textarea::placeholder {
   white-space: nowrap;
 }
 .detail-tabs button.active {
-  color: var(--scope-text-secondary, #3a6bd4);
+  color: var(--scope-accent-text, #6246b5);
 }
 .detail-tabs button.active:after {
   content: '';
   position: absolute;
   height: 2px;
-  background: var(--scope-selected, #4f7be2);
+  background: var(--scope-accent-text, #6246b5);
   bottom: -1px;
   width: 100%;
   left: 0;
@@ -2413,10 +2361,6 @@ textarea::placeholder {
   }
   .brand-name {
     font-size: 24px;
-  }
-  .preview-badge {
-    font-size: 8px;
-    margin-left: 0;
   }
   .device-switch {
     gap: 5px;

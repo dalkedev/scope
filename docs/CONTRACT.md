@@ -1,4 +1,4 @@
-# Scope implementation contract
+# Snurpo implementation contract
 
 All JSON fields use camelCase. The local engine is the single source of truth.
 
@@ -55,7 +55,7 @@ Device { serial, model, state, rooted: bool }
 App { package, name, running: bool }
 DeviceStatus { running, serial: Option<String>, package: Option<String>, mode: Option<String>, message: String, logs: Vec<String> }
 
-## Scope device API (scope_device)
+## Snurpo device API (scope_device)
 
 `DeviceManager::new(runtime_dir: PathBuf) -> DeviceManager` (Clone)
 `manager.list_devices() -> async Result<Vec<Device>>`

@@ -33,7 +33,7 @@ if (metadataResult.status !== 0)
     metadataResult.stderr || metadataResult.error?.message || 'cargo metadata failed',
   );
 const workspaceMembers = new Set(JSON.parse(metadataResult.stdout).workspace_members);
-const scopeRepository = 'https://github.com/dalkedev/scope';
+const scopeRepository = 'https://github.com/dalkedev/snurpo';
 function sameExistingManifest(left, right) {
   if (typeof left !== 'string' || typeof right !== 'string') return false;
   try {
@@ -141,7 +141,7 @@ const escape = (text) =>
   );
 const sections = rustNotices.licenses.map(
   (license) =>
-    `<section><h2>${escape(license.name)} (${escape(license.id)})</h2><p>${license.packages.map((p) => `${escape(p.name)} ${escape(p.version)}${p.provenance ? ` (<a href="${escape(p.upstreamSource)}">upstream</a>; <a href="${escape(p.source)}">vendored source</a>; <a href="${escape(p.provenance)}">Scope backport provenance</a>)` : ''}`).join(', ')}</p><pre>${escape(license.text)}</pre></section>`,
+    `<section><h2>${escape(license.name)} (${escape(license.id)})</h2><p>${license.packages.map((p) => `${escape(p.name)} ${escape(p.version)}${p.provenance ? ` (<a href="${escape(p.upstreamSource)}">upstream</a>; <a href="${escape(p.source)}">vendored source</a>; <a href="${escape(p.provenance)}">Snurpo backport provenance</a>)` : ''}`).join(', ')}</p><pre>${escape(license.text)}</pre></section>`,
 );
 for (const p of frontendNotices.packages)
   sections.push(
@@ -152,7 +152,7 @@ writeFileSync(join(destination, 'rust.json'), JSON.stringify(rustNotices, null, 
 writeFileSync(join(destination, 'frontend.json'), JSON.stringify(frontendNotices, null, 2) + '\n');
 writeFileSync(
   join(destination, 'index.html'),
-  `<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Scope — third-party licenses</title><style>body{max-width:1000px;margin:3rem auto;padding:0 1.5rem;font:16px/1.6 system-ui,sans-serif;color:#20272b}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:13px/1.5 monospace}section{border-top:1px solid #ccd3d4;margin-top:3rem}h2{font-size:20px}</style><h1>Scope — third-party licenses</h1><p>Generated from Cargo.lock ${rustNotices.lockfileSha256} and package-lock.json ${frontendNotices.lockfileSha256}. See THIRD_PARTY_NOTICES.md for vendored interception scripts and optional runtimes. ${escape(rustNotices.scope)}</p>${sections.join('\n')}</html>\n`,
+  `<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Snurpo: third-party licenses</title><style>body{max-width:1000px;margin:3rem auto;padding:0 1.5rem;font:16px/1.6 system-ui,sans-serif;color:#20272b}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:13px/1.5 monospace}section{border-top:1px solid #ccd3d4;margin-top:3rem}h2{font-size:20px}</style><h1>Snurpo: third-party licenses</h1><p>Generated from Cargo.lock ${rustNotices.lockfileSha256} and package-lock.json ${frontendNotices.lockfileSha256}. See THIRD_PARTY_NOTICES.md for vendored interception scripts and optional runtimes. ${escape(rustNotices.scope)}</p>${sections.join('\n')}</html>\n`,
 );
 console.log(
   `Wrote ${rustNotices.licenses.length} Rust license sections and ${frontendNotices.packages.length} npm package notices.`,

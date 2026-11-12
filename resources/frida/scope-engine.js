@@ -1,4 +1,4 @@
-/* Scope-owned Java interception engine. Uses the documented Frida Java API.
+/* Snurpo-owned Java interception engine. Uses the documented Frida Java API.
  * Coverage is deliberately limited to java.net.URL, SSLContext and OkHttp3.
  * Method rollback cannot revoke already-created clients: the worker must end
  * its spawned process on Stop or failure. No hostname verifier is replaced.
@@ -105,7 +105,7 @@
       const stream = use('java.io.ByteArrayInputStream').$new(bytes);
       const ca = Java.cast(use('java.security.cert.CertificateFactory').getInstance('X.509').generateCertificate(stream), Certificate);
       ca.checkValidity();
-      if (ca.getBasicConstraints() < 0) throw new Error('Scope certificate must be a CA');
+      if (ca.getBasicConstraints() < 0) throw new Error('Snurpo certificate must be a CA');
       const store = Store.getInstance(Store.getDefaultType());
       store.load(null, null); // Empty, never the Android/system trust store.
       store.setCertificateEntry('scope', ca);
@@ -116,7 +116,7 @@
       for (let i = 0; i < managers.length; i++) {
         if (X509.class.isInstance(managers[i])) { manager = Java.cast(managers[i], X509); break; }
       }
-      if (!manager) throw new Error('No X509 trust manager for isolated Scope CA');
+      if (!manager) throw new Error('No X509 trust manager for isolated Snurpo CA');
       let Extended;
       try { Extended = Java.use('javax.net.ssl.X509ExtendedTrustManager'); } catch (_) { /* Android before API 24. */ }
       trust = { manager, ca, Factory, X509, Certificate, Extended };
@@ -146,7 +146,7 @@
       const authType = context ? context.authType : String(Java.cast(values[0].getPublicKey(), use('java.security.Key')).getAlgorithm());
       const peer = Java.array('java.security.cert.X509Certificate', values);
       if (context && context.type) {
-        if (!state.Extended || !state.Extended.class.isInstance(state.manager)) throw new Error('Isolated Scope manager cannot preserve extended TLS context');
+        if (!state.Extended || !state.Extended.class.isInstance(state.manager)) throw new Error('Isolated Snurpo manager cannot preserve extended TLS context');
         const manager = Java.cast(state.manager, state.Extended);
         manager.checkServerTrusted.overload('[Ljava.security.cert.X509Certificate;', 'java.lang.String', context.type).call(manager, peer, authType, context.transport);
       } else {
@@ -215,7 +215,7 @@
         const wrapped = Array.from(managers, manager => {
           if (!state.X509.class.isInstance(manager)) return manager;
           const extended = state.Extended && state.Extended.class.isInstance(manager);
-          if (extended && !ExtendedWrapper) throw new Error('Cannot preserve X509ExtendedTrustManager context with this Scope manager');
+          if (extended && !ExtendedWrapper) throw new Error('Cannot preserve X509ExtendedTrustManager context with this Snurpo manager');
           const wrapper = (extended ? ExtendedWrapper : BasicWrapper).$new();
           wrapper.delegate.value = Java.cast(manager, state.X509);
           count++;

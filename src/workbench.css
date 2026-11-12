@@ -561,13 +561,13 @@
   position: relative;
 }
 .composer-tabs > button.selected {
-  color: var(--scope-text-secondary, #4e79b8);
+  color: var(--scope-accent-text, #6246b5);
 }
 .composer-tabs > button.selected:after {
   content: '';
   position: absolute;
   height: 2px;
-  background: var(--scope-selected, #648bd0);
+  background: var(--scope-accent-text, #6246b5);
   bottom: -1px;
   left: 0;
   width: 100%;

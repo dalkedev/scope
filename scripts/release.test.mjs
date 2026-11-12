@@ -16,7 +16,7 @@ test('release assets require an exact existing tag, matching HEAD and clean trac
   };
   try {
     git('init');
-    git('config', 'user.name', 'Scope release fixture');
+    git('config', 'user.name', 'Snurpo release fixture');
     git('config', 'user.email', 'fixture@example.test');
     writeFileSync(join(root, 'source.txt'), 'reviewed source');
     git('add', 'source.txt');

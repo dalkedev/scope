@@ -10,7 +10,7 @@ try {
   vm.runInNewContext(fs.readFileSync(require('node:path').join(__dirname, '../scope-engine.js'), 'utf8'), context);
   engine = context.module.exports;
 } catch (error) { if (error.code !== 'ENOENT') throw error; }
-const api = () => { assert.ok(engine, 'Scope-owned Java engine is implemented'); return engine; };
+const api = () => { assert.ok(engine, 'Snurpo-owned Java engine is implemented'); return engine; };
 const plain = value => JSON.parse(JSON.stringify(value));
 function javaError(javaType, message) { const error = new Error(message); error.$h = { javaType }; return error; }
 

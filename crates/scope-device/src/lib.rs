@@ -288,8 +288,8 @@ impl DeviceManager {
             tokio::net::TcpStream::connect(("127.0.0.1", proxy_port)),
         )
         .await
-        .context("Scope proxy is not accepting connections")?
-        .context("Start the Scope proxy before device interception")?;
+        .context("Snurpo proxy is not accepting connections")?
+        .context("Start the Snurpo proxy before device interception")?;
         if self.command(&serial, &["get-state"]).await.context("Selected device is disconnected, offline or unauthorized. Run connection diagnostics and accept its USB debugging prompt")? != "device" {
             bail!("Selected device is not ready. Run connection diagnostics before starting interception");
         }
@@ -313,7 +313,7 @@ impl DeviceManager {
             }
             let version = self.worker_version().await.map_err(|error| {
                 let setup = self.setup_command(&abi);
-                anyhow::anyhow!("Optional Frida runtime is unavailable: {error:#}\nRun this once in your terminal, then try Start again:\n{setup}\nThis creates Scope's private runtime; no Android settings have changed.")
+                anyhow::anyhow!("Optional Frida runtime is unavailable: {error:#}\nRun this once in your terminal, then try Start again:\n{setup}\nThis creates Snurpo's private runtime; no Android settings have changed.")
             })?;
             let server = diagnostics::server_selection(&self.inner.runtime, Some(&abi));
             if let Some(path) = server.path.filter(|_| server.local) {
@@ -376,7 +376,7 @@ impl DeviceManager {
         self.save_recovery(&state)?;
         let setup = async {
             self.command(&state.serial, &["reverse", &format!("tcp:{proxy_port}"), &format!("tcp:{proxy_port}")]).await?;
-            self.log(format!("ADB reverse: device 127.0.0.1:{proxy_port} → Scope localhost:{proxy_port}"));
+            self.log(format!("ADB reverse: device 127.0.0.1:{proxy_port} → Snurpo localhost:{proxy_port}"));
             let worker = if mode == "proxy" {
                 self.log("Proxy mode is DEVICE-WIDE. The selected package is launched, but Android may route other applications through this proxy.");
                 self.log("HTTPS requires manually configured application trust. System proxy mode does not install a CA or bypass pinning.");
@@ -529,9 +529,9 @@ impl DeviceManager {
             .root_command(state, "cat /proc/net/tcp6 2>/dev/null || true")
             .await?;
         if tcp_port_listening(&sockets, port) || tcp_port_listening(&sockets6, port) {
-            bail!("Android TCP port {port} already has a listener. Scope will not replace or stop an unrelated server. Stop your own listener or use an existing default-port USB Frida server, then retry");
+            bail!("Android TCP port {port} already has a listener. Snurpo will not replace or stop an unrelated server. Stop your own listener or use an existing default-port USB Frida server, then retry");
         }
-        // Only this spawned PID is owned and stopped by Scope. Existing servers are left alone.
+        // Only this spawned PID is owned and stopped by Snurpo. Existing servers are left alone.
         let pid = self.root_command(state, &format!("{remote} -l 127.0.0.1:{port} >/data/local/tmp/scope-frida-server.log 2>&1 & echo $!")).await?;
         let pid: u32 = pid
             .lines()
@@ -751,7 +751,7 @@ impl DeviceManager {
         if !state.target_spawn_pending {
             return Ok(());
         }
-        let pid = state.target_pid.context("Spawn was attempted without a recorded PID. Manually reconcile the app/process on the device; Scope cannot safely infer or kill it. Recovery retained")?;
+        let pid = state.target_pid.context("Spawn was attempted without a recorded PID. Manually reconcile the app/process on the device; Snurpo cannot safely infer or kill it. Recovery retained")?;
         if pid == 0 {
             bail!("Invalid recorded target PID; recovery retained");
         }
@@ -780,7 +780,7 @@ else echo UNKNOWN; fi"#
             .await
             .context("Cannot inspect recorded target process; recovery retained")?;
         if result.trim() != "ABSENT" {
-            bail!("Recorded target PID {pid} is present or its state is inaccessible. Scope will not kill a saved or reused PID; manually reconcile it and retry Stop. Recovery retained");
+            bail!("Recorded target PID {pid} is present or its state is inaccessible. Snurpo will not kill a saved or reused PID; manually reconcile it and retry Stop. Recovery retained");
         }
         self.log(format!(
             "Recorded target PID {pid} is absent in the observed root procfs view"
@@ -812,7 +812,7 @@ else echo UNKNOWN; fi"#
                             self.log("Android proxy was already restored")
                         }
                         Restoration::PreserveExternal => self.log(
-                            "Android proxy changed outside Scope; preserving the current setting",
+                            "Android proxy changed outside Snurpo; preserving the current setting",
                         ),
                         Restoration::Restore => {}
                     }
@@ -829,7 +829,7 @@ else echo UNKNOWN; fi"#
                 } else {
                     vec!["shell", "settings", "put", "global", "http_proxy", old]
                 };
-                // Quote existing user settings, which are not controlled by Scope.
+                // Quote existing user settings, which are not controlled by Snurpo.
                 let args: Vec<String> = args
                     .iter()
                     .enumerate()
@@ -848,7 +848,7 @@ else echo UNKNOWN; fi"#
             if let Err(error) = self.root_command(state, &script).await {
                 errors.push(error.to_string());
             } else {
-                self.log("Scope CA removed from shared trust stores and selected app; temporary mount overlays disappear after reboot");
+                self.log("Snurpo CA removed from shared trust stores and selected app; temporary mount overlays disappear after reboot");
             }
         }
         if let Some(port) = state.forward_port {
@@ -872,7 +872,7 @@ else echo UNKNOWN; fi"#
                             errors.push(error.to_string());
                         }
                     } else {
-                        self.log("Owned Frida forward is absent or changed outside Scope; preserving other mappings");
+                        self.log("Owned Frida forward is absent or changed outside Snurpo; preserving other mappings");
                     }
                 }
                 Err(error) => {
@@ -912,7 +912,7 @@ else echo UNKNOWN; fi"#
                         self.log("ADB reverse mapping was already restored")
                     }
                     Restoration::PreserveExternal => self.log(
-                        "ADB reverse mapping changed outside Scope; preserving the current mapping",
+                        "ADB reverse mapping changed outside Snurpo; preserving the current mapping",
                     ),
                 }
             }
@@ -2205,7 +2205,7 @@ mod tests {
                     .status()
                     .logs
                     .iter()
-                    .any(|line| line.contains("changed outside Scope")));
+                    .any(|line| line.contains("changed outside Snurpo")));
             }
         }
     }

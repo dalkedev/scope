@@ -1,0 +1,57 @@
+{
+  "captured": "2026-11-12",
+  "application": "Snurpo native macOS arm64 source build",
+  "sourceVersion": "1.4.2",
+  "reviewBundleIdentifier": "dev.snurpo.review",
+  "productionBundleIdentifier": "dev.scope.debugger",
+  "captureMethod": "Original native application fullscreen JPEG captures, no cropping, editing, retouching or image generation. Pointer parked outside the captured content; all images visually checked for absence of cursor and system sharing/title strip.",
+  "network": "Reopened the isolated eight-exchange localhost archive; capture stopped. Fixture originally127.0.0.1:17891, proxy127.0.0.1:17890, isolated bridge17994.",
+  "images": [
+    {
+      "file": "traffic-inspector.jpg",
+      "originalCapture": "v1.4.2/01-traffic-inspector.jpg",
+      "dimensions": [
+        3600,
+        2260
+      ],
+      "sha256": "f0ab1b11fe58941181edb2c75d27f8678521b5c9134785e24c7d6b8d612c9de6"
+    },
+    {
+      "file": "mocked-response.jpg",
+      "originalCapture": "v1.4.2/03-mocked-response.jpg",
+      "dimensions": [
+        3600,
+        2260
+      ],
+      "sha256": "06e077f7c6fa9c92c6d308b69f062d55c43e822dcf3ba3d256b54c9c6a0e7435"
+    },
+    {
+      "file": "replay-composer.jpg",
+      "originalCapture": "v1.4.2/04-replay-composer.jpg",
+      "dimensions": [
+        3600,
+        2260
+      ],
+      "sha256": "44365c8e1f26ae46019e35ba292d7a4a55cf62f09e9351310c070c32899acbac"
+    },
+    {
+      "file": "session-analysis.jpg",
+      "originalCapture": "v1.4.2/05-session-analysis.jpg",
+      "dimensions": [
+        3600,
+        2260
+      ],
+      "sha256": "81c8c658300c5a37ee9b7a453926537f548efdb2eefd8e434145dce3bdf0d272"
+    },
+    {
+      "file": "traffic-rules.jpg",
+      "originalCapture": "v1.4.2/02-mock-rule.jpg",
+      "dimensions": [
+        3600,
+        2260
+      ],
+      "sha256": "a5e3746c449bb01e794772066797491db0582d801c97ab76ddb8163f3291934e"
+    }
+  ],
+  "format": "JPEG/JFIF; original native screenshot bytes preserved"
+}

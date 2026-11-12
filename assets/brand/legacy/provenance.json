@@ -1,0 +1,43 @@
+{
+  "date": "2026-11-05",
+  "license": "AGPL-3.0-or-later",
+  "generator": "OpenAI image generation",
+  "assets": [
+    {
+      "file": "scope-logo.svg",
+      "kind": "production vector",
+      "source": "Two-path vector reconstruction of the selected generated concept; canonical solid cyan #2DDED1, no background or external dependencies.",
+      "sha256": "761ddd4041d3009112fc1624152fb42ed5c771e6ef7ec1ac03e35b77370df049"
+    },
+    {
+      "file": "scope-logo.png",
+      "kind": "transparent raster export",
+      "dimensions": [
+        512,
+        512
+      ],
+      "source": "PNG export of the clean production SVG; source for desktop icon generation.",
+      "sha256": "ed8b58f26a0ac4eba24cdb4e814cb00e99611c332bc248881ce429553dff0c4d"
+    },
+    {
+      "file": "scope-banner.png",
+      "kind": "generated raster illustration",
+      "dimensions": [
+        1774,
+        887
+      ],
+      "source": "Original generated banner, retained unedited. This is brand illustration, not a screenshot of Scope.",
+      "sha256": "1139ba096091363c8cd358143c5f81c21a80318ab370d385aee9d351af6aba4b"
+    }
+  ],
+  "prompts": {
+    "logo_concept": "Use case: logo-brand. Create one premium finished one-color brand symbol for Scope, an HTTP request/response debugger. True transparent PNG background. Pure solid cyan #55E6D2 only, absolutely no white elements. Symbol geometry: two thick orthogonal stepped traces meet visually as a square inspection frame but leave two deliberate small breaks at opposite corners. The upper-left trace enters horizontally from the left, steps upward to form the top edge and right half of the frame. The lower-right trace returns horizontally from the right, steps downward to form the bottom edge and left half. A clean square transparent aperture is at the center. A distinctive compact monogram-like silhouette without being a letter. Only six to eight purposeful right angle turns; squared terminal ends, constant band thickness, extremely simple flat geometry. Professional polished brand designer work, mathematical precision, clean anti-aliased edges. Center the mark in square canvas, icon fills roughly half the canvas with generous clean transparent padding. No arrows or arrowheads, no magnifying glass, no eyes, no ECG, no text, no initials, no gradient, no shading, no dimensionality, no specks, no distressed edges, no background rectangle, no checkerboard or mockup. This must be a clean final usable transparent icon, not a sketch or concept sheet.",
+    "banner": "Use case: ads-marketing / logo-brand. Asset: final wide GitHub repository and developer portfolio banner for Scope. Make the canvas exactly 2:1 landscape, approximately 2400 by 1200 pixels. Input image is the reference brand mark: preserve its recognizable geometry of two opposing orthogonal cyan stepped traces around a transparent square aperture, but render its edges clean and mathematically crisp, with solid flat cyan. Design a sophisticated dark technical editorial identity, a premium independent developer tool rather than generic SaaS. Background deep graphite #10191C, off-white typography #F3F4EE, cyan #55E6D2 accents. Large generous negative space, aligned Swiss-style typography, subtle fine horizontal request/response trace rails and tiny square packet ticks as supporting graphic texture. Upper-left: compact cyan mark from reference followed by the exact word 'Scope' in strong restrained modern sans-serif. Lower-left, large and clear, exact tagline on two lines: 'See what your' / 'app is saying.' Make that sentence the hero. Right half: an oversized precise flat cyan version of the same aperture mark, with trace lanes entering and returning behind it. A very small footer along bottom-left reads exactly 'HTTP(S) DEBUGGING / CAPTURE / INSPECT / COMPARE'. No other text. All text perfectly spelled, with comfortable 8% safe margins. The composition should be useful at GitHub banner size. No fake screenshot, no interface cards, no browser chrome, no logo variants, no licenses, no owner names, no platform badges, no phone, no robot, no shields, no magnifier, no gradient glow, no 3D, no watermark. Crisp, mature, highly legible and art-directed."
+  },
+  "production_note": "The concept prompt uses an exploratory cyan. The production SVG/PNG use #2DDED1. The generated banner retains its original related cyan/graphite tones; it is not the canonical vector artwork.",
+  "desktop_icons": {
+    "tool": "@tauri-apps/cli 2.12.4 from package-lock.json",
+    "source": "assets/brand/scope-logo.png",
+    "method": "Generate into a temporary directory, then replace the existing desktop PNG/ICO/ICNS files only."
+  }
+}

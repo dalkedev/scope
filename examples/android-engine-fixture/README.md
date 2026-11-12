@@ -2,7 +2,12 @@
 
 This original lab APK exercises a fresh platform `SSLContext.init` and real OkHttp **3.14.9**, with a deliberately wrong SHA-256 pin for `127.0.0.1`. It keeps the original hostname verifier, certificate checks and request errors. The explicit `okhttp-scope` control uses an isolated original manager containing only an optional public fixture CA; that same manager and its socket factory reach OkHttp, so the deliberate wrong pin is tested after successful chain cleaning. `platform` and default `okhttp` retain original system trust. Only `http[s]://127.0.0.1:PORT/` inputs are accepted; credentials, queries, fragments and redirects are forbidden. One action makes one GET, with one request in flight, four-second socket timeouts and an eight-second OkHttp call deadline. No response bodies are logged. HTTP reachability is separate from TLS/pin acceptance.
 
-**Actual direct-worker acceptance: PASS, 75/75 outcomes and 2/2 Stop/restoration gates** on AOSP Android 16/API 36 ARM64, Frida 17.9.1 and real OkHttp 3.14.9. See [the exact target, source hashes, initial failure/fix and full numeric receipt](../../docs/ANDROID_ACCEPTANCE.md). The earlier software-emulator prerequisite failure remains historical; it is superseded for this measured target. Other API/ABI combinations and full native desktop lifecycle gates remain separate. The APK is test-only and is never packaged with Scope.
+**Actual direct-worker acceptance: PASS, 75/75 outcomes and 2/2 Stop/restoration gates** on AOSP Android 16/API 36 ARM64, Frida 17.9.1 and real OkHttp 3.14.9. See [the exact target, source hashes, initial failure/fix and full numeric receipt](../../docs/ANDROID_ACCEPTANCE.md). The earlier software-emulator prerequisite failure remains historical; it is superseded for this measured target. Other API/ABI combinations and full native desktop lifecycle gates remain separate. The APK is test-only and is never packaged with Snurpo.
+
+The fixture keeps its original Scope CA labels and internal identifiers,
+including `com.scope.enginefixture`, `ScopeEngineFixture`, `scope-java-v1` and
+`okhttp-scope`. They remain unchanged so the commands and historical acceptance
+receipts refer to the same fixture; the desktop application is now Snurpo.
 
 ## Build with existing tools
 
@@ -38,7 +43,7 @@ The server uses the installed `openssl` command and Python standard library. It 
 python3 examples/android-engine-fixture/serve.py --seconds 600 --max-connections 100
 ```
 
-The single JSON startup receipt supplies the temporary public `scope_ca` path and URLs: Scope `18443`, foreign `18444`, wrong-host `18445`, expired `18446`, and HTTP `18080`. Keep that process running during the manual test. Restarting it creates new CAs; restart the worker with the new public CA. Host helper tests use real Python SSL verification for all four certificate cases. These are host certificate-fixture checks, not Android or Scope engine proof.
+The single JSON startup receipt supplies the temporary public `scope_ca` path and URLs: Scope `18443`, foreign `18444`, wrong-host `18445`, expired `18446`, and HTTP `18080`. Keep that process running during the manual test. Restarting it creates new CAs; restart the worker with the new public CA. Host helper tests use real Python SSL verification for all four certificate cases. These are host certificate-fixture checks, not Android or Snurpo engine proof.
 
 ## Manual acceptance on an explicitly selected owned lab device
 
@@ -108,8 +113,8 @@ These standalone commands deliberately select direct certificate/unpinning hooks
 
 Record actual exception types/causes for every failure. For `okhttp-scope`, require `SSLPeerUnverifiedException` with `Certificate pinning failure!` for the valid-Scope no-hooks/certificate-only/Stop controls; a generic trust failure is insufficient. The default OkHttp chain cleaner retains its original manager and can reject Scope CA before the wrong pin is evaluated in certificate-only mode; that rejection alone does not prove a measured pin mismatch. Ordinary 3.14.9 pinner hooks retain the raw chain for isolated Scope validation. Kotlin lazy `check$okhttp` configurations are rejected before readiness because their cleaner can discard that chain. No chain-cleaner override is installed.
 
-After Stop, require the worker's matching successful termination acknowledgment, check `adb -s "$SERIAL" shell pidof com.scope.enginefixture` reports absence, and launch the fresh baseline again. Missing acknowledgment, a surviving PID or unknown termination is a failed cleanup gate; do not kill arbitrary PIDs. Exercise Scope UI Stop/application restart separately to validate the full Rust/UI lifecycle and saved recovery; those current-source interactive gates require their own receipt and are not established by this worker matrix.
+After Stop, require the worker's matching successful termination acknowledgment, check `adb -s "$SERIAL" shell pidof com.scope.enginefixture` reports absence, and launch the fresh baseline again. Missing acknowledgment, a surviving PID or unknown termination is a failed cleanup gate; do not kill arbitrary PIDs. Exercise Snurpo UI Stop/application restart separately to validate the full Rust/UI lifecycle and saved recovery; those current-source interactive gates require their own receipt and are not established by this worker matrix.
 
-Proxy capture is another separate manual phase: run actual Scope on its selected listener and use only the synthetic HTTP URL with an explicitly selected proxy profile. Confirm capture in Scope, then Stop and confirm owned mapping/process cleanup. It supplies no HTTPS/pinning evidence. Do not combine that proxy experiment's CA with the direct fixture matrix.
+Proxy capture is another separate manual phase: run actual Snurpo on its selected listener and use only the synthetic HTTP URL with an explicitly selected proxy profile. Confirm capture in Snurpo, then Stop and confirm owned mapping/process cleanup. It supplies no HTTPS/pinning evidence. Do not combine that proxy experiment's CA with the direct fixture matrix.
 
 Finally remove only your recorded test reverse mappings (`adb -s "$SERIAL" reverse --remove tcp:PORT` per owned entry), stop the temporary server and delete the disposable build directory. No wildcard mapping deletion, global trust-store change or automatic device selection is required.

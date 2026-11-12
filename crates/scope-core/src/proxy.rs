@@ -125,7 +125,7 @@ fn error_response(status: StatusCode, message: &str) -> Response<Body> {
     Response::builder()
         .status(status)
         .header("content-type", "text/plain; charset=utf-8")
-        .body(Body::from(format!("Scope: {message}")))
+        .body(Body::from(format!("Snurpo: {message}")))
         .unwrap()
 }
 fn request_snapshot(e: &Exchange) -> Value {
@@ -210,7 +210,7 @@ impl Engine {
         let session = session_id.clone();
         let task = tokio::spawn(async move {
             if let Err(error) = proxy.start().await {
-                eprintln!("Scope proxy failed: {error}");
+                eprintln!("Snurpo proxy failed: {error}");
                 engine.mark_incomplete(
                     &session,
                     &format!("Proxy stopped after transport failure: {error}"),

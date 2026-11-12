@@ -3,6 +3,35 @@
    request, response, breakpoint or device state. */
 :root {
   color-scheme: light;
+  --scope-text: #273442;
+  --scope-text-secondary: #506075;
+  --scope-text-muted: #59697d;
+  --scope-code: #33465b;
+  --scope-control-border: #7b8a9c;
+  --scope-danger: #a13d42;
+  --scope-warning: #7a5b13;
+  --scope-success: #256653;
+  --scope-violet: #6747a0;
+  --scope-accent: #6b4fc5;
+  --scope-accent-hover: #593fb1;
+  --scope-accent-text: #6246b5;
+  --scope-hover: #f3f0fa;
+  --scope-selected: #eee8fb;
+}
+
+/* The sidebar stays dark in both appearances; light workspace text tokens
+   must not turn its session metadata or focus indicator into dark-on-dark. */
+:root:not([data-theme='dark']) .sidebar {
+  --scope-text: #e3ebf5;
+  --scope-text-secondary: #bdcbdc;
+  --scope-text-muted: #a4b4c8;
+  --scope-accent-text: #d1bdff;
+  --scope-control-border: #627892;
+  --scope-code: #c3d7ef;
+  --scope-danger: #ffaba6;
+  --scope-warning: #eccd80;
+  --scope-success: #81d6b5;
+  --scope-violet: #c1b5ff;
 }
 
 :root[data-theme='dark'] {
@@ -15,12 +44,13 @@
   --scope-recessed: #131c28;
   --scope-inset: #1c2939;
   --scope-raised: #253449;
-  --scope-hover: #22344d;
-  --scope-selected: #213c62;
+  --scope-hover: #2a293e;
+  --scope-selected: #352d50;
   --scope-border: #344359;
   --scope-control-border: #627892;
-  --scope-accent: #356fea;
-  --scope-accent-text: #99beff;
+  --scope-accent: #7454c4;
+  --scope-accent-hover: #7d5ed0;
+  --scope-accent-text: #d1bdff;
   --scope-danger: #ffaba6;
   --scope-danger-surface: #3b242c;
   --scope-danger-border: #965c66;
@@ -61,8 +91,8 @@
 }
 
 :root[data-theme='dark'] .button.primary:not(.is-capturing):hover:not(:disabled) {
-  background: #285dd0;
-  border-color: #285dd0;
+  background: var(--scope-accent-hover);
+  border-color: var(--scope-accent-hover);
 }
 
 :root[data-theme='dark'] .button.primary.is-capturing:hover:not(:disabled) {
@@ -94,7 +124,7 @@
 
 :root[data-theme='dark'] ::selection {
   color: #f3f7ff;
-  background: #345683;
+  background: #564379;
 }
 
 :root[data-theme='dark'] :focus-visible {
@@ -139,7 +169,7 @@
 }
 
 .theme-options button[aria-pressed='true'] {
-  background: #365a87;
+  background: #51406f;
   color: #ffffff;
 }
 

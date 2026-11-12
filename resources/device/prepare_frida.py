@@ -3,7 +3,7 @@
 
 Run with the same Python configured as SCOPE_PYTHON. Pass --abi arm64-v8a,
 armeabi-v7a, x86 or x86_64 from `adb shell getprop ro.product.cpu.abi`.
-The downloaded binary is passed to Scope as SCOPE_FRIDA_SERVER_LOCAL; only
+The downloaded binary is passed to Snurpo as SCOPE_FRIDA_SERVER_LOCAL; only
 Start interception copies and launches it on the explicitly selected device.
 """
 import argparse
@@ -29,7 +29,7 @@ def main():
     args.output.write_bytes(binary)
     args.output.chmod(0o755)
     print("Downloaded Frida %s Android %s server to %s" % (version, arch, args.output.resolve()))
-    print("Set SCOPE_FRIDA_SERVER_LOCAL to this path before launching Scope.")
+    print("Set SCOPE_FRIDA_SERVER_LOCAL to this path before launching Snurpo.")
 
 if __name__ == "__main__":
     main()

@@ -1,11 +1,11 @@
 # Debugging workflow gaps
 
-Reviewed 2026-11-09 against Scope main `312802c` (1.4.1). These are documented
+Reviewed 2026-11-09 against main `312802c` (then Scope 1.4.1, now Snurpo). These are documented
 workflows, not a benchmark or an exhaustive product comparison. Existing replay,
 HAR/native export, filtering, rules and session comparison were inspected before
 selecting new work. No upstream implementation was copied.
 
-| Workflow                                | Primary evidence                                                                                                                                                                                                                                    | Scope at the reviewed baseline                                                                                        | Decision                                                                                                                         |
+| Workflow                                | Primary evidence                                                                                                                                                                                                                                    | Application at the reviewed baseline                                                                                        | Decision                                                                                                                         |
 | --------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
 | Move one captured request to a terminal | [HTTP Toolkit snippets](https://httptoolkit.com/docs/reference/view-page/), [Proxyman Copy as](https://proxyman.com/docs/basic-features/copy-as), [mitmproxy exporter](https://github.com/mitmproxy/mitmproxy/blob/main/mitmproxy/addons/export.py) | Inspector offered Compose replay and Copy request URL, without a complete terminal command.                           | Implement cURL (POSIX shell) preview and explicit copy in this increment.                                                        |
 | Compare two specific responses          | [Proxyman Diff](https://proxyman.com/docs/advanced-features/diff) documents request/response comparison with platform limits.                                                                                                                       | Session comparison aggregates endpoints, status, JSON shape and timings; it is not a detailed two-message value diff. | Follow-up candidate: pin an exchange as baseline and compare status/headers/body with evidence IDs.                              |
@@ -14,8 +14,7 @@ selecting new work. No upstream implementation was copied.
 
 Large-session streaming (#12), WebSocket capture (#13) and packaged Windows/Linux
 acceptance (#10) remain more substantial maturity work. A cURL export does not
-close these issues or certify release readiness. Current version numbers are
-preserved; the older roadmap's 1.0 language is historical planning context.
+close these issues or certify release readiness. The older roadmap's 1.0 language is historical planning context.
 
 The command generator follows [cURL's documented option semantics](https://curl.se/docs/manpage.html)
 for `--disable`, `--globoff`, `--path-as-is`, `--header`, `--head` and

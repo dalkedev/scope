@@ -1,6 +1,6 @@
 # Code of Conduct
 
-Scope welcomes contributors with different experience levels and backgrounds. Be respectful, specific and constructive when discussing code, reports and design choices.
+Snurpo welcomes contributors with different experience levels and backgrounds. Be respectful, specific and constructive when discussing code, reports and design choices.
 
 ## Expected behavior
 
@@ -13,7 +13,7 @@ Harassment, discriminatory abuse, threats, sexual harassment, doxxing, and delib
 
 ## Scope and enforcement
 
-This policy applies to project issues, pull requests, discussions and other spaces maintained for Scope. Maintainers may edit or remove harmful content, lock a thread, reject contributions or restrict participation. The response should consider severity, context and repeated behavior.
+This policy applies to project issues, pull requests, discussions and other spaces maintained for Snurpo. Maintainers may edit or remove harmful content, lock a thread, reject contributions or restrict participation. The response should consider severity, context and repeated behavior.
 
 Report concerns privately through the repository owner's available GitHub contact channel. If no private channel is listed, open a brief issue requesting one without naming affected people or repeating sensitive details. For immediate exposure of private data on GitHub, use GitHub's reporting controls as well. Security vulnerabilities follow [SECURITY.md](SECURITY.md).
 

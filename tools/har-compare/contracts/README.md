@@ -67,7 +67,7 @@ At most 100 rules, 100 statuses per rule, 100 JSON requirements per rule, and 1,
 From the repository root:
 
 ```sh
-/opt/scope-lab/toolchains/node-v22.22.3-linux-x64/bin/node --test tools/har-compare/contracts/*.test.mjs
+/opt/scope-lab/toolchains/node-v26.13.1-linux-x64/bin/node --test tools/har-compare/contracts/*.test.mjs
 ```
 
 Tests use real HAR parsing and cover authored status/type failures, missing-from-both fields, repeated/query variants, exact selectors, empty JSON availability, pointer escaping/prototype safety, config/budget failures, canonical ordering and redacted output. CLI integration is tested separately in the parent prototype.

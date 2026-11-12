@@ -1,4 +1,4 @@
-# Scope-owned Android Java engine
+# Snurpo-owned Android Java engine
 
 The experimental `scope-java-v1` engine uses documented Frida/Java APIs and the unchanged third-party Frida Java bridge. It replaces the imported HTTP Toolkit runtime hooks. The project remains AGPL-3.0-or-later; [notices and bridge provenance](../THIRD_PARTY_NOTICES.md) remain applicable. No legally certified clean-room claim is made.
 
@@ -10,7 +10,7 @@ The experimental `scope-java-v1` engine uses documented Frida/Java APIs and the 
 | `certificate` | Subsequent SSLContext.init, original basic/extended X509 managers | Existing/default contexts are not covered. Original socket/SSLEngine delegation and hostname verification remain active. |
 | `unpinning` | Ordinary Java OkHttp3 CertificatePinner List and Certificate[] signatures; acceptance target 3.14.9 | Requires certificate profile; missing/unknown pinner capabilities fail startup. Custom/obfuscated/native pinners are unsupported. |
 
-A separate empty KeyStore contains only the supplied Scope CA, and a real Java TrustManagerFactory performs chain validation. CA constraints, certificate validity, server-leaf checks and original Java exception types bound acceptance. A valid Scope chain can override an original certificate/pin rejection only at the supported seams; unrelated failures and non-Scope chain decisions remain unchanged. No trust-all manager, hostname bypass or expiry bypass is installed. Native TLS, Cronet, QUIC, Flutter, child processes and root hiding are unsupported.
+A separate empty KeyStore contains only the supplied Snurpo CA, and a real Java TrustManagerFactory performs chain validation. CA constraints, certificate validity, server-leaf checks and original Java exception types bound acceptance. A valid Snurpo chain can override an original certificate/pin rejection only at the supported seams; unrelated failures and non-Snurpo chain decisions remain unchanged. No trust-all manager, hostname bypass or expiry bypass is installed. Native TLS, Cronet, QUIC, Flutter, child processes and root hiding are unsupported.
 
 System proxy mode remains device-wide and requires manually configured application trust for HTTPS. Neither mode injects a system CA. Legacy recovery records retain removal of their recorded owned CA.
 
@@ -48,4 +48,4 @@ Simulated tests do not prove Android execution, cryptography or compatibility. T
 
 The [original lab APK and manual matrix](../examples/android-engine-fixture/README.md) target real OkHttp 3.14.9 with a deliberately mismatching pin, fresh platform contexts and ephemeral loopback-only valid/foreign/wrong-host/expired TLS endpoints. Build/signature and host certificate-fixture checks are separate from Android execution. The [recorded actual matrix](ANDROID_ACCEPTANCE.md) passes all 75 controlled outcomes and both worker Stop/restoration gates on the specified target. Native desktop lifecycle gates remain separate.
 
-Recognized Kotlin lazy `check$okhttp` configurations are rejected transactionally before unpinning readiness, including classes that also expose ordinary public overloads. Their original-manager chain cleaner can discard the raw chain before the pinner sees it. No lazy support or chain-cleaner override is claimed. Ordinary Java overloads preserve the raw chain and typed original/non-Scope error controls.
+Recognized Kotlin lazy `check$okhttp` configurations are rejected transactionally before unpinning readiness, including classes that also expose ordinary public overloads. Their original-manager chain cleaner can discard the raw chain before the pinner sees it. No lazy support or chain-cleaner override is claimed. Ordinary Java overloads preserve the raw chain and typed original/non-Snurpo error controls.

@@ -105,7 +105,7 @@ def main(event_timeout=30):
                 require(len(entries) == 3, 'Expected three native entries')
                 for entry in entries:
                     scope = entry['_scope']
-                    require(scope['completed'] is True and scope['error'] is None, 'Incomplete Scope evidence')
+                    require(scope['completed'] is True and scope['error'] is None, 'Incomplete Snurpo evidence')
                     require(scope['provenance'] == 'upstream' and scope['edited'] is False and scope['appliedRules'] == [], 'Unexpected native provenance')
                     require(scope['originalRequest'] is None and scope['originalResponse'] is None, 'Unexpected edit history')
                     require(entry['request']['url'].startswith(origin + '/'), 'Non-fixture native URL')
@@ -114,7 +114,7 @@ def main(event_timeout=30):
                     require(body['size'] == len(body['text'].encode()), 'Native body size mismatch')
                 hars[name], hashes[name] = har, digest(path)
             require(set(hars) == {'baseline', 'missing-field', 'http-failure', 'timestamp-noise'}, 'Missing session')
-            receipt['checks'].append('12 real proxy captures; complete upstream Scope extensions and decoded sizes')
+            receipt['checks'].append('12 real proxy captures; complete upstream Snurpo extensions and decoded sizes')
             strict = run / 'strict.json'
             ignored = run / 'ignored.json'
             strict.write_text(json.dumps({'mode': 'strict'}) + '\n')
@@ -185,7 +185,7 @@ def main(event_timeout=30):
                 return contents
 
             online = analyze('while-fixture-running')
-            receipt['checks'].append('4 inventories plus literal missing-field/status/noise/strict-control findings, Scope evidence, privacy, and parsed JUnit')
+            receipt['checks'].append('4 inventories plus literal missing-field/status/noise/strict-control findings, Snurpo evidence, privacy, and parsed JUnit')
             process.stdin.write('finish\n')
             process.stdin.flush()
             finished = read_event(process, timeout=event_timeout)

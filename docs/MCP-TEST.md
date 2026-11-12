@@ -7,7 +7,7 @@ cargo build -p scope-desktop -p scope-mcp
 node scripts/smoke.mjs
 ```
 
-Requirements: Node.js 22.13+ with built-in `node:sqlite` (Node.js 24 LTS recommended), `curl`, and the platform dependencies needed to build Tauri. The test has no npm dependencies. On Windows run it in a normal terminal where console processes can be launched. Override executable locations with `SCOPE_BIN` and `SCOPE_MCP_BIN` when testing release builds.
+Requirements: Node.js 26.13.1+ with built-in `node:sqlite` (Node.js 26 LTS selected), `curl`, and the platform dependencies needed to build Tauri. The test has no npm dependencies. On Windows run it in a normal terminal where console processes can be launched. Override executable locations with `SCOPE_BIN` and `SCOPE_MCP_BIN` when testing release builds.
 
 Keep ports **17890** and **17891** free; the demo uses them. The authenticated MCP bridge and the credential fixture use ephemeral localhost ports. If a demo is already running, the test reports the busy port without stopping that process.
 

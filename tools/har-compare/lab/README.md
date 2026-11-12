@@ -1,4 +1,4 @@
-# Scope HAR comparison local lab
+# Snurpo HAR comparison local lab
 
 An optional, isolated development lab for the dependency-free CLI in `../cli.mjs`.
 It uses synthetic localhost traffic only. Installing this lab does not change the
@@ -7,7 +7,7 @@ The CLI itself requires no Playwright dependency and never replays captured URLs
 
 ## Pinned tools and installation
 
-Use the project's selected Node **22.22.3** runtime. The lab locks
+Use the project's selected Node **26.13.1** runtime. The lab locks
 **playwright 1.64.1** and **playwright-core 1.64.1**, with npm integrity digests in
 `package-lock.json`. This version's official package declares Node `>=20`.
 Playwright's own browser manifest pins Chromium headless shell
@@ -17,7 +17,7 @@ For independent JUnit XML validation, the lab additionally pins
 `@xmldom/xmldom 0.9.12` (MIT, Node `>=14.6`, no runtime dependencies). It stays
 inside this lab; the product CLI still uses only Node built-ins.
 
-Select Node **22.22.3** on `PATH`. From the repository root, use these POSIX
+Select Node **26.13.1** on `PATH`. From the repository root, use these POSIX
 shell commands to keep both caches in this lab's ignored output:
 
 ```sh
@@ -36,7 +36,7 @@ installation, an authenticated browser profile, or a sandbox-disabling flag.
 Firefox can be installed explicitly with
 `node node_modules/playwright/cli.js install firefox`.
 
-Sources checked on **2026-11-03**:
+Dependency sources checked on **2026-11-03** (Node runtime updated **2026-11-12**):
 
 - [Official tagged package metadata](https://github.com/microsoft/playwright/blob/v1.64.1/packages/playwright/package.json)
   identifies the version, exact core dependency, Node floor and Apache-2.0 license.
@@ -51,8 +51,8 @@ Sources checked on **2026-11-03**:
   documents isolated contexts, request interception and HAR recording.
 - [Official xmldom 0.9.12 metadata](https://github.com/xmldom/xmldom/blob/0.9.12/package.json)
   identifies the independent XML parser pin, runtime floor and MIT license.
-- [Official Node 22.22.3 archive](https://nodejs.org/en/download/archive/v22.22.3)
-  identifies the existing project runtime. This lab does not replace it.
+- [Official Node 26.13.1 archive](https://nodejs.org/en/download/archive/v26.13.1)
+  identifies the selected project runtime. The lab uses it without replacing your global installation.
 
 ## One-command verification
 
@@ -419,7 +419,7 @@ runnable on a compatible host. Existing jsdom checks are separate evidence.
 | HTML security | Real browser with unsafe detector control | Text escaping, request interception, CSP CSS, interaction |
 | Browser capture | Playwright full HAR | Mixed page assets and selected API on a compatible host |
 
-This lab does not prove native Scope interception, full HAR standards
+This lab does not prove native Snurpo interception, full HAR standards
 conformance, OS-wide network silence, browser coverage across operating systems,
 performance regression detection, or release readiness. The core CLI tests cover
 parser/config/resource limits separately; run them with `node --test

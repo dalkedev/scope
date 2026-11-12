@@ -4,7 +4,7 @@
 
 Close the terminal handoff gap: select an exchange, preview a POSIX-shell cURL
 command, explicitly copy it, and run it separately. Opening or copying never
-sends traffic. Keep the current 1.4.1 version; “toward 1.0” means product maturity, not a downgrade.
+sends traffic. Keep the current released version while preparing the feature; review any release bump separately. The historical “toward 1.0” language describes product maturity, not a downgrade.
 
 ## Approaches
 
@@ -27,7 +27,7 @@ absent. Empty captured header values must be emitted using cURL's semicolon form
 Whitespace-only SP/HTAB header values become empty headers. Empty captured
 framing is regenerated as Content-Length: 0. HEAD uses --head and nonempty HEAD
 bodies are rejected with a Compose replay alternative. Do not automatically follow redirects, retry, disable TLS checks
-or route through Scope. Disable curlrc and URL globbing; restrict HTTP(S).
+or route through Snurpo. Disable curlrc and URL globbing; restrict HTTP(S).
 
 Text bodies use printf with a fixed %s format piped to --data-binary @-; base64
 bodies decode locally and use POSIX printf %b octal bytes, including NUL. Reject

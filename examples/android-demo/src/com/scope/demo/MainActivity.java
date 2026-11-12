@@ -30,7 +30,7 @@ public class MainActivity extends Activity {
         title.setTextColor(Color.rgb(24, 48, 61));
         layout.addView(title);
         TextView intro = new TextView(this);
-        intro.setText("A real Android HTTP client. Requests go to your Mac's local Scope demo server through ADB.\n\nEdit a response in Scope, then see the result here.\n");
+        intro.setText("A real Android HTTP client. Requests go to your Mac's local Snurpo demo server through ADB.\n\nEdit a response in Snurpo, then see the result here.\n");
         intro.setTextSize(16);
         layout.addView(intro);
         addButton(layout, "GET /api/products", "GET", "/api/products", null);
@@ -41,7 +41,7 @@ public class MainActivity extends Activity {
         output = new TextView(this);
         output.setTextSize(14);
         output.setTextColor(Color.rgb(30, 62, 75));
-        output.setText("Ready. Start Scope interception for com.scope.demo, then tap a request.\n");
+        output.setText("Ready. Start Snurpo interception for com.scope.demo, then tap a request.\n");
         ScrollView scroll = new ScrollView(this);
         scroll.addView(output);
         layout.addView(scroll, new LinearLayout.LayoutParams(-1, 0, 1));
@@ -87,7 +87,7 @@ public class MainActivity extends Activity {
             }
             show("← " + status + " " + path + "\n" + bytes.toString("UTF-8") + "\n\n");
         } catch (Exception error) {
-            show("ERROR: " + error.getMessage() + "\nCheck Scope proxy and adb reverse tcp:17891 tcp:17891.\n\n");
+            show("ERROR: " + error.getMessage() + "\nCheck Snurpo proxy and adb reverse tcp:17891 tcp:17891.\n\n");
         } finally {
             if (connection != null) connection.disconnect();
         }

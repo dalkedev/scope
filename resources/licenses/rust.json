@@ -1,6 +1,6 @@
 {
   "generator": "cargo-about 0.9.3; scripts/licenses.mjs",
-  "lockfileSha256": "f834e5e9b3b5e3047c075ebe6a30fd2f048d831f9510ba268e69ed92ef3027ca",
+  "lockfileSha256": "e834cd825898ada7d1e5407a94bf07a0fed3d79147cb83bd0291fee0242ebaba",
   "scope": "Workspace runtime dependencies across supported target configurations; build and dev dependencies excluded. Includes target-specific crates not necessarily present in each artifact.",
   "licenses": [
     {
@@ -14,39 +14,39 @@
           "license": "AGPL-3.0-or-later",
           "repository": null,
           "authors": [],
-          "source": "https://github.com/dalkedev/scope"
+          "source": "https://github.com/dalkedev/snurpo"
         },
         {
           "name": "scope-core",
-          "version": "1.4.1",
+          "version": "1.4.2",
           "license": "AGPL-3.0-or-later",
           "repository": null,
           "authors": [],
-          "source": "https://github.com/dalkedev/scope"
+          "source": "https://github.com/dalkedev/snurpo"
         },
         {
           "name": "scope-device",
-          "version": "1.4.1",
+          "version": "1.4.2",
           "license": "AGPL-3.0-or-later",
           "repository": null,
           "authors": [],
-          "source": "https://github.com/dalkedev/scope"
+          "source": "https://github.com/dalkedev/snurpo"
         },
         {
           "name": "scope-mcp",
-          "version": "1.4.1",
+          "version": "1.4.2",
           "license": "AGPL-3.0-or-later",
           "repository": null,
           "authors": [],
-          "source": "https://github.com/dalkedev/scope"
+          "source": "https://github.com/dalkedev/snurpo"
         },
         {
           "name": "scope-desktop",
-          "version": "1.4.1",
+          "version": "1.4.2",
           "license": "AGPL-3.0-or-later",
           "repository": null,
           "authors": [],
-          "source": "https://github.com/dalkedev/scope"
+          "source": "https://github.com/dalkedev/snurpo"
         }
       ]
     },
@@ -714,6 +714,23 @@
           "repository": "https://github.com/briansmith/ring",
           "authors": [],
           "source": "https://crates.io/crates/ring/0.17.14"
+        }
+      ]
+    },
+    {
+      "id": "ISC",
+      "name": "ISC License",
+      "text": "Copyright © 2015, Simonas Kazlauskas\n\nPermission to use, copy, modify, and/or distribute this software for any purpose with or without\nfee is hereby granted, provided that the above copyright notice and this permission notice appear\nin all copies.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS\nSOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE\nAUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES\nWHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT,\nNEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF\nTHIS SOFTWARE.\n",
+      "packages": [
+        {
+          "name": "libloading",
+          "version": "0.7.4",
+          "license": "ISC",
+          "repository": "https://github.com/nagisa/rust_libloading/",
+          "authors": [
+            "Simonas Kazlauskas <libloading@kazlauskas.me>"
+          ],
+          "source": "https://crates.io/crates/libloading/0.7.4"
         }
       ]
     },
@@ -3579,6 +3596,21 @@
     {
       "id": "MIT",
       "name": "MIT License",
+      "text": "MIT License\n\nCopyright (c) 2017-2021 qDot\nCopyright (c) 2021 Tauri Apps Contributors\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.\n",
+      "packages": [
+        {
+          "name": "libappindicator",
+          "version": "0.9.0",
+          "license": "Apache-2.0 OR MIT",
+          "repository": null,
+          "authors": [],
+          "source": "https://crates.io/crates/libappindicator/0.9.0"
+        }
+      ]
+    },
+    {
+      "id": "MIT",
+      "name": "MIT License",
       "text": "MIT License\n\nCopyright (c) 2018 Matthew D. Steele\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.\n",
       "packages": [
         {
@@ -3995,6 +4027,14 @@
           "repository": "https://github.com/tauri-apps/muda",
           "authors": [],
           "source": "https://crates.io/crates/muda/0.20.0"
+        },
+        {
+          "name": "tray-icon",
+          "version": "0.25.1",
+          "license": "MIT OR Apache-2.0",
+          "repository": "https://github.com/tauri-apps/tray-icon",
+          "authors": [],
+          "source": "https://crates.io/crates/tray-icon/0.25.1"
         }
       ]
     },
@@ -4185,6 +4225,14 @@
             "Robert Bragg <robert@sixbynine.org>"
           ],
           "source": "https://crates.io/crates/jni-sys-macros/0.4.1"
+        },
+        {
+          "name": "libappindicator-sys",
+          "version": "0.9.0",
+          "license": "Apache-2.0 OR MIT",
+          "repository": null,
+          "authors": [],
+          "source": "https://crates.io/crates/libappindicator-sys/0.9.0"
         },
         {
           "name": "ndk-context",
@@ -5571,9 +5619,9 @@
           "authors": [
             "The gtk-rs Project Developers"
           ],
-          "source": "https://github.com/dalkedev/scope/tree/main/vendor/glib",
+          "source": "https://github.com/dalkedev/snurpo/tree/main/vendor/glib",
           "upstreamSource": "https://crates.io/crates/glib/0.18.5",
-          "provenance": "https://github.com/dalkedev/scope/blob/main/vendor/glib-provenance/README.md"
+          "provenance": "https://github.com/dalkedev/snurpo/blob/main/vendor/glib-provenance/README.md"
         },
         {
           "name": "atk-sys",

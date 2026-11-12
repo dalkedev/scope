@@ -1,18 +1,18 @@
 {
-  "name": "scope-desktop",
-  "version": "1.4.1",
-  "description": "Desktop HTTP(S) debugging with persistent sessions, Android instrumentation and MCP",
+  "name": "snurpo-desktop",
+  "version": "1.4.2",
+  "description": "Snurpo: a nosy little HTTP debugger with persistent sessions, Android instrumentation and MCP",
   "license": "AGPL-3.0-or-later",
   "repository": {
     "type": "git",
-    "url": "https://github.com/dalkedev/scope.git"
+    "url": "https://github.com/dalkedev/snurpo.git"
   },
   "bugs": {
-    "url": "https://github.com/dalkedev/scope/issues"
+    "url": "https://github.com/dalkedev/snurpo/issues"
   },
-  "homepage": "https://github.com/dalkedev/scope#readme",
+  "homepage": "https://github.com/dalkedev/snurpo#readme",
   "engines": {
-    "node": ">=22.13.0"
+    "node": ">=26.13.1"
   },
   "private": true,
   "type": "module",

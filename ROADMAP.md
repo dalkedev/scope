@@ -1,10 +1,9 @@
 # Roadmap
 
-Scope is built around a complete loop: select a target, capture, inspect/change,
-save, reopen and analyze. The original 1.0.0 proposal below is historical;
-the current source version is 1.4.1. See [Releases](https://github.com/dalkedev/scope/releases)
-for published artifacts and [workflow research](docs/COMPETITOR-GAPS.md) for the
-next interoperability candidates.
+Snurpo is built around a complete loop: select a target, capture, inspect/change,
+save, reopen and analyze. The original 1.0.0 proposal below is historical.
+See [Releases](https://github.com/dalkedev/snurpo/releases) for published artifacts
+and [workflow research](docs/COMPETITOR-GAPS.md) for the next interoperability candidates.
 This roadmap is a direction, not a delivery schedule. [Public issue research](docs/USER-NEEDS.md)
 links specific user needs to work that is delivered or still planned.
 

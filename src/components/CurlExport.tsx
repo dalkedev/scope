@@ -70,7 +70,7 @@ function CurlPreview({
       <p className="field-help">
         This command may contain credentials in its URL, headers and body. Review it before sharing.
         Nothing is sent when you preview or copy. Running it sends a new request using your
-        terminal's network settings; Scope rules and breakpoints are not included.
+        terminal's network settings; Snurpo rules and breakpoints are not included.
       </p>
       <InlineError message={error} />
       {command && (

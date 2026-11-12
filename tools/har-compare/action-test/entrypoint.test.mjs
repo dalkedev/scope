@@ -122,7 +122,7 @@ for (const [current, code, outcome] of [['missing-field.har', 1, 'regression'], 
     assert.equal(r.status, 0);
     assert.equal(r.outputs['exit-code'], String(code));
     assert.equal(r.outputs.result, outcome);
-    assert.match(r.stderr, /Scope HAR comparison/);
+    assert.match(r.stderr, /Snurpo HAR comparison/);
   });
 }
 
