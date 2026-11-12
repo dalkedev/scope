@@ -1,0 +1,20 @@
+{
+  "version": "Snurpo 1.5.0",
+  "updated": "2026-11-12",
+  "pages": [
+    { "slug": "", "source": "introduction.md", "title": "Introduction", "description": "Follow a request from local capture to useful evidence.", "group": "Start here" },
+    { "slug": "installation", "source": "installation.md", "title": "Install Snurpo", "description": "Choose a verified release asset and understand platform support.", "group": "Start here" },
+    { "slug": "first-capture", "source": "first-capture.md", "title": "Your first capture", "description": "Capture six real localhost requests, then connect your own client.", "group": "Start here" },
+    { "slug": "https", "source": "https.md", "title": "HTTPS and trust", "description": "Configure the proxy and trust its public CA in a test client.", "group": "Capture and inspect" },
+    { "slug": "inspect-and-search", "source": "inspect-and-search.md", "title": "Inspect and search", "description": "Read messages and combine filters across a saved session.", "group": "Capture and inspect" },
+    { "slug": "rules-breakpoints", "source": "rules-breakpoints.md", "title": "Rules and breakpoints", "description": "Mock, rewrite, block or pause an intended request.", "group": "Capture and inspect" },
+    { "slug": "replay-curl", "source": "replay-curl.md", "title": "Replay and cURL", "description": "Send an edited replay or preview a complete terminal command.", "group": "Capture and inspect" },
+    { "slug": "sessions-export", "source": "sessions-export.md", "title": "Sessions and exports", "description": "Organize, import and export evidence with an explicit content policy.", "group": "Work with evidence" },
+    { "slug": "analysis", "source": "analysis.md", "title": "Analysis and comparison", "description": "Explore observed endpoints, compare captures and infer an API shape.", "group": "Work with evidence" },
+    { "slug": "mcp", "source": "mcp.md", "title": "Connect an MCP client", "description": "Share selected evidence through stdio with separate write permissions.", "group": "Connect and automate" },
+    { "slug": "android", "source": "android.md", "title": "Android, experimental", "description": "Choose a device proxy or supported Frida workflow and restore owned state.", "group": "Connect and automate" },
+    { "slug": "har-compare-ci", "source": "har-compare-ci.md", "title": "HAR comparison and CI", "description": "Compare saved HARs offline and interpret clean, regression and invalid results.", "group": "Connect and automate" },
+    { "slug": "troubleshooting", "source": "troubleshooting.md", "title": "Troubleshooting", "description": "Identify the failing connection, trust, capture or permission step.", "group": "Reference" },
+    { "slug": "releases", "source": "releases.md", "title": "Releases and compatibility", "description": "Understand version 1.5.0, tested platforms and preserved Scope identifiers.", "group": "Reference" }
+  ]
+}

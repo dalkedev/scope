@@ -24,7 +24,7 @@ The token has read access by default; only the proposal job receives
 `pull-requests: write`. This setting does not authorize automated approval in
 Snurpo's workflow. Commits retain their actual Git authorship.
 
-CI also runs on `release/**` pushes: events generated with `GITHUB_TOKEN` do not
+CI also runs on `release/**` and `docs/**` pushes: events generated with `GITHUB_TOKEN` do not
 trigger ordinary PR workflows, so the proposal relies on checks from that exact
 branch commit. `require_last_push_approval` is disabled because the maintainer
 pushes the code and must still be able to review the bot-authored PR. Stale
@@ -38,6 +38,21 @@ After review, the maintainer chooses when to merge and create a version tag.
 The draft mode builds an existing tag into a private draft prerelease. Publishing
 that draft is a separate maintainer action. A version number in source is not
 evidence of a published or platform-validated release.
+
+## Reviewing website documentation
+
+Use a `docs/<topic>` branch and commit the review summary in
+`docs/website/REVIEW.md`. Dispatch **Prepare review or draft release** on that
+branch with `mode: documentation`. The tag input is unused in this mode.
+The workflow validates the branch and opens a draft PR as `github-actions[bot]`,
+using the committed review summary. If an open PR already exists for that
+branch, it reports that PR instead of creating another one.
+
+Documentation mode does not run release builds, create tags or releases,
+approve, or merge. The maintainer reviews the changes, marks the PR ready and
+approves it normally. The same code-owner, resolved-conversation and exact-commit
+macOS, Windows and Linux check requirements apply before merge. A new commit
+dismisses the approval and requires review again.
 
 See [GitHub protected branch behavior](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches),
 [CODEOWNERS behavior](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners)

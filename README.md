@@ -9,6 +9,7 @@
 
 <p align="center">
   <a href="https://snurpo.dev">Website</a> ·
+  <a href="https://snurpo.dev/docs/">Docs</a> ·
   <a href="docs/GETTING_STARTED.md">Get started</a> ·
   <a href="https://github.com/dalkedev/snurpo/releases">Downloads</a> ·
   <a href="docs/SCREENSHOTS.md">Screenshots</a> ·
