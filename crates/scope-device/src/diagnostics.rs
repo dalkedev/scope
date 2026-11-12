@@ -542,7 +542,7 @@ impl DeviceDiagnostics {
                         "info",
                         "Current ADB mappings inspected",
                         &format!(
-                            "{} reverse, {} forward; {} match Scope's recorded ownership.",
+                            "{} reverse, {} forward; {} match Snurpo's recorded ownership.",
                             self.mappings.reverse.len(),
                             self.mappings.forward.len(),
                             self.mappings.owned.len()

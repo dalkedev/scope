@@ -7,7 +7,7 @@ test('Node capture records actual localhost API and non-JSON HTTP bodies', async
   const fixture = await startFixture(); t.after(() => fixture.close());
   const har = await captureWithNode(fixture.origin, 'missing-field');
   assert.equal(har?.log?.entries?.length, 4, 'one document, CSS, SVG and API response must be captured');
-  assert.equal(har.log.creator.name, 'Scope synthetic Node lab (not browser capture)');
+  assert.equal(har.log.creator.name, 'Snurpo synthetic Node lab (not browser capture)');
   assert.deepEqual(har.log.entries.map(e => e.response.content.mimeType), ['text/html; charset=utf-8', 'text/css', 'image/svg+xml', 'application/json']);
   const entry = har.log.entries[3];
   assert.equal(entry.request.url, fixture.origin + '/api/user');

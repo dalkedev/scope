@@ -1,56 +1,67 @@
-# Scope identity
+# Snurpo identity
 
-Scope's mark uses two opposing request/response paths around an open inspection
-window. Keep its two breaks, square geometry and proportions intact. The production
-mark is one solid cyan, `#2DDED1`, on a transparent background. Graphite `#111315`
-and paper `#F3F0E8` are the supporting presentation colors. This brand refresh does
-not change the desktop interface's existing interaction colors.
+**A nosy little HTTP debugger.**
+
+Snurpo is an inquisitive mint creature with an enormous lavender nose, cream eyes,
+small hands and feet, and a slightly suspicious expression. Its silhouette and
+nose are the identifying features. Keep the entire nose visible and leave clear
+space around the character.
 
 ## Source assets
 
 | Asset | Purpose |
 | --- | --- |
-| [scope-logo.svg](../assets/brand/scope-logo.svg) | Canonical two-path vector; prefer this for web and scalable placement. |
-| [scope-logo.png](../assets/brand/scope-logo.png) | Clean transparent 512 × 512 export and desktop-icon source. |
-| [scope-banner.png](../assets/brand/scope-banner.png) | 1774 × 887 repository/portfolio banner; brand illustration, not an application screenshot. |
-| [provenance.json](../assets/brand/provenance.json) | Exact generation prompts, production steps, dimensions and source-asset SHA-256 hashes. |
+| [snurpo-logo.png](../assets/brand/snurpo-logo.png) | Original 1254 × 1254 transparent mascot; desktop icon source. |
+| [snurpo-ui.png](../assets/brand/snurpo-ui.png) | 128 × 128 transparent export for the desktop interface and favicon. |
+| [snurpo-banner.png](../assets/brand/snurpo-banner.png) | 1774 × 887 repository/portfolio illustration; not an application screenshot. |
+| [snurpo-tray-source.png](../assets/brand/snurpo-tray-source.png) | Original transparent, monochrome head for the macOS menu bar. |
+| [provenance.json](../assets/brand/provenance.json) | Generation details, exact prompt references, dimensions and SHA-256 hashes. |
 
-`resources/scope.svg` mirrors the canonical vector. Desktop PNG, ICO and ICNS
-variants live in `src-tauri/icons/` and were generated with the repository's locked
-Tauri CLI 2.12.4 from the clean PNG. Regenerate into a temporary directory:
+The supporting palette uses lavender, mint, cream and charcoal. The desktop uses
+lavender for interactive selections/focus and mint for small brand details; HTTP
+status, errors, warnings and capture states retain their semantic meaning in both
+light and dark appearances. Do not stretch
+the character or use the banner as an icon source. Keep product information in
+text so that the README remains understandable without its images.
+
+Desktop PNG, ICO and ICNS variants live in `src-tauri/icons/`. Regenerate with the
+locked Tauri CLI into a temporary directory and replace only existing desktop
+files; generated Android/iOS assets are not used by this application:
 
 ```sh
 npm ci
-npm run tauri -- icon assets/brand/scope-logo.png --output /tmp/scope-icons
+npm run tauri -- icon assets/brand/snurpo-logo.png --output .runtime/snurpo-icons
 ```
 
-Review the output and replace only the existing desktop icon files. Android/iOS
-outputs are not part of this desktop branding change. Keep the source PNG/SVG;
-do not regenerate from the textured banner or an enlarged screenshot.
+The macOS status item uses `src-tauri/icons/snurpo-tray-template.png`: a 36 × 36
+transparent template with the eye and face holes preserved. Its native renderer
+normalizes the image to 18 logical points and macOS supplies the appropriate
+light/dark tint. The [tray prompt](../assets/brand/tray-prompt.md) and technical
+trim/resize export are recorded in provenance. The menu offers **Show Snurpo**
+and **Quit Snurpo**; it does not change capture or launch-at-login settings.
 
-## Use and provenance
+## Voice and provenance
 
-Keep clear space around the mark and retain its transparent aperture. Do not
-stretch, rotate, outline, add gradients or attach a magnifier/pulse symbol. Prefer
-at least 24 px for the mark; a banner containing text needs enough width to remain
-legible. Keep product information in Markdown when an image is unavailable.
+Be curious, playful and concise in welcome or promotional copy. Controls, errors
+and technical documentation should remain direct: capture, inspect, edit, replay,
+save and compare. Do not imply a hosted service, universal pinning bypass,
+independent security audit or features the application does not implement.
 
-The concept and banner were created with OpenAI image generation on 5 November
-2026. The chosen mark was reconstructed as clean vector geometry and exported to
-PNG; the banner is the original generated raster. It retains related cyan and
-near-black tones from its generation prompt. The vector/PNG define the exact
-production color. No private conversations, account content, third-party photos
-or app captures were used in these brand assets. Existing real screenshots and
-their separate [capture provenance](images/README.md) remain unchanged.
+The mascot and banner were generated with OpenAI image generation on 12 November
+2026. The banner uses the mascot as an identity reference. Exact prompts are
+preserved in [mascot-prompt.md](../assets/brand/mascot-prompt.md) and
+[banner-prompt.md](../assets/brand/banner-prompt.md). These original raster assets
+are unchanged; desktop icons and the small UI image are technical Tauri exports.
+The menu-bar template is a technical sharp export of its separate generated source.
+No private conversations, account content, third-party photographs or application
+captures were supplied for the artwork. Existing real screenshots and their
+[capture provenance](images/README.md) remain historical evidence.
 
-The original Scope artwork is distributed under **AGPL-3.0-or-later**, like the
-project: see [LICENSE](../LICENSE). Existing third-party licenses and notices
-remain intact. The new desktop icons are included in the published 1.2.0 release
-and retained by later versions.
-Published 1.1.0 downloads retain their original icon. Packaging, platform
-verification and publication are tracked separately in [the verification record](VERIFICATION.md).
+Snurpo artwork is distributed under **AGPL-3.0-or-later**, like the project; see
+[LICENSE](../LICENSE). Third-party notices remain intact. The former Scope artwork
+and its provenance are archived under [assets/brand/legacy](../assets/brand/legacy/).
 
-Use concrete verbs and evidence: capture, rewrite, replay, save, inspect. Keep
-scope, privacy and synthetic provenance visible. Avoid unsupported claims such
-as universal pinning bypass, complete API inference, independent security audit
-or enterprise certification. A proposed version is not a published release.
+This branding is in the source tree. Published Scope 1.4.1 installers retain their
+original names and artwork until a new release is actually built and published.
+See [migration notes](MIGRATING_TO_SNURPO.md) and [release instructions](RELEASING.md).
+`snurpo.dev` is a domain candidate, not a purchased or connected destination.

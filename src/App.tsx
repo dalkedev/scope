@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { ChangeEvent, FormEvent, ReactNode } from 'react';
+import snurpoMark from '../assets/brand/snurpo-ui.png';
 import {
   Activity,
   ArrowDown,
@@ -475,7 +476,7 @@ export default function App() {
         const result = await api.save_export(sessionId, format, exportRedacted);
         if (result.saved)
           setNotice(
-            `${format === 'har' ? 'HAR' : format === 'openapi' ? 'Observed OpenAPI' : 'Scope session'} exported${result.path ? ` to ${result.path}` : ''}.`,
+            `${format === 'har' ? 'HAR' : format === 'openapi' ? 'Observed OpenAPI' : 'Snurpo session'} exported${result.path ? ` to ${result.path}` : ''}.`,
           );
         return;
       }
@@ -490,7 +491,7 @@ export default function App() {
         `${(selectedSession?.name || 'session').replace(/[^a-z0-9-]/gi, '-').toLowerCase()}.${format === 'har' ? 'har' : format === 'openapi' ? 'openapi.json' : 'scope.json'}`,
       );
       setNotice(
-        `${format === 'har' ? 'HAR' : format === 'openapi' ? 'Observed OpenAPI' : 'Scope session'} exported.`,
+        `${format === 'har' ? 'HAR' : format === 'openapi' ? 'Observed OpenAPI' : 'Snurpo session'} exported.`,
       );
     });
   async function importFile(e: ChangeEvent<HTMLInputElement>) {
@@ -549,13 +550,9 @@ export default function App() {
   return (
     <div className="app-shell">
       <aside className="sidebar">
-        <div className="brand-row">
-          <div className="brand-mark">
-            <span />
-            <span />
-            <span />
-          </div>
-          <span className="brand-name">scope</span>
+        <div className="brand-row" title="Snurpo — A nosy little HTTP debugger.">
+          <img className="brand-mark" src={snurpoMark} alt="" />
+          <span className="brand-name">snurpo</span>
           <span className="preview-badge">local</span>
         </div>
         <button
@@ -798,7 +795,7 @@ export default function App() {
                   >
                     <FolderArchive size={14} />
                     <span>
-                      Scope session<small>Includes originals and edits</small>
+                      Snurpo session<small>Includes originals and edits</small>
                     </span>
                   </button>
                   <button
@@ -1126,11 +1123,8 @@ export default function App() {
                             </button>
                           ) : (
                             <div className="empty-actions">
-                              <button className="button primary" onClick={() => setPanel('device')}>
-                                <Smartphone size={15} /> Connect a device
-                              </button>
                               <button
-                                className="text-button demo-button"
+                                className="button primary"
                                 onClick={() => void demo()}
                                 disabled={!native || !!busy}
                               >
@@ -1141,6 +1135,9 @@ export default function App() {
                                 )}{' '}
                                 Generate test traffic
                               </button>
+                              <button className="text-button" onClick={() => setPanel('device')}>
+                                <Smartphone size={15} /> Connect a device
+                              </button>
                             </div>
                           )
                         }
@@ -1149,8 +1146,8 @@ export default function App() {
                           'Try a different search or clear your filters.'
                         ) : (
                           <>
-                            Connect an Android app or point your HTTP client at the local proxy.
-                            Captured traffic is saved as it arrives.
+                            Try six real localhost requests, then inspect their responses.
+                            Or connect your own app. Captured traffic is saved as it arrives.
                           </>
                         )}
                       </Empty>
@@ -1217,8 +1214,8 @@ export default function App() {
         )}
         <footer className="app-status">
           <span className="status-wordmark">
-            <span className="tiny-scope" />
-            Scope {boot?.version || '0.1.0'}
+            <img className="tiny-snurpo" src={snurpoMark} alt="" />
+            Snurpo {boot?.version || '0.1.0'}
           </span>
           <span>HTTP, in plain sight.</span>
           <span className="status-right">
@@ -1556,7 +1553,7 @@ function NewSessionModal({
           maxLength={120}
         />
         {!native && (
-          <p className="inline-warning">Creating sessions requires the Scope desktop app.</p>
+          <p className="inline-warning">Creating sessions requires the Snurpo desktop app.</p>
         )}
         <div className="modal-actions">
           <button type="button" className="button" onClick={onClose}>
@@ -1827,13 +1824,13 @@ function DevicePanel({
                   {!device.running &&
                     'Select the bundled hook profiles for an app you own or are authorized to test. '}
                   Experimental Java URL/OkHttp hooks only. Stop ends the instrumented app process.
-                  Unpinning requires the Scope CA profile; native TLS and custom pinners are
+                  Unpinning requires the Snurpo CA profile; native TLS and custom pinners are
                   unsupported.
                 </p>
                 <div className="info-callout">
                   <Info size={15} />
                   <p>
-                    Frida needs an optional local runtime. If it is missing, Scope shows the setup
+                    Frida needs an optional local runtime. If it is missing, Snurpo shows the setup
                     command before changing your device. Runtime installation is a separate action.
                   </p>
                 </div>
@@ -1843,7 +1840,7 @@ function DevicePanel({
                   </p>
                 ) : (
                   [
-                    ['certificate', 'Trust the Scope CA'],
+                    ['certificate', 'Trust the Snurpo CA'],
                     ['proxy', 'Proxy configuration'],
                     ['unpinning', 'TLS certificate unpinning'],
                   ].map(([id, label]) => (
@@ -1977,7 +1974,7 @@ function McpPanel({
       <PanelHeading
         icon={<Code2 size={24} />}
         title="A debugger your agent can use."
-        subtitle="Connect a compatible MCP client to your local Scope engine."
+        subtitle="Connect a compatible MCP client to your local Snurpo engine."
         onClose={onClose}
       />
       <div className="settings-grid">
@@ -1988,7 +1985,7 @@ function McpPanel({
               <span className="mini-badge">stdio</span>
             </div>
             <p className="help-copy">
-              Add this server configuration to your MCP client. Keep Scope open while the agent
+              Add this server configuration to your MCP client. Keep Snurpo open while the agent
               inspects your captures.
             </p>
             <div className="config-block">
@@ -2011,7 +2008,7 @@ function McpPanel({
               </div>
               <pre>
                 {config ||
-                  'Open the Scope desktop app to get the configuration\nwith the actual path to your MCP executable.'}
+                  'Open the Snurpo desktop app to get the configuration\nwith the actual path to your MCP executable.'}
               </pre>
             </div>
           </div>
@@ -2219,7 +2216,7 @@ function ConnectionPanel({
       <PanelHeading
         icon={<Settings2 size={24} />}
         title="Your local capture engine"
-        subtitle="Point an HTTP client at Scope or connect an Android device."
+        subtitle="Point an HTTP client at Snurpo or connect an Android device."
         onClose={onClose}
       />
       <div className="settings-grid">
@@ -2259,7 +2256,7 @@ function ConnectionPanel({
           <div className="settings-section">
             <h2>Certificate authority</h2>
             <p className="help-copy">
-              Scope creates a local CA for HTTPS inspection. Trust this certificate only in devices
+              Snurpo creates a local CA for HTTPS inspection. Trust this certificate only in devices
               and clients you use for testing.
             </p>
             <div className="path-display">
@@ -2290,7 +2287,7 @@ function ConnectionPanel({
           <h3>
             <Terminal size={16} /> Connect a command-line client
           </h3>
-          <p className="help-copy">With capture running, route a request through Scope:</p>
+          <p className="help-copy">With capture running, route a request through Snurpo:</p>
           <pre className="command-example">
             curl --proxy http://127.0.0.1:{displayedPort} \ --cacert "
             {proxy.caCertPath || '/path/to/scope-ca.pem'}" \ https://example.com
@@ -2501,7 +2498,7 @@ function CompareView({
       {!value ? (
         <Empty icon={<ArrowLeftRight size={31} />} title="Two sessions. A clearer picture.">
           Choose two captures to find added, removed and changed endpoints. Sessions can be imported
-          from HAR or Scope archives.
+          from HAR or Snurpo archives.
         </Empty>
       ) : (
         <>

@@ -1,0 +1,57 @@
+{
+  "captured": "2026-11-12",
+  "application": "Snurpo native macOS arm64 source build",
+  "sourceVersion": "1.4.1; unreleased rebrand",
+  "reviewBundleIdentifier": "dev.snurpo.review",
+  "productionBundleIdentifier": "dev.scope.debugger",
+  "captureMethod": "Original native application JPEG captures (original bytes, no transcoding); pointer parked outside the application; no cropping, editing, retouching or image generation.",
+  "network": "Synthetic localhost only; proxy127.0.0.1:17890, fixture127.0.0.1:17891, isolated bridge17994",
+  "images": [
+    {
+      "file": "traffic-inspector.jpg",
+      "originalCapture": "01-traffic-inspector.jpg",
+      "dimensions": [
+        3494,
+        2260
+      ],
+      "sha256": "84b6b707a6d937548c1b25f226a6b277d7d24711505a15891cc219470109beae"
+    },
+    {
+      "file": "mocked-response.jpg",
+      "originalCapture": "03-mocked-response.jpg",
+      "dimensions": [
+        3494,
+        2260
+      ],
+      "sha256": "712e02c5275a8d8ef688132f071bec7485511a510130dbdfb7d56ae3d813b8dc"
+    },
+    {
+      "file": "replay-composer.jpg",
+      "originalCapture": "04-replay-composer.jpg",
+      "dimensions": [
+        3494,
+        2260
+      ],
+      "sha256": "6a1c7ee3c1c6268b25a3e2f462dff403833eed6b8c43f0f81dde615337513b3d"
+    },
+    {
+      "file": "session-analysis.jpg",
+      "originalCapture": "05-session-analysis.jpg",
+      "dimensions": [
+        3494,
+        2260
+      ],
+      "sha256": "2f15e999b06e2626a4d137962fd49d2b47654d1e060d66d4b748661579581fe4"
+    },
+    {
+      "file": "traffic-rules.jpg",
+      "originalCapture": "02-mock-rule.jpg (selected-rule retake)",
+      "dimensions": [
+        3494,
+        2260
+      ],
+      "sha256": "2e94a6de1094cf37e11ba905ceb0232c8b02f25b2262c1db3489387db11d1051"
+    }
+  ],
+  "format": "JPEG/JFIF; capture API initially supplied filenames ending in .png, corrected to .jpg without changing image bytes"
+}

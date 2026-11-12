@@ -1,14 +1,14 @@
 # Android interception
 
-Scope's Android adapter uses its own localhost proxy, public CA and experimental Java interception engine on Frida. The retained Java bridge has separate third-party provenance. [Engine coverage and evidence](ANDROID_ENGINE.md).
+Snurpo's Android adapter uses its own localhost proxy, public CA and experimental Java interception engine on Frida. The retained Java bridge has separate third-party provenance. [Engine coverage and evidence](ANDROID_ENGINE.md).
 
 ## What is implemented
 
 - Real ADB device enumeration, including offline/unauthorized states, model and a read-only root check.
 - Installed packages and running state. If an existing Frida server is available, app display labels come from Frida; otherwise the exact package ID is shown as the name.
-- **System proxy:** Android's global HTTP proxy and a matching ADB reverse mapping. The selected application is restarted. This mode is **device-wide**, so traffic from other apps may appear. HTTPS requires manually configured application trust; Scope does not install a system CA.
-- **Frida:** a separate Python worker spawns and attaches to the selected application. Original Scope Java hooks configure supported proxy seams, add trust for chains validated against Scope's CA, and conditionally bypass supported OkHttp3 pins for those chains. Hostname verification remains active.
-- **Frida Stop ends the exact instrumented app process**, unloads/detaches and restores recorded owned mappings/server state. System proxy Stop restores recorded proxy/reverse state. Older recovery records retain cleanup of their Scope-owned CA.
+- **System proxy:** Android's global HTTP proxy and a matching ADB reverse mapping. The selected application is restarted. This mode is **device-wide**, so traffic from other apps may appear. HTTPS requires manually configured application trust; Snurpo does not install a system CA.
+- **Frida:** a separate Python worker spawns and attaches to the selected application. Original Snurpo Java hooks configure supported proxy seams, add trust for chains validated against Snurpo's CA, and conditionally bypass supported OkHttp3 pins for those chains. Hostname verification remains active.
+- **Frida Stop ends the exact instrumented app process**, unloads/detaches and restores recorded owned mappings/server state. System proxy Stop restores recorded proxy/reverse state. Older recovery records retain cleanup of their Snurpo-owned CA.
 - A saved recovery file allows Stop to retry after a disconnected device or interrupted session. Starting another session is refused until that cleanup succeeds.
 - The 1.0 **Diagnostics** workspace and `device_diagnostics` MCP tool provide read-only authorization/root/ABI/runtime/mapping/recovery preflight with actionable fixes. See [diagnostic boundaries and troubleshooting](DIAGNOSTICS.md).
 
@@ -27,7 +27,7 @@ Discovery order:
 3. Common macOS, Linux and Windows Android SDK locations.
 4. `adb` / `adb.exe` on PATH.
 
-Authorize the computer on the device and use Refresh. A rooted emulator is useful for a local lab. Scope does not create, root or rewrite emulator images.
+Authorize the computer on the device and use Refresh. A rooted emulator is useful for a local lab. Snurpo does not create, root or rewrite emulator images.
 
 A non-rooted device can use system proxy mode for HTTP. HTTPS then depends on manually configured app trust. Modern Android apps commonly ignore user-installed CAs, and pinning is not bypassed by proxy mode.
 
@@ -42,8 +42,11 @@ A task-local macOS arm64 bundle with a standalone worker/server was exercised du
 Install Python **3.9+** with `venv` support. Find the Android ABI with `adb -s YOUR_SERIAL shell getprop ro.product.cpu.abi`, then run the included helper. For the public macOS app installed in Applications:
 
 ```sh
-python3 /Applications/Scope.app/Contents/Resources/resources/device/install-runtime.py --abi arm64-v8a
+python3 /Applications/Snurpo.app/Contents/Resources/resources/device/install-runtime.py --abi arm64-v8a
 ```
+
+For the published Scope 1.4.1 package, use `Scope.app` in that path. The application
+reports the correct command for its actual installation.
 
 From a source checkout:
 
@@ -51,9 +54,9 @@ From a source checkout:
 python3 resources/device/install-runtime.py --abi arm64-v8a
 ```
 
-Replace `arm64-v8a` with the ABI reported by the device (`armeabi-v7a`, `x86` and `x86_64` are also accepted). On Windows, use `py -3` instead of `python3`. Scope also reports a command with the actual resource/runtime paths when no runtime is found.
+Replace `arm64-v8a` with the ABI reported by the device (`armeabi-v7a`, `x86` and `x86_64` are also accepted). On Windows, use `py -3` instead of `python3`. Snurpo also reports a command with the actual resource/runtime paths when no runtime is found.
 
-The helper creates a private virtualenv under Scope's `device/managed-frida` runtime directory, installs pinned Frida 17.9.1 from PyPI and downloads the matching official Android server with a pinned SHA-256 check. It does not use system-wide pip or change the Android device. After it succeeds, retry interception; no environment variables are needed. Server push/start happens only when you start interception. `--runtime-dir` supports a custom Scope device-runtime directory.
+The helper creates a private virtualenv under Snurpo's `device/managed-frida` runtime directory, installs pinned Frida 17.9.1 from PyPI and downloads the matching official Android server with a pinned SHA-256 check. It does not use system-wide pip or change the Android device. After it succeeds, retry interception; no environment variables are needed. Server push/start happens only when you start interception. `--runtime-dir` supports a custom Snurpo device-runtime directory.
 
 Worker precedence is an explicit `SCOPE_FRIDA_WORKER` executable, an explicit `SCOPE_PYTHON` interpreter, an optional privately packaged worker, the managed virtualenv, then `python3`/`python` on PATH. Server precedence is explicit local/device overrides, an optional privately packaged ABI match, the managed ABI match, then an existing default-port USB Frida server. Packaged resources are resolved through `SCOPE_RESOURCES`; source builds also find the repository's resources directory.
 
@@ -67,11 +70,11 @@ python3 -m venv .venv-frida
 export SCOPE_PYTHON="$PWD/.venv-frida/bin/python"
 ```
 
-On Windows, use `.venv-frida\Scripts\python.exe` and set `SCOPE_PYTHON` to its absolute path before launching Scope.
+On Windows, use `.venv-frida\Scripts\python.exe` and set `SCOPE_PYTHON` to its absolute path before launching Snurpo.
 
-With no server override, Scope checks the selected device's ABI and uses a matching optional packaged or managed `frida-server-17.9.1-android-*` resource when available. No native server is included in public packages; the recommended helper installs it locally. If none is found, Scope connects to an existing default-port USB Frida server and does not stop a server it did not start.
+With no server override, Snurpo checks the selected device's ABI and uses a matching optional packaged or managed `frida-server-17.9.1-android-*` resource when available. No native server is included in public packages; the recommended helper installs it locally. If none is found, Snurpo connects to an existing default-port USB Frida server and does not stop a server it did not start.
 
-To have Scope launch a dedicated server, download a matching official binary locally first. This helper **only downloads** and does not alter the device:
+To have Snurpo launch a dedicated server, download a matching official binary locally first. This helper **only downloads** and does not alter the device:
 
 ```sh
 # Choose --abi from: adb -s YOUR_SERIAL shell getprop ro.product.cpu.abi
@@ -106,9 +109,9 @@ The locally tested optional worker used CPython 3.12.13 from python-build-standa
 
 | ID | Supported behavior |
 | --- | --- |
-| `proxy` | Subsequent Java URL HTTP(S) connections and available OkHttp3 builders use the Scope listener. |
-| `certificate` | Subsequent SSLContext initialization wraps original X509 trust managers; separate Java PKIX validation admits only valid chains to the supplied Scope CA. |
-| `unpinning` | Ordinary Java OkHttp3 CertificatePinner List and Certificate[] overloads may accept a Scope-validated chain after an original rejection; acceptance target 3.14.9. Requires `certificate`. Lazy Kotlin `check$okhttp` configurations fail before readiness. |
+| `proxy` | Subsequent Java URL HTTP(S) connections and available OkHttp3 builders use the Snurpo listener. |
+| `certificate` | Subsequent SSLContext initialization wraps original X509 trust managers; separate Java PKIX validation admits only valid chains to the supplied Snurpo CA. |
+| `unpinning` | Ordinary Java OkHttp3 CertificatePinner List and Certificate[] overloads may accept a Snurpo-validated chain after an original rejection; acceptance target 3.14.9. Requires `certificate`. Lazy Kotlin `check$okhttp` configurations fail before readiness. |
 
 An omitted/empty API or CLI profile array selects `proxy`, `certificate`, `unpinning` for compatibility. Explicit selections remain exact. The UI disables Start for an empty selection; deselecting certificate also deselects/disables unpinning. `root`, `system-ca` and unknown profiles fail before device probes. No root hiding is provided.
 
@@ -126,19 +129,19 @@ The Frida version pin is the existing integration baseline, not a claim that it 
 
 ## Cleanup and recovery
 
-Scope writes `device-recovery.json` under its runtime directory before changing the device. It contains the selected serial/package, previous proxy/reverse state, legacy temporary CA hash, owned forwarding/server identifiers and pending spawned-process cleanup/PID. The spawned PID is persisted before readiness; an attempted spawn without a returned PID remains explicitly uncertain.
+Snurpo writes `device-recovery.json` under its runtime directory before changing the device. It contains the selected serial/package, previous proxy/reverse state, legacy temporary CA hash, owned forwarding/server identifiers and pending spawned-process cleanup/PID. The spawned PID is persisted before readiness; an attempted spawn without a returned PID remains explicitly uncertain.
 
 Press Stop while the device is connected. If cleanup fails, the file remains and the log explains that reconnection is needed. Reconnect the **same device**, then press Stop again. Do not delete the recovery file as a substitute for restoring device settings.
 
-Stop verifies that current proxy and ADB mappings still match Scope's recorded values before restoring them. External changes are preserved and logged. Invalid saved fields are rejected before cleanup commands; failed inspection leaves recovery available for a retry.
+Stop verifies that current proxy and ADB mappings still match Snurpo's recorded values before restoring them. External changes are preserved and logged. Invalid saved fields are rejected before cleanup commands; failed inspection leaves recovery available for a retry.
 
-New sessions never inject system CAs. For older recovery records only, Stop still removes the recorded Scope-owned certificate from shared stores and the selected app. Existing temporary mount overlays disappear on reboot; Scope does not unmount shared trust stores underneath other apps.
+New sessions never inject system CAs. For older recovery records only, Stop still removes the recorded Snurpo-owned certificate from shared stores and the selected app. Existing temporary mount overlays disappear on reboot; Snurpo does not unmount shared trust stores underneath other apps.
 
-Frida Stop terminates the owned app process because created client/TLS objects can outlive method unhooking. The worker has 12 seconds for bounded cleanup, followed by stdout drain. A successful worker exit alone cannot prove termination: Rust requires a matching successful acknowledgment. Failed/timed-out workers and missing acknowledgments retain recovery. After a restart, only observed absence of the recorded PID in a readable root procfs view allows automatic reconciliation. A present or inaccessible PID remains an error and is never killed from saved state. Unknown attempted-spawn completion requires manual process/device reconciliation; Scope cannot safely discover it by package name. Preserve the recovery file until that reconciliation and owned setting/mapping restoration are complete. A server binary downloaded/copied for Scope remains for the next session; only its owned process is stopped.
+Frida Stop terminates the owned app process because created client/TLS objects can outlive method unhooking. The worker has 12 seconds for bounded cleanup, followed by stdout drain. A successful worker exit alone cannot prove termination: Rust requires a matching successful acknowledgment. Failed/timed-out workers and missing acknowledgments retain recovery. After a restart, only observed absence of the recorded PID in a readable root procfs view allows automatic reconciliation. A present or inaccessible PID remains an error and is never killed from saved state. Unknown attempted-spawn completion requires manual process/device reconciliation; Snurpo cannot safely discover it by package name. Preserve the recovery file until that reconciliation and owned setting/mapping restoration are complete. A server binary downloaded/copied for Snurpo remains for the next session; only its owned process is stopped.
 
 ## Local Android demo
 
-`examples/android-demo` contains a small Java Activity using `HttpURLConnection`. It talks only to Scope's local demo API at `http://127.0.0.1:17891`.
+`examples/android-demo` contains a small Java Activity using `HttpURLConnection`. It talks only to Snurpo's local demo API at `http://127.0.0.1:17891`.
 
 The build script uses an installed SDK and JDK directly; it requires no Gradle or Maven download:
 
@@ -150,7 +153,7 @@ adb -s YOUR_SERIAL reverse tcp:17891 tcp:17891
 
 The default paths target macOS Android Studio. Override `ANDROID_HOME`, `JAVA_HOME`, `SCOPE_ANDROID_BUILD_TOOLS` and `SCOPE_ANDROID_JAR` for another SDK layout. The demo app itself works on Android API 26+; the offline shell build is currently verified on macOS.
 
-Start Scope's demo server, choose `com.scope.demo` in the application picker and start interception. The app buttons send real GET/POST requests, show the received HTTP status/body and allow enough read timeout for an interactive breakpoint.
+Start Snurpo's demo server, choose `com.scope.demo` in the application picker and start interception. The app buttons send real GET/POST requests, show the received HTTP status/body and allow enough read timeout for an interactive breakpoint.
 
 The package uses cleartext for the local fixture server. It is a test target, not an example of production TLS configuration. Its login request contains only an explicit local-demo credential.
 
@@ -173,7 +176,7 @@ The runtime uses original `scope-engine.js` plus the unchanged Frida Java bridge
 
 ## Recorded local smoke test
 
-**Historical backend receipt:** the following 2026-11-02 results used the removed hook backend and CA-injection path. They do not validate the current Scope-owned engine or its process-ending Stop contract. Current direct-worker TLS/pinning/hostname and Stop/restoration acceptance is recorded separately for one API/ABI in [the 9 November receipt](ANDROID_ACCEPTANCE.md).
+**Historical backend receipt:** the following 2026-11-02 results used the removed hook backend and CA-injection path. They do not validate the current Snurpo-owned engine or its process-ending Stop contract. Current direct-worker TLS/pinning/hostname and Stop/restoration acceptance is recorded separately for one API/ABI in [the 9 November receipt](ANDROID_ACCEPTANCE.md).
 
 On 2026-11-02, the macOS build was checked against an existing rooted Android 16 arm64 emulator using only the included `com.scope.demo` application:
 

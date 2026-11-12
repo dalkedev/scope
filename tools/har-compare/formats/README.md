@@ -1,6 +1,6 @@
 # JUnit XML export
 
-`junitReport(report)` in `junit.mjs` renders an already-produced Scope comparison report as deterministic JUnit-style XML. It has no runtime dependencies, file IO, network requests or model calls. The CLI coordinator owns output path creation and exit codes.
+`junitReport(report)` in `junit.mjs` renders an already-produced Snurpo comparison report as deterministic JUnit-style XML. It has no runtime dependencies, file IO, network requests or model calls. The CLI coordinator owns output path creation and exit codes.
 
 ```js
 import { junitReport } from './formats/junit.mjs';
@@ -20,7 +20,7 @@ The module accepts the internal comparison report's `operations` and `findings` 
 Run the focused tests from the repository root:
 
 ```sh
-/opt/scope-lab/toolchains/node-v22.22.3-linux-x64/bin/node --test tools/har-compare/formats/*.test.mjs
+/opt/scope-lab/toolchains/node-v26.13.1-linux-x64/bin/node --test tools/har-compare/formats/*.test.mjs
 ```
 
 Production code and standard Node tests require no root dependencies. One optional parser integration test uses `python3` and its standard-library `xml.etree.ElementTree`; it is explicitly skipped if `python3` is unavailable. On 2026-11-03 all 11 formatter tests passed, including that parser check. This establishes XML well-formedness for the tested fixtures, not compatibility with every CI provider or a remotely executed CI upload.

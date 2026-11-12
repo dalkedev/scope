@@ -59,10 +59,10 @@ function validateTree(value, budget, depth = 0) {
 }
 function scopeEvidence(raw, index) {
   if (raw === undefined) return { entry: index };
-  if (!isObject(raw)) fail('HAR', `Entry ${index}: invalid Scope extension.`);
-  for (const key of ['completed', 'edited']) if (raw[key] !== undefined && typeof raw[key] !== 'boolean') fail('HAR', `Entry ${index}: invalid Scope flag.`);
-  if (raw.completed === false || (raw.error !== undefined && raw.error !== null)) fail('INCOMPLETE', `Entry ${index}: incomplete or failed Scope capture.`);
-  if (raw.provenance !== undefined && !['upstream', 'mock', 'blocked'].includes(raw.provenance)) fail('HAR', `Entry ${index}: invalid Scope provenance.`);
+  if (!isObject(raw)) fail('HAR', `Entry ${index}: invalid Snurpo extension.`);
+  for (const key of ['completed', 'edited']) if (raw[key] !== undefined && typeof raw[key] !== 'boolean') fail('HAR', `Entry ${index}: invalid Snurpo flag.`);
+  if (raw.completed === false || (raw.error !== undefined && raw.error !== null)) fail('INCOMPLETE', `Entry ${index}: incomplete or failed Snurpo capture.`);
+  if (raw.provenance !== undefined && !['upstream', 'mock', 'blocked'].includes(raw.provenance)) fail('HAR', `Entry ${index}: invalid Snurpo provenance.`);
   const evidence = { entry: index };
   for (const key of ['provenance', 'edited']) if (raw[key] !== undefined) evidence[key] = raw[key];
   return evidence;

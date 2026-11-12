@@ -1,20 +1,24 @@
 # Getting started
 
-Scope stores captures locally and works without an account. Start with the included fixture to check the desktop, then connect a client or Android app.
+Snurpo stores captures locally and works without an account. Start with the included fixture to check the desktop, then connect a client or Android app.
 
 ## Install a release
 
-1. Download the artifact for your host from [GitHub Releases](https://github.com/dalkedev/scope/releases). Read its release notes for architecture, optional Frida resources and signing status.
+The latest published release is **Scope 1.4.1** and still carries the Scope name.
+This source tree uses **Snurpo**; new branding does not change the saved-data
+location or trusted CA. See [migration notes](MIGRATING_TO_SNURPO.md).
+
+1. Download the artifact for your host from [GitHub Releases](https://github.com/dalkedev/snurpo/releases). Read its release notes for architecture, optional Frida resources and signing status.
 2. Compare its SHA-256 with the release checksum file, then extract the archive or run the platform installer.
-3. On macOS, move `Scope.app` to Applications and open it. The public package is ad-hoc signed without Apple notarization. If Gatekeeper blocks it, use macOS **System Settings → Privacy & Security → Open Anyway** after verifying the source and checksum. Do not disable Gatekeeper globally.
+3. On macOS, move the app to Applications and open it (`Scope.app` for the published 1.4.1 package, `Snurpo.app` for new source builds). The public package is ad-hoc signed without Apple notarization. If Gatekeeper blocks it, use macOS **System Settings → Privacy & Security → Open Anyway** after verifying the source and checksum. Do not disable Gatekeeper globally.
 
 The interactively tested host is **macOS arm64** (Apple Silicon). Windows x64 and Linux x64 have CI build/headless-protocol coverage; their interactive installers, desktop and device behavior remain unverified. Read the release notes for Linux's known dependency advisory. Optional Frida native binaries are not included in public packages; [install them locally](ANDROID.md#frida-runtime) for Frida mode.
 
 ## Capture local test traffic
 
-Click the lightning bolt beside **New session**. Its tooltip is **Generate real test traffic through the proxy**. Scope starts the local fixture at `127.0.0.1:17891` and captures six requests through the proxy at `127.0.0.1:17890`.
+Click the lightning bolt beside **New session**. Its tooltip is **Generate real test traffic through the proxy**. Snurpo starts the local fixture at `127.0.0.1:17891` and captures six requests through the proxy at `127.0.0.1:17890`.
 
-The fixture includes a deliberate 401 sign-in response, a slow endpoint and repeated product requests. These are real loopback requests, labeled as demo traffic. Scope does not populate an empty archive with fabricated captures.
+The fixture includes a deliberate 401 sign-in response, a slow endpoint and repeated product requests. These are real loopback requests, labeled as demo traffic. Snurpo does not populate an empty archive with fabricated captures.
 
 Select a row and switch between request, response, headers, body, timing and originals. Open **Analysis** to inspect observed endpoint/status/timing patterns. **Compare** accepts two saved sessions.
 
@@ -24,19 +28,19 @@ text as before. **Search syntax** below the field offers clickable examples.
 
 ## Send traffic from a desktop client
 
-Create a session and select **Start capture**. Configure your client to use the address shown by Scope:
+Create a session and select **Start capture**. Configure your client to use the address shown by Snurpo:
 
 ```sh
 curl --proxy http://127.0.0.1:17890 http://example.com
 ```
 
-For HTTPS, open Scope's connection settings and copy its public CA path. Tell the client to trust that certificate:
+For HTTPS, open Snurpo's connection settings and copy its public CA path. Tell the client to trust that certificate:
 
 ```sh
-curl --proxy http://127.0.0.1:17890 --cacert /absolute/path/from/Scope/scope-ca.pem https://example.com
+curl --proxy http://127.0.0.1:17890 --cacert /absolute/path/shown/in/settings/scope-ca.pem https://example.com
 ```
 
-Use the actual path from your installation. Scope generates its own CA and keeps the private signing key in its application data directory. Share only the public CA. Trusting a CA and bypassing app-specific certificate pinning are separate steps.
+Use the actual path from your installation. Snurpo generates its own CA and keeps the private signing key in its application data directory. Share only the public CA. Trusting a CA and bypassing app-specific certificate pinning are separate steps.
 
 ## Connect Android
 
@@ -56,7 +60,7 @@ For runtime installation, supported hook profiles, non-root limitations and exac
 
 1. Open **Traffic rules**, create a rule, and match the endpoint's host and path.
 2. Choose **Pause & edit**, then request, response, or both stages. Save the rule.
-3. Send a new request through Scope from your client or Android app. The paused
+3. Send a new request through Snurpo from your client or Android app. The paused
    message banner appears even while you stay in the rule editor.
 4. Open the editor. It contains the real message: edit the request URL/method,
    headers or body, or the response's final status, headers or body.
@@ -74,12 +78,12 @@ traffic through the proxy to pause and edit it. [Matching, ordering and examples
 
 ## Save and move sessions
 
-Captures are committed to the local SQLite archive as they arrive. Stopping capture or quitting Scope does not delete them.
+Captures are committed to the local SQLite archive as they arrive. Stopping capture or quitting Snurpo does not delete them.
 
 Use the session export controls to save:
 
 - **HAR** for interoperability with other HTTP tools.
-- **Scope session** (`.scope.json`) for a lossless Scope archive, including Scope-specific metadata and original edited messages.
+- **Snurpo session** (`.scope.json`) for a lossless Snurpo archive, including Snurpo-specific metadata and original edited messages.
 
 Import creates a separate session. Ordinary exports contain captured credentials
 and body content. The separate **sanitized** option masks known credential fields,
@@ -107,15 +111,15 @@ or body. Review credentials before changing destination. Replay follows current
 rules and bypasses manual breakpoint pauses. **Activity** records local event
 metadata without copying traffic bodies or credential headers into a second log.
 
-The connection/settings view displays the data directory. It contains `scope.sqlite3`, Scope's public CA and private key, MCP bridge configuration, and device recovery state. The SQLite database is not encrypted by Scope. For a consistent filesystem backup, stop capture and quit the app before copying the directory. Do not publish that directory.
+The connection/settings view displays the data directory. It contains `scope.sqlite3`, Snurpo's public CA and private key, MCP bridge configuration, and device recovery state. The SQLite database is not encrypted by Snurpo. For a consistent filesystem backup, stop capture and quit the app before copying the directory. Do not publish that directory.
 
 ## If something goes wrong
 
 | Symptom                                    | Next step                                                                                                           |
 | ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------- |
-| App reports a busy port                    | Check for another Scope instance or a process using 17890, 17891 or 17892; do not stop unrelated processes blindly  |
+| App reports a busy port                    | Check for another Snurpo instance or a process using 17890, 17891 or 17892; do not stop unrelated processes blindly  |
 | No devices                                 | Check `adb devices -l`, authorization, USB debugging and the ADB discovery paths in [Android setup](ANDROID.md#adb) |
-| HTTPS fails                                | Confirm the client trusts Scope's CA; inspect pinning/native-stack compatibility separately                         |
+| HTTPS fails                                | Confirm the client trusts Snurpo's CA; inspect pinning/native-stack compatibility separately                         |
 | Paused request fails                       | Check the 60-second breakpoint expiry and the client's own timeout                                                  |
 | Device disconnected during interception    | Reconnect the same device and press Stop to retry recorded cleanup                                                  |
 | MCP sees no sessions                       | Share the selected session in **MCP server**; sharing resets after app restart                                      |
@@ -123,4 +127,4 @@ The connection/settings view displays the data directory. It contains `scope.sql
 
 If cleanup fails, keep the recovery file and reconnect the same device. Removing the recovery file does not restore the device. See [recovery details](ANDROID.md#cleanup-and-recovery).
 
-For a reproducible bug report, use the repository's [issue forms](https://github.com/dalkedev/scope/issues/new/choose). Include sanitized logs and the exact stage that failed, not private captures or CA keys.
+For a reproducible bug report, use the repository's [issue forms](https://github.com/dalkedev/snurpo/issues/new/choose). Include sanitized logs and the exact stage that failed, not private captures or CA keys.

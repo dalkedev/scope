@@ -34,7 +34,7 @@ class DoctorProcessTests(unittest.TestCase):
             path.mkdir()
             (path / 'fixture.test.mjs').write_text('// synthetic coordinator fixture\n')
         self.node = self.root / 'node'
-        self.write_executable(self.node, "import sys\nprint('v22.22.3' if '--version' in sys.argv else '# tests 1\\n# skipped 0')\n")
+        self.write_executable(self.node, "import sys\nprint('v26.13.1' if '--version' in sys.argv else '# tests 1\\n# skipped 0')\n")
         self.prefix = self.root / 'toolchains'
         binaries = self.prefix / 'rust-1.99.1-x86_64-unknown-linux-gnu/bin'
         binaries.mkdir(parents=True)
@@ -67,17 +67,17 @@ class DoctorProcessTests(unittest.TestCase):
         self.assertFalse((self.prefix / 'cargo-home').exists())
 
     def test_invalid_node_version_keeps_probe_evidence(self):
-        self.write_executable(self.node, "print('v20.1.0')\n")
+        self.write_executable(self.node, "print('v26.13.0')\n")
         result = self.invoke('--node', str(self.node))
         report = json.loads(result.stdout)
         self.assertEqual(result.returncode, 2)
-        self.assertEqual(report['checks'][0]['output'], 'v20.1.0\n')
+        self.assertEqual(report['checks'][0]['output'], 'v26.13.0\n')
         self.assertTrue(report['toolAvailability']['node']['available'])
         self.assertTrue(report['missingPrerequisites'])
 
     def test_receipt_collision_is_rejected_before_a_tool_runs(self):
         marker = self.root / 'ran-node'
-        self.write_executable(self.node, f"from pathlib import Path\nPath({str(marker)!r}).touch()\nprint('v22.22.3')\n")
+        self.write_executable(self.node, f"from pathlib import Path\nPath({str(marker)!r}).touch()\nprint('v26.13.1')\n")
         output = self.root / 'receipt.json'
         output.write_text('preserved synthetic receipt\n')
         result = self.invoke('--node', str(self.node), '--output', str(output))

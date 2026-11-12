@@ -85,7 +85,7 @@ test('new fields are informational; removed calls fail; new calls do not fail', 
   assert.equal(runCase(t, [entry(), entry()], [entry()]).status, 1);
   assert.equal(runCase(t, [], [entry()]).status, 0);
 });
-test('base64 UTF-8 JSON and allowlisted Scope provenance are preserved', t => {
+test('base64 UTF-8 JSON and allowlisted Snurpo provenance are preserved', t => {
   const e = entry({});
   e.response.content.text = Buffer.from('{"word":"zażółć"}').toString('base64');
   e.response.content.encoding = 'base64';
@@ -101,9 +101,9 @@ for (const [name, mutate] of [
   ['unknown encoding', e => e.response.content.encoding = 'gzip'],
   ['invalid UTF-8 base64', e => { e.response.content.encoding = 'base64'; e.response.content.text = '/w=='; }],
   ['unsupported non-JSON response', e => { e.response.content.mimeType = 'text/html'; e.response.content.text = '<h1>hi</h1>'; }],
-  ['incomplete Scope entry', e => e._scope = { completed: false }],
-  ['Scope capture error', e => e._scope = { error: 'SYNTHETIC_SECRET' }],
-  ['malformed Scope flags', e => e._scope = { completed: 'false' }],
+  ['incomplete Snurpo entry', e => e._scope = { completed: false }],
+  ['Snurpo capture error', e => e._scope = { error: 'SYNTHETIC_SECRET' }],
+  ['malformed Snurpo flags', e => e._scope = { completed: 'false' }],
   ['invalid status', e => e.response.status = 0],
   ['invalid method', e => e.request.method = 'GET\nSECRET'],
   ['non-HTTP URL', e => e.request.url = 'file:///etc/passwd'],

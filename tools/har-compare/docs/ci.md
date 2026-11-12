@@ -3,7 +3,7 @@
 `.github/workflows/har-compare.yml` runs for pushes and pull requests that change
 `tools/har-compare/**` or the workflow itself. It is separate from the desktop
 build and release workflows. It requests only `contents: read`, persists no Git
-credentials, and uses commit-pinned official actions and exact Node.js 22.22.3.
+credentials, and uses commit-pinned official actions and exact Node.js 26.13.1.
 
 The job runs on a clean GitHub-hosted Ubuntu 22.04 runner as its non-root user.
 Only the lab's locked QA dependencies are installed with

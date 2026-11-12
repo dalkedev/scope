@@ -291,7 +291,7 @@ export function RulesWorkspace({ native }: { native: boolean }) {
                 disabled={!native || busy}
                 onClick={() => setSelection(newRule())}
               >
-                <Plus size={14} /> Create your first rule
+                <Plus size={14} /> {rules.length ? 'Create another rule' : 'Create your first rule'}
               </button>
               <div className="rule-examples">
                 <span>Edit an authorization header before sending</span>
@@ -592,7 +592,7 @@ export function RuleEditor({
               ))}
             </select>
             <p className="field-help">
-              Save this rule, then trigger a matching request in your app. Scope waits for the
+              Save this rule, then trigger a matching request in your app. Snurpo waits for the
               actual {pauseStage === 'both' ? 'request and response' : pauseStage} before you edit
               it. This rule pauses only matching endpoints.
             </p>

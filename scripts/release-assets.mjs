@@ -38,24 +38,24 @@ function copyInstallers(subdir, extension, suffix) {
   const installers = readdirSync(directory).filter((name) => name.endsWith(extension));
   if (installers.length !== 1)
     throw new Error(`Expected exactly one ${extension} installer, found ${installers.length}`);
-  const destination = join(output, `Scope-${tag}-${platform}-${arch}${suffix}`);
+  const destination = join(output, `Snurpo-${tag}-${platform}-${arch}${suffix}`);
   copyFileSync(join(directory, installers[0]), destination);
   assets.push(destination);
 }
 if (process.platform === 'darwin') {
-  const app = join(bundle, 'macos/Scope.app');
+  const app = join(bundle, 'macos/Snurpo.app');
   verifyPublicResources(join(app, 'Contents/Resources/resources'));
   if (
     !existsSync(join(app, 'Contents/Resources/LICENSE')) ||
     !existsSync(join(app, 'Contents/Resources/THIRD_PARTY_NOTICES.md'))
   ) {
-    throw new Error('The application must include the Scope license and third-party notice index');
+    throw new Error('The application must include the Snurpo license and third-party notice index');
   }
-  const destination = join(output, `Scope-${tag}-${platform}-${arch}.zip`);
+  const destination = join(output, `Snurpo-${tag}-${platform}-${arch}.zip`);
   run('/usr/bin/ditto', ['-c', '-k', '--sequesterRsrc', '--keepParent', app, destination]);
   assets.push(destination);
-  const source = join(output, `Scope-${tag}-source.zip`);
-  run('git', ['archive', '--format=zip', `--prefix=scope-${tag}/`, `--output=${source}`, commit]);
+  const source = join(output, `Snurpo-${tag}-source.zip`);
+  run('git', ['archive', '--format=zip', `--prefix=snurpo-${tag}/`, `--output=${source}`, commit]);
   assets.push(source);
 } else if (process.platform === 'win32') copyInstallers('nsis', '.exe', '-setup.exe');
 else {

@@ -18,7 +18,7 @@ config selectors/pointers are not embedded in an HTML details section or XML.
 
 Retained metadata: report-local operation/finding IDs, original HAR entry
 indices, counts, finding kinds/severity, HTTP statuses, JSON type names, authored
-rule/requirement ordinals, coverage counts and validated Scope provenance/edited
+rule/requirement ordinals, coverage counts and validated Snurpo provenance/edited
 flags. Removed labels: captured method/origin/path, JSON pointers, original
 selection/ignore/contract configuration strings. Config is replaced with mode
 and rule counts plus `redacted: true`; it is metadata, not a replayable config.

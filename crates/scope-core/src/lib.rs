@@ -1,4 +1,4 @@
-//! Local, durable HTTP(S) interception engine shared by Scope desktop and MCP.
+//! Local, durable HTTP(S) interception engine shared by Snurpo desktop and MCP.
 //! Buffers bodies up to 16 MiB. Larger bodies fail explicitly; no partial body
 //! is presented as a successful capture. WebSocket frames and trailers are not captured.
 #[cfg(test)]

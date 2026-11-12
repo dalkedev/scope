@@ -2,7 +2,7 @@
 
 ## Reproduce from repository root
 
-Use Node.js 22.22.3 or newer. The runtime CLI is dependency-free. Install only
+Use Node.js 26.13.1 or newer. The runtime CLI is dependency-free. Install only
 the separately locked development lab for DOM/browser checks:
 
 ```sh

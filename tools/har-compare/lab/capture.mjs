@@ -8,7 +8,7 @@ function validateOrigin(origin) {
   if (url.protocol !== 'http:' || url.hostname !== '127.0.0.1' || url.origin !== origin) throw new Error('Capture accepts only a lab loopback origin and known synthetic scenario.');
 }
 function har(entries) {
-  return { log: { version: '1.2', creator: { name: 'Scope synthetic Node lab (not browser capture)', version: '0.1.0' }, entries } };
+  return { log: { version: '1.2', creator: { name: 'Snurpo synthetic Node lab (not browser capture)', version: '0.1.0' }, entries } };
 }
 async function record(origin, path, headers) {
   const started = new Date().toISOString();

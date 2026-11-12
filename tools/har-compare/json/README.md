@@ -67,4 +67,4 @@ names or silently lossy decimal tokens as accepted input.
 Primary background: [RFC 8259 objects and numbers](https://www.rfc-editor.org/rfc/rfc8259.html),
 [ECMAScript JSON.parse](https://tc39.es/ecma262/multipage/structured-data.html#sec-json.parse).
 These sources explain interoperability and JavaScript parsing; the stricter
-acceptance policy is Scope's explicit decision.
+acceptance policy is Snurpo's explicit decision.

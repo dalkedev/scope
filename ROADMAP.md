@@ -1,6 +1,6 @@
 # Roadmap
 
-Scope is built around a complete loop: select a target, capture, inspect/change,
+Snurpo is built around a complete loop: select a target, capture, inspect/change,
 save, reopen and analyze. 1.0.0 is a review proposal, not a published release.
 This roadmap is a direction, not a delivery schedule. [Public issue research](docs/USER-NEEDS.md)
 links specific user needs to work that is delivered or still planned.

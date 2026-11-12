@@ -89,7 +89,7 @@ class WorkerTests(unittest.TestCase):
             for name, content in cases.items():
                 with self.subTest(case=name):
                     ca.write_text(content, encoding="utf-8")
-                    with self.assertRaisesRegex(ValueError, "Scope CA"):
+                    with self.assertRaisesRegex(ValueError, "Snurpo CA"):
                         WORKER.build_script(root, ca, 17890, ["proxy"])
 
     def test_main_rejects_invalid_ca_before_frida_import_or_device_work(self):
@@ -108,7 +108,7 @@ class WorkerTests(unittest.TestCase):
             argv = ["frida_worker", "--serial", "synthetic", "--package", "app.test",
                     "--ca", str(ca), "--scripts", str(root), "--profile", "proxy"]
             with mock.patch.object(WORKER.sys, "argv", argv), mock.patch("builtins.__import__", side_effect=guarded_import):
-                with self.assertRaisesRegex(ValueError, "Scope CA"):
+                with self.assertRaisesRegex(ValueError, "Snurpo CA"):
                     WORKER.main()
 
     def test_exact_ca_size_boundary_and_new_contents_are_revalidated(self):
@@ -124,7 +124,7 @@ class WorkerTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "64 KiB"):
                 WORKER.build_script(root, ca, 17890, ["proxy"])
             ca.write_bytes(b"not a certificate")
-            with self.assertRaisesRegex(ValueError, "Scope CA"):
+            with self.assertRaisesRegex(ValueError, "Snurpo CA"):
                 WORKER.build_script(root, ca, 17890, ["proxy"])
 
     def test_ready_gate_requires_engine_exact_profiles_and_real_capabilities(self):

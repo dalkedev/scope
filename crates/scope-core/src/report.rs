@@ -227,7 +227,7 @@ impl Engine {
     }
     pub fn import_session(&self, mut value: Value) -> Result<Session> {
         if value["format"] != "scope-session" || value["version"] != 1 {
-            bail!("Unsupported Scope session format/version");
+            bail!("Unsupported Snurpo session format/version");
         }
         let original: Session = serde_json::from_value(value["session"].clone())?;
         let exchanges: Vec<Exchange> = serde_json::from_value(value["exchanges"].take())?;
@@ -330,7 +330,7 @@ impl Engine {
             json!({"startedDateTime":date,"time":e.duration_ms,"pageref":session_id,"request":{"method":e.method,"url":e.url,"httpVersion":"HTTP/1.1","cookies":[],"headers":e.request_headers,"queryString":query,"headersSize":-1,"bodySize":e.request_bytes,"postData":{"mimeType":mime(&e.request_headers),"text":e.request_body,"_encoding":if e.request_body_base64{Some("base64")}else{None}}},"response":{"status":e.status.unwrap_or(0),"statusText":e.status.and_then(|s|hudsucker::hyper::StatusCode::from_u16(s).ok()).and_then(|s|s.canonical_reason().map(str::to_owned)).unwrap_or_default(),"httpVersion":"HTTP/1.1","cookies":[],"headers":e.response_headers,"content":{"size":e.response_bytes,"mimeType":mime(&e.response_headers),"text":e.response_body,"encoding":if e.response_body_base64{Some("base64")}else{None}},"redirectURL":e.response_headers.iter().find(|h|h.name.eq_ignore_ascii_case("location")).map(|h|&h.value).cloned().unwrap_or_default(),"headersSize":-1,"bodySize":e.response_bytes},"cache":{},"timings":{"send":0,"wait":e.duration_ms,"receive":0},"_scope":{"completed":e.completed,"provenance":e.provenance,"appliedRules":e.applied_rules,"error":e.error,"edited":e.edited,"originalRequest":e.original_request,"originalResponse":e.original_response,"protocolNote":"HTTP version is normalized; original version and trailers are not recorded"}})
         }).collect();
         Ok(
-            json!({"log":{"version":"1.2","creator":{"name":"Scope","version":env!("CARGO_PKG_VERSION")},"pages":[{"id":session_id,"title":session.name,"startedDateTime":chrono::DateTime::from_timestamp_millis(session.created_at).unwrap().to_rfc3339(),"pageTimings":{}}],"entries":entries}}),
+            json!({"log":{"version":"1.2","creator":{"name":"Snurpo","version":env!("CARGO_PKG_VERSION")},"pages":[{"id":session_id,"title":session.name,"startedDateTime":chrono::DateTime::from_timestamp_millis(session.created_at).unwrap().to_rfc3339(),"pageTimings":{}}],"entries":entries}}),
         )
     }
     pub fn import_har(&self, har: Value, name: String) -> Result<Session> {
@@ -392,11 +392,11 @@ impl Engine {
             e.completed = scope["completed"].as_bool().unwrap_or(true);
             if let Some(value) = scope.get("provenance") {
                 e.provenance = serde_json::from_value(value.clone())
-                    .context("Invalid HAR Scope provenance")?;
+                    .context("Invalid HAR Snurpo provenance")?;
             }
             if let Some(value) = scope.get("appliedRules") {
                 e.applied_rules = serde_json::from_value(value.clone())
-                    .context("Invalid HAR Scope rule evidence")?;
+                    .context("Invalid HAR Snurpo rule evidence")?;
             }
             e.edited = scope["edited"].as_bool().unwrap_or(false);
             e.original_request = scope
@@ -688,7 +688,7 @@ impl Engine {
             paths.entry(path.clone()).or_insert_with(|| json!({}))[method] = operation;
         }
         Ok(
-            json!({"openapi":"3.1.1","info":{"title":"Scope observed HTTP API","version":"observed","description":"Generated from completed captured HTTP responses. This describes observed traffic, not a verified API contract. No example values, query values, header credentials or session names are emitted."},"paths":paths,"x-scope":{"sessionId":session_id,"observedOnly":true,"eligibleExchanges":eligible.len(),"sampledExchanges":eligible.len().min(5000),"operationCount":groups.len(),"omittedExchanges":omitted,"truncated":budget.truncated,"limits":{"exchanges":5000,"operations":200,"schemaNodes":10000,"schemaDepth":6,"propertiesPerObject":40,"arrayItems":20,"jsonBodyBytes":262144,"evidenceIdsPerOperation":50},"limitations":["Only completed exchanges with a final response and no capture error are used.","Numeric and UUID segments are normalized; other static path segments and server names remain visible and may be sensitive.","Origins with the same normalized path and method are grouped into one operation and listed as observed servers.","JSON properties and types are observations only; requiredness, authentication, enums, constraints and unobserved responses are not inferred.","Mocks and blocks are synthetic observations and may differ from upstream behavior.","Bodies and schema traversal are bounded; unsupported HTTP methods and excess observations are omitted."]}}),
+            json!({"openapi":"3.1.1","info":{"title":"Snurpo observed HTTP API","version":"observed","description":"Generated from completed captured HTTP responses. This describes observed traffic, not a verified API contract. No example values, query values, header credentials or session names are emitted."},"paths":paths,"x-scope":{"sessionId":session_id,"observedOnly":true,"eligibleExchanges":eligible.len(),"sampledExchanges":eligible.len().min(5000),"operationCount":groups.len(),"omittedExchanges":omitted,"truncated":budget.truncated,"limits":{"exchanges":5000,"operations":200,"schemaNodes":10000,"schemaDepth":6,"propertiesPerObject":40,"arrayItems":20,"jsonBodyBytes":262144,"evidenceIdsPerOperation":50},"limitations":["Only completed exchanges with a final response and no capture error are used.","Numeric and UUID segments are normalized; other static path segments and server names remain visible and may be sensitive.","Origins with the same normalized path and method are grouped into one operation and listed as observed servers.","JSON properties and types are observations only; requiredness, authentication, enums, constraints and unobserved responses are not inferred.","Mocks and blocks are synthetic observations and may differ from upstream behavior.","Bodies and schema traversal are bounded; unsupported HTTP methods and excess observations are omitted."]}}),
         )
     }
 }

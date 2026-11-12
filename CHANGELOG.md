@@ -4,6 +4,23 @@ User-visible changes are recorded here. Back up important captures before upgrad
 
 ## Unreleased
 
+- Correct low-contrast light-appearance text and status foregrounds while keeping
+  the sidebar readable in both appearances. Fix the existing-rule empty prompt.
+
+- Make real localhost test traffic the first-run primary action. Add restrained
+  lavender selection/focus accents and mint brand details in both appearances,
+  preserving HTTP status and capture-state semantics.
+
+- Add a macOS menu-bar mascot with Show Snurpo and Quit Snurpo actions, using a
+  monochrome template icon that follows the system appearance.
+
+- Rename the current application and project branding from Scope to **Snurpo**,
+  with a new mascot and repository artwork. Existing published releases retain
+  their original names, assets and checksums.
+- Preserve installed application identity, saved sessions, trusted CA keys,
+  archive formats and MCP compatibility identifiers. See
+  [migration notes](docs/MIGRATING_TO_SNURPO.md).
+
 ## 1.4.1 — 2026-11-09
 
 - Upgrade the bundled SQLite driver/runtime to the patched line for

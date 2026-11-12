@@ -14,7 +14,7 @@ import time
 
 ROOT = Path(__file__).resolve().parents[3]
 PROTOTYPE = ROOT / 'tools' / 'har-compare'
-NODE_MINIMUM = (22, 22, 3)
+NODE_MINIMUM = (26, 13, 1)
 
 
 def child_environment():
@@ -98,7 +98,7 @@ def execute_checks(args, report):
     node = args.node or shutil.which('node', path=environment.get('PATH', ''))
     report['toolAvailability']['node'] = {'available': False, 'requested': args.node}
     if not node:
-        raise ValueError('Node is unavailable; pass --node /path/to/node (>=22.22.3).')
+        raise ValueError('Node is unavailable; pass --node /path/to/node (>=26.13.1).')
     node = require_executable(Path(node))
     report['toolAvailability']['node']['available'] = True
     node_check = run([node, '--version'], environment)
@@ -106,7 +106,7 @@ def execute_checks(args, report):
     report['checks'].append(node_check)
     actual = version_tuple(node_check['output'])
     if node_check['exitCode'] != 0 or actual is None or actual < NODE_MINIMUM:
-        raise ValueError('Node >=22.22.3 is required; selected executable failed the version check.')
+        raise ValueError('Node >=26.13.1 is required; selected executable failed the version check.')
     report['node'] = node
     report['toolAvailability']['node'].update({'available': True, 'version': node_check['output'].strip()})
     checks = report['checks']

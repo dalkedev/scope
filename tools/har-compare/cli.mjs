@@ -10,7 +10,7 @@ import { compareHar } from './src/compare.mjs';
 import { junitReport } from './formats/junit.mjs';
 import { jsonReport, htmlReport, writeReports } from './src/report.mjs';
 
-const help = `Scope HAR compare (offline prototype)
+const help = `Snurpo HAR compare (offline prototype)
 Usage:
   node cli.mjs compare --baseline FILE --candidate FILE [--config FILE]
                       [--json NEW_FILE] [--html NEW_FILE] [--junit NEW_FILE]
@@ -27,7 +27,10 @@ Exit: 0 no configured regression, 1 regression candidates, 2 invalid/incomplete 
 No network, auth, replay or model call. See README.md for matching/privacy limits.
 `;
 try {
-  if (Number(process.versions.node.split('.')[0]) < 22) fail('RUNTIME', 'Node 22 or later is required; tested with 22.22.3.');
+  const [nodeMajor, nodeMinor, nodePatch] = process.versions.node.split('.').map(Number);
+  if (nodeMajor < 26 || (nodeMajor === 26 && (nodeMinor < 13 || (nodeMinor === 13 && nodePatch < 1)))) {
+    fail('RUNTIME', 'Node 26.13.1 or later is required; use the version pinned in .nvmrc.');
+  }
   let parsed;
   try {
     parsed = parseArgs({ options: { help: { type: 'boolean', short: 'h' }, baseline: { type: 'string' }, candidate: { type: 'string' }, input: { type: 'string' }, config: { type: 'string' }, json: { type: 'string' }, html: { type: 'string' }, junit: { type: 'string' }, labels: { type: 'string' } }, allowPositionals: true, tokens: true });

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Scope's isolated Frida worker. Stdout is JSON Lines; stdin EOF requests Stop.
+"""Snurpo's isolated Frida worker. Stdout is JSON Lines; stdin EOF requests Stop.
 
 The worker owns one spawned application process. Stop ends that process because
 unloading methods cannot revoke already-created proxy or TLS objects.
@@ -58,7 +58,7 @@ def build_script(root, ca, port, profiles):
         if len(anchors) != 1 or anchors[0] != der:
             raise ValueError("incomplete or non-CA certificate")
     except (OSError, UnicodeError, ValueError, ssl.SSLError):
-        raise ValueError("Scope CA must be one valid complete public PEM CA certificate, at most 64 KiB") from None
+        raise ValueError("Snurpo CA must be one valid complete public PEM CA certificate, at most 64 KiB") from None
     config = {"caPem": cert, "proxyHost": "127.0.0.1", "proxyPort": port, "profiles": profiles}
     return "\n".join([
         (root / "frida-java-bridge.js").read_text(encoding="utf-8"),
@@ -70,7 +70,7 @@ def build_script(root, ca, port, profiles):
 def validate_ready(payload, profiles):
     selected = normalize_profiles(profiles)
     if not isinstance(payload, dict) or payload.get("kind") != "scope-hooks-ready" or payload.get("engine") != "scope-java-v1" or payload.get("profiles") != selected:
-        raise ValueError("Invalid Scope engine readiness identity or profiles")
+        raise ValueError("Invalid Snurpo engine readiness identity or profiles")
     capabilities = payload.get("capabilities")
     if not isinstance(capabilities, dict) or set(capabilities) != set(selected):
         raise ValueError("Missing requested profile capabilities")
@@ -347,7 +347,7 @@ def main():
     signal.signal(signal.SIGINT, lambda *_: stopped.set())
     signal.signal(signal.SIGTERM, lambda *_: stopped.set())
     threading.Thread(target=wait_for_stop, daemon=True).start()
-    emit("log", message="Experimental Scope Java hooks; Stop ends the spawned app. Native TLS/QUIC and custom pinners are not covered.")
+    emit("log", message="Experimental Snurpo Java hooks; Stop ends the spawned app. Native TLS/QUIC and custom pinners are not covered.")
     run_session(device, args.package, source, profiles, frida.__version__, stopped, process_not_found=(frida.ProcessNotFoundError,), cancellable_factory=frida.Cancellable)
 
 

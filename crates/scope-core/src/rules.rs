@@ -140,7 +140,7 @@ impl RuleAction {
                     value: "text/plain; charset=utf-8".into(),
                 }]),
                 body: Some(format!(
-                    "Scope blocked this request{}",
+                    "Snurpo blocked this request{}",
                     reason
                         .as_ref()
                         .map(|s| format!(": {s}"))

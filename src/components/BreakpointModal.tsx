@@ -112,7 +112,7 @@ function BreakpointEditor({ item, onClose, onResolve }: Props) {
         <strong>{item.method}</strong> {item.url}
       </p>
       <p className="field-help breakpoint-hold-note">
-        Scope holds this message for up to 60 seconds from capture, then aborts it. Your client may
+        Snurpo holds this message for up to 60 seconds from capture, then aborts it. Your client may
         time out sooner. Closing this editor keeps the message paused.
       </p>
       {request ? (
