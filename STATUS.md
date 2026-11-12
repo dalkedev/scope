@@ -1,13 +1,26 @@
-# Snurpo 1.4.2
+# Snurpo 1.5.0
 
-Snurpo 1.4.2 is the first release under the new name, with mascot desktop icons,
-a macOS menu-bar icon, refreshed appearance and a native workflow gallery.
-Source tooling uses Node 26.13.1 LTS; installed applications need no Node runtime.
-The redundant `local` label beside the logo is removed. Packages and platform
-notes are available through [Releases](https://github.com/dalkedev/snurpo/releases).
-Earlier Scope releases keep their original assets and checksums.
-See [migration notes](docs/MIGRATING_TO_SNURPO.md) for the unchanged data directory,
-CA keys, archive formats and MCP compatibility identifiers.
+Snurpo 1.5.0 adds **Copy as cURL** to the request inspector. Preview a captured
+request, review its credentials, then explicitly copy a command for sh, bash or
+zsh. Text/binary bodies and repeated headers are supported. Opening or copying
+the preview sends no traffic; execution happens separately in your terminal.
+See [the guide](docs/GETTING_STARTED.md#copy-a-request-to-your-terminal) for
+normalization and size limits, and [release notes](docs/releases/1.5.0.md).
+
+[Downloads](https://github.com/dalkedev/snurpo/releases/tag/v1.5.0) retain the
+Snurpo branding introduced in 1.4.2. The existing native screenshot gallery records
+that earlier release, with original capture provenance. Source tooling uses
+Node 26.13.1 LTS; installed applications need no Node runtime. Earlier releases
+keep their assets and checksums. See [migration notes](docs/MIGRATING_TO_SNURPO.md)
+for unchanged local data, CA and MCP identifiers.
+
+Local feature validation passed 88 tests on Node 26.13.1, including real sh/zsh
+loopback execution with all 256 binary byte values. Native GUI review confirmed preview/copy and unchanged captured traffic, but found
+inspector styling leaking into the dialog. The preview now opens outside the
+inspector with responsive width and a scrollable body; browser layout checks pass
+in both appearances and short windows. Native visual retest and tagged package
+verification remain separate acceptance steps. This feature does not add
+PowerShell or cmd.exe syntax or broaden device support.
 
 The reviewed 1.4.1 runtime sources passed 75 direct-worker Android outcomes and two
 native macOS Android Start/Stop capture cycles on AOSP API 36 ARM64, Frida

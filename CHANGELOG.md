@@ -2,6 +2,13 @@
 
 User-visible changes are recorded here. Back up important captures before upgrading.
 
+## 1.5.0: 2026-11-12
+
+- Preview and copy a captured request as a POSIX-shell cURL command, preserving
+  repeated headers and text/binary body bytes without sending traffic. Normalize
+  transport framing, explain unsupported/oversized requests and show clipboard
+  success or manual-copy fallback. Commands include captured credentials.
+
 ## 1.4.2: 2026-11-12
 
 - Ship the first Snurpo-branded desktop packages and a refreshed native workflow

@@ -1,6 +1,6 @@
 {
   "generator": "scripts/licenses.mjs",
-  "lockfileSha256": "8d7f02a4c43f1cf8982331d89a7925e34e2f94a07301858452f475d1a527f1e8",
+  "lockfileSha256": "535fb071e6d0eb5f3cd7aab9ce23d3d7755b331e73c7faff8e1523410d180027",
   "scope": "Installed npm runtime dependencies, including fonts; development tools excluded.",
   "packages": [
     {

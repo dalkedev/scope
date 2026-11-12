@@ -19,8 +19,9 @@ Publication is a separate maintainer action; for a stable release, clear both th
 prerelease flags. Keep historical release assets attached to their original tags.
 
 The first public prerelease, `v0.1.0-alpha.1`, used application version `0.1.0`;
-the current source uses application version `1.4.2`, the first Snurpo-branded
-release. **Scope 1.4.1** keeps its original `Scope-…` artifact names and
+the current source uses application version `1.5.0` for the Copy as cURL feature.
+Snurpo 1.4.2 was the first release under the new name. **Scope 1.4.1** keeps its
+original `Scope-…` artifact names and
 checksums. Do not move its tag or replace those assets with a renamed build.
 [Migration notes](MIGRATING_TO_SNURPO.md) describe the compatibility identifiers.
 Repository: [dalkedev/snurpo](https://github.com/dalkedev/snurpo).

@@ -24,7 +24,7 @@
 
 **Local capture, saved sessions and export need no account or subscription.** Built-in analysis runs locally. You choose which sessions an external agent can access.
 
-> **Snurpo 1.4.2: new name, same saved work.** Get the Snurpo-branded packages from [Releases](https://github.com/dalkedev/snurpo/releases/tag/v1.4.2). This update brings the mascot, macOS menu-bar icon, clearer first-run actions and refreshed Light/Dark appearance. Saved sessions, certificate trust and MCP configuration remain compatible. See [migration notes](docs/MIGRATING_TO_SNURPO.md). Source tooling now uses Node 26.13.1 LTS; the installed desktop app needs no Node runtime. Previous Scope releases retain their original downloads and checksums. [Release notes →](docs/releases/1.4.2.md) · [Verification record →](docs/VERIFICATION.md)
+> **Snurpo 1.5.0: take a captured request to your terminal.** Select **Copy as cURL** to preview and explicitly copy a POSIX-shell command, including repeated headers and text or binary bodies. Previewing and copying send no traffic. [Downloads](https://github.com/dalkedev/snurpo/releases/tag/v1.5.0) · [Release notes](docs/releases/1.5.0.md) · [Terminal export and limits](docs/GETTING_STARTED.md#copy-a-request-to-your-terminal). Saved sessions, certificate trust and MCP configuration remain compatible. Source tooling uses Node 26.13.1 LTS; the installed desktop app needs no Node runtime. The existing gallery records Snurpo 1.4.2; see its [capture provenance](docs/images/README.md).
 
 <a href="docs/SCREENSHOTS.md"><img src="docs/images/snurpo/mocked-response.jpg" alt="Real captured traffic: a products request returns a local HTTP 503 mock, with its rule and response JSON visible." width="100%"></a>
 
@@ -57,6 +57,11 @@ Open Snurpo and select **Generate test traffic** in the empty inspector, or the 
 3. Stop capture, quit and reopen. Your session is still there.
 
 No Android device is needed for this first run. [Continue with HTTPS, Android, breakpoints and export →](docs/GETTING_STARTED.md)
+
+Select an exchange and choose **Copy as cURL** to review a complete terminal
+command before copying it. Text and binary request bodies are supported; the
+preview clearly labels POSIX shell syntax and captured credentials.
+[Terminal export and limits →](docs/GETTING_STARTED.md#copy-a-request-to-your-terminal)
 
 ### Find the request. Check the API change.
 
