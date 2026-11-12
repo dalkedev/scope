@@ -7,6 +7,12 @@ and [workflow research](docs/COMPETITOR-GAPS.md) for the next interoperability c
 This roadmap is a direction, not a delivery schedule. [Public issue research](docs/USER-NEEDS.md)
 links specific user needs to work that is delivered or still planned.
 
+## Added in 1.5.0
+
+- Preview and explicitly copy captured requests as cURL commands for POSIX shells.
+- Preserve text/binary bodies and repeated headers, with clear transport
+  normalization, credential disclosure and clipboard/manual-copy feedback.
+
 ## Proposed in 1.0.0
 
 - Ordered persistent rewrite/mock/block rules with original messages and provenance.
@@ -16,7 +22,7 @@ links specific user needs to work that is delivered or still planned.
 - Twelve MCP tools with explicit session/write/global-rule/diagnostics permissions.
 - Required maintainer review and platform build checks before merge.
 
-## Next: make the first release dependable
+## Next: strengthen platform acceptance
 
 - Validate packaged apps on Windows and Linux, then publish a clear host/device compatibility matrix.
 - Expand physical-device and Android-version testing with reproducible fixtures and explicit cleanup checks.

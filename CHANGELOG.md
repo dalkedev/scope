@@ -2,7 +2,7 @@
 
 User-visible changes are recorded here. Back up important captures before upgrading.
 
-## Unreleased
+## 1.5.0: 2026-11-12
 
 - Preview and copy a captured request as a POSIX-shell cURL command, preserving
   repeated headers and text/binary body bytes without sending traffic. Normalize

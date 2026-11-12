@@ -1,6 +1,6 @@
 {
   "name": "snurpo-desktop",
-  "version": "1.4.2",
+  "version": "1.5.0",
   "description": "Snurpo: a nosy little HTTP debugger with persistent sessions, Android instrumentation and MCP",
   "license": "AGPL-3.0-or-later",
   "repository": {
