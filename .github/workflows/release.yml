@@ -3,24 +3,24 @@ on:
   workflow_dispatch:
     inputs:
       mode:
-        description: Open a review proposal, or build an existing tag into a draft
+        description: Open a release or documentation review, or build an existing tag into a draft
         type: choice
-        options: [draft, proposal]
+        options: [draft, proposal, documentation]
         default: draft
         required: true
       tag:
-        description: Existing version tag to build
+        description: Version tag for draft/proposal modes (unused for documentation)
         required: true
         default: v1.5.0
 permissions:
   contents: read
 concurrency:
-  group: release-${{ inputs.mode }}-${{ inputs.tag }}
+  group: release-${{ inputs.mode }}-${{ inputs.tag }}-${{ github.ref }}
   cancel-in-progress: false
 jobs:
   proposal:
     name: Open maintainer review
-    if: inputs.mode == 'proposal'
+    if: inputs.mode == 'proposal' || inputs.mode == 'documentation'
     runs-on: ubuntu-22.04
     timeout-minutes: 5
     permissions:
@@ -30,6 +30,7 @@ jobs:
       GH_TOKEN: ${{ github.token }}
       GH_REPO: ${{ github.repository }}
       PROPOSAL_BRANCH: ${{ github.ref_name }}
+      PROPOSAL_MODE: ${{ inputs.mode }}
       RELEASE_TAG: ${{ inputs.tag }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -38,19 +39,29 @@ jobs:
       - name: Open draft pull request as the Actions bot
         shell: bash
         run: |
-          node -e "if (!/^v\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/.test(process.env.RELEASE_TAG)) process.exit(1)"
-          version=${RELEASE_TAG#v}
-          test "$PROPOSAL_BRANCH" = "release/$version" || { echo 'Proposal branch must match the requested version'; exit 1; }
-          review_file="docs/releases/$version-review.md"
-          test -f "$review_file" || { echo 'Missing committed release review'; exit 1; }
+          if test "$PROPOSAL_MODE" = documentation; then
+            node -e "if (!/^docs\/[A-Za-z0-9][A-Za-z0-9/_-]*$/.test(process.env.PROPOSAL_BRANCH)) { console.error('Documentation proposal requires a docs/* branch'); process.exit(1); }"
+            review_file=docs/website/REVIEW.md
+            review_title='Snurpo website documentation: maintainer review'
+          elif test "$PROPOSAL_MODE" = proposal; then
+            node -e "if (!/^v\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/.test(process.env.RELEASE_TAG)) process.exit(1)"
+            version=${RELEASE_TAG#v}
+            test "$PROPOSAL_BRANCH" = "release/$version" || { echo 'Proposal branch must match the requested version'; exit 1; }
+            review_file="docs/releases/$version-review.md"
+            review_title="Snurpo $version: maintainer release review"
+          else
+            echo 'Unsupported review proposal mode'
+            exit 1
+          fi
+          test -f "$review_file" || { echo 'Missing committed review body'; exit 1; }
           existing=$(gh pr list --head "$PROPOSAL_BRANCH" --base main --state open --json number --jq '.[0].number // empty')
           if test -n "$existing"; then
             echo "Review proposal already exists: #$existing"
           else
-            gh pr create --draft --base main --head "$PROPOSAL_BRANCH" --title "Snurpo $version: maintainer release review" --body-file "$review_file"
+            gh pr create --draft --base main --head "$PROPOSAL_BRANCH" --title "$review_title" --body-file "$review_file"
           fi
   build:
-    if: inputs.mode != 'proposal'
+    if: inputs.mode == 'draft'
     name: Build ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     timeout-minutes: 60
