@@ -92,7 +92,20 @@ configuration includes Snurpo's `LICENSE` and `THIRD_PARTY_NOTICES.md` alongside
 the resource directory, so links to the included notices resolve in the bundle.
 
 Linux build prerequisites used by CI are `libwebkit2gtk-4.1-dev`, `build-essential`,
-`curl`, `wget`, `file`, `libxdo-dev`, `librsvg2-dev`, `patchelf` and `libssl-dev`.
+`curl`, `wget`, `file`, `libxdo-dev`, `libayatana-appindicator3-dev`, `librsvg2-dev`,
+`patchelf` and `libssl-dev`, matching the
+[Tauri Linux prerequisites](https://v2.tauri.app/start/prerequisites/#linux).
+The locked Tauri CLI 2.12.4 collects dependency features across target tables
+without evaluating their `cfg` conditions. It therefore detects Snurpo's
+macOS-only `tray-icon` feature during Linux packaging and requires the Ayatana
+library even though the Linux application has no tray UI. With this CLI, the
+Debian package also gains a `libayatana-appindicator3-1` dependency and the AppImage
+includes that library. This is the documented
+[upstream bundler issue #16250](https://github.com/tauri-apps/tauri/issues/16250),
+not a Linux tray feature or a Rust compilation requirement. Keep both CI and
+release prerequisite lists aligned until a verified upstream fix removes this
+packaging requirement.
+
 Dependency security findings, including platform-specific warnings, are recorded
 in [DEPENDENCIES.md](DEPENDENCIES.md). A passing build is not a claim that those
 warnings or platform runtime checks are resolved.
