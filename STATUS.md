@@ -14,10 +14,13 @@ Node 26.13.1 LTS; installed applications need no Node runtime. Earlier releases
 keep their assets and checksums. See [migration notes](docs/MIGRATING_TO_SNURPO.md)
 for unchanged local data, CA and MCP identifiers.
 
-Local feature validation passed 87 tests on Node 26.13.1, including real sh/zsh
-loopback execution with all 256 binary byte values. Native GUI clipboard checks
-and fresh tagged package verification remain separate acceptance steps. This
-feature does not add PowerShell or cmd.exe syntax or broaden device support.
+Local feature validation passed 88 tests on Node 26.13.1, including real sh/zsh
+loopback execution with all 256 binary byte values. Native GUI review confirmed preview/copy and unchanged captured traffic, but found
+inspector styling leaking into the dialog. The preview now opens outside the
+inspector with responsive width and a scrollable body; browser layout checks pass
+in both appearances and short windows. Native visual retest and tagged package
+verification remain separate acceptance steps. This feature does not add
+PowerShell or cmd.exe syntax or broaden device support.
 
 The reviewed 1.4.1 runtime sources passed 75 direct-worker Android outcomes and two
 native macOS Android Start/Stop capture cycles on AOSP API 36 ARM64, Frida

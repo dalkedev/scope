@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { Terminal } from 'lucide-react';
 import { requestToCurl } from '../curl';
 import { messageOf } from '../form-utils';
@@ -60,46 +61,50 @@ function CurlPreview({
       if (mounted.current) setCopyState('failed');
     }
   }
-  return (
+  return createPortal(
     <ModalFrame
       title="Copy as cURL"
       subtitle="POSIX shell: sh, bash or zsh. Not PowerShell or cmd.exe."
       icon={<Terminal size={22} />}
       onClose={onClose}
+      className="curl-export-modal"
     >
-      <p className="field-help">
-        This command may contain credentials in its URL, headers and body. Review it before sharing.
-        Nothing is sent when you preview or copy. Running it sends a new request using your
-        terminal's network settings; Snurpo rules and breakpoints are not included.
-      </p>
-      <InlineError message={error} />
-      {command && (
-        <>
-          <label className="field-label" htmlFor="curl-command">
-            cURL command (POSIX shell)
-          </label>
-          <textarea
-            id="curl-command"
-            className="code-editor"
-            rows={12}
-            value={command}
-            readOnly
-            spellCheck={false}
-          />
-          <p className="field-help">
-            Host, content length and connection headers are regenerated. Redirects are not followed
-            automatically.
-          </p>
-        </>
-      )}
-      {copyState === 'copied' && <p role="status">Copied to clipboard.</p>}
-      <InlineError
-        message={
-          copyState === 'failed'
-            ? 'Clipboard unavailable. Select the command and copy it manually.'
-            : ''
-        }
-      />
+      <div className="curl-export-content">
+        <p className="field-help">
+          This command may contain credentials in its URL, headers and body. Review it before
+          sharing. Nothing is sent when you preview or copy. Running it sends a new request using
+          your terminal's network settings; Snurpo rules and breakpoints are not included.
+        </p>
+        <InlineError message={error} />
+        {command && (
+          <>
+            <label className="field-label" htmlFor="curl-command">
+              cURL command (POSIX shell)
+            </label>
+            <textarea
+              id="curl-command"
+              className="code-editor"
+              rows={12}
+              value={command}
+              readOnly
+              spellCheck={false}
+              wrap="off"
+            />
+            <p className="field-help">
+              Host, content length and connection headers are regenerated. Redirects are not
+              followed automatically.
+            </p>
+          </>
+        )}
+        {copyState === 'copied' && <p role="status">Copied to clipboard.</p>}
+        <InlineError
+          message={
+            copyState === 'failed'
+              ? 'Clipboard unavailable. Select the command and copy it manually.'
+              : ''
+          }
+        />
+      </div>
       <footer className="modal-actions">
         <button className="button" onClick={onClose}>
           Close
@@ -112,6 +117,7 @@ function CurlPreview({
           {copyState === 'copying' ? 'Copying…' : 'Copy command'}
         </button>
       </footer>
-    </ModalFrame>
+    </ModalFrame>,
+    document.body,
   );
 }

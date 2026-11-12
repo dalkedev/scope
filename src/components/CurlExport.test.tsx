@@ -27,6 +27,23 @@ function open() {
   fireEvent.click(screen.getByRole('button', { name: 'Copy as cURL' }));
 }
 describe('cURL preview', () => {
+  it('escapes inspector layout and restores trigger focus after Escape', () => {
+    const view = render(
+      <aside className="inspector">
+        <CurlExport exchange={exchange} />
+      </aside>,
+    );
+    const trigger = screen.getByRole('button', { name: 'Copy as cURL' });
+    trigger.focus();
+    open();
+    const dialog = screen.getByRole('dialog');
+    expect(dialog.closest('.inspector')).toBeNull();
+    expect(view.container).not.toContainElement(dialog);
+    expect(screen.getByRole('button', { name: 'Close dialog' })).toHaveFocus();
+    fireEvent.keyDown(document, { key: 'Escape' });
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    expect(trigger).toHaveFocus();
+  });
   it('previews actual credentials but only writes clipboard after explicit copy', async () => {
     const copy = vi.fn().mockResolvedValue(undefined);
     vi.stubGlobal('navigator', { clipboard: { writeText: copy } });
