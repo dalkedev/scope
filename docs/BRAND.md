@@ -14,6 +14,7 @@ space around the character.
 | [snurpo-logo.png](../assets/brand/snurpo-logo.png) | Original 1254 × 1254 transparent mascot; desktop icon source. |
 | [snurpo-ui.png](../assets/brand/snurpo-ui.png) | 128 × 128 transparent export for the desktop interface and favicon. |
 | [snurpo-banner.png](../assets/brand/snurpo-banner.png) | 1774 × 887 repository/portfolio illustration; not an application screenshot. |
+| [snurpo-sign.png](../assets/brand/snurpo-sign.png) | Transparent mascot holding the snurpo.dev website sign for linked README artwork. |
 | [snurpo-tray-source.png](../assets/brand/snurpo-tray-source.png) | Original transparent, monochrome head for the macOS menu bar. |
 | [provenance.json](../assets/brand/provenance.json) | Generation details, exact prompt references, dimensions and SHA-256 hashes. |
 
@@ -64,4 +65,7 @@ and its provenance are archived under [assets/brand/legacy](../assets/brand/lega
 This branding is in the source tree. Published Scope 1.4.1 installers retain their
 original names and artwork until a new release is actually built and published.
 See [migration notes](MIGRATING_TO_SNURPO.md) and [release instructions](RELEASING.md).
-`snurpo.dev` is a domain candidate, not a purchased or connected destination.
+The project website is [snurpo.dev](https://snurpo.dev). The website sign uses the
+existing mascot as an identity reference and the Plompy/Blef sign series as a
+composition reference. Its [exact prompt](../assets/brand/sign-prompt.md), dimensions
+and SHA-256 hash are recorded alongside the other brand assets.
