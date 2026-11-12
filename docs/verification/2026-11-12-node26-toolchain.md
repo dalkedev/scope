@@ -1,4 +1,4 @@
-# Node 26 source-tooling baseline — 12 November 2026
+# Node 26 source-tooling baseline: 12 November 2026
 
 Current source builds, CI, the offline HAR CLI and its optional development lab
 now require **Node.js 26.13.1 or newer**. `.nvmrc` and active CI/example workflows

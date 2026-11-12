@@ -1,4 +1,4 @@
-# Snurpo HAR comparison — local CI experiment
+# Snurpo HAR comparison: local CI experiment
 
 Compare a baseline HAR with a new run, without opening Snurpo or replaying traffic.
 The CLI reports **observed regression candidates**, returns a CI exit status, and

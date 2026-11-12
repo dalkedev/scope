@@ -1,7 +1,7 @@
 # Scope → Snurpo
 
-Scope is now **Snurpo — A nosy little HTTP debugger.** The application name,
-mascot, window title, documentation and future installer names change. Existing
+Scope is now **Snurpo: A nosy little HTTP debugger.** The application name,
+mascot, window title, documentation and installer names change in 1.4.2. Existing
 sessions, certificates, integrations and data formats keep their compatibility
 identifiers. This is a brand change, not a data migration.
 
@@ -14,10 +14,9 @@ git remote set-url origin https://github.com/dalkedev/snurpo.git
 
 ## Existing installations
 
-The latest published release at the time of the rename is **Scope 1.4.1**. Those
-release tags and downloadable assets are historical and remain unchanged. Source
-version 1.4.1 is not a claim that a Snurpo-branded 1.4.1 installer was published.
-The next release must use a new version and publish its own verified artifacts.
+**Snurpo 1.4.2** follows **Scope 1.4.1** with its own tag and downloadable assets.
+Earlier release tags, Scope-branded packages and checksums remain unchanged.
+No Snurpo-branded 1.4.1 installer was published.
 
 Snurpo retains the desktop application identifier `dev.scope.debugger` and
 `ProjectDirs::from("dev", "scope", "Scope")`. It therefore reads the same local
@@ -31,8 +30,8 @@ compatible. An app rename does not require reinstalling the CA.
 New macOS bundles are called `Snurpo.app`. The old `Scope.app` bundle may still be
 present after a manual install. Keep one installed copy and do not run both at
 once: they use the same database, proxy settings and local bridge. Platform
-installer upgrade behavior must be checked as part of the next release; a name
-change alone is not proof of an in-place installer upgrade.
+installer upgrade behavior is not established by the name change. Windows/Linux
+interactive upgrades remain unverified; keep a backup of important captures.
 
 On macOS, a small template mascot in the menu bar offers **Show Snurpo** and
 **Quit Snurpo**. Show brings the application window forward, including from a

@@ -19,9 +19,8 @@ Publication is a separate maintainer action; for a stable release, clear both th
 prerelease flags. Keep historical release assets attached to their original tags.
 
 The first public prerelease, `v0.1.0-alpha.1`, used application version `0.1.0`;
-the current source uses application version `1.4.1`. The Snurpo rebrand is
-currently a source change, not a new published release. The latest published
-release, **Scope 1.4.1**, keeps its original `Scope-…` artifact names and
+the current source uses application version `1.4.2`, the first Snurpo-branded
+release. **Scope 1.4.1** keeps its original `Scope-…` artifact names and
 checksums. Do not move its tag or replace those assets with a renamed build.
 [Migration notes](MIGRATING_TO_SNURPO.md) describe the compatibility identifiers.
 Repository: [dalkedev/snurpo](https://github.com/dalkedev/snurpo).
@@ -127,7 +126,7 @@ RELEASE_TAG=vX.Y.Z # Replace with the next reviewed version tag.
 node scripts/release-assets.mjs "$RELEASE_TAG"
 ```
 
-For a future reviewed Snurpo release, the macOS helper produces the following
+For a reviewed Snurpo release, the macOS helper produces the following
 filenames, with `<version>` replaced by the chosen version:
 
 - `Snurpo-v<version>-macOS-arm64.zip`, preserving the app bundle with `ditto`;

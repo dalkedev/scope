@@ -117,16 +117,6 @@ textarea::placeholder {
   .brand-mark { transition: transform 180ms ease-out; }
   .brand-row:hover .brand-mark { transform: translateY(-2px) rotate(-5deg); }
 }
-.preview-badge {
-  font-size: 9px;
-  letter-spacing: 0.2px;
-  padding: 3px 6px;
-  background: #19382f;
-  color: #b4e5cc;
-  border: 1px solid #456b58;
-  border-radius: 5px;
-  margin: 5px 0 0 3px;
-}
 .device-switch {
   display: flex;
   gap: 10px;
@@ -2371,10 +2361,6 @@ textarea::placeholder {
   }
   .brand-name {
     font-size: 24px;
-  }
-  .preview-badge {
-    font-size: 8px;
-    margin-left: 0;
   }
   .device-switch {
     gap: 5px;

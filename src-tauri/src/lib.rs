@@ -363,7 +363,7 @@ fn setup_menu_bar(app: &tauri::App) -> Result<()> {
     TrayIconBuilder::with_id("snurpo-status")
         .icon(tauri::include_image!("icons/snurpo-tray-template.png"))
         .icon_as_template(true)
-        .tooltip("Snurpo — A nosy little HTTP debugger.")
+        .tooltip("Snurpo: A nosy little HTTP debugger.")
         .menu(&menu)
         .show_menu_on_left_click(true)
         .on_menu_event(|app, event| match event.id.as_ref() {

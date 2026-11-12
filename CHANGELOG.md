@@ -2,7 +2,15 @@
 
 User-visible changes are recorded here. Back up important captures before upgrading.
 
-## Unreleased
+## 1.4.2: 2026-11-12
+
+- Ship the first Snurpo-branded desktop packages and a refreshed native workflow
+  gallery. Remove the redundant `local` badge beside the application name.
+- Move source tooling and the offline HAR CLI to Node.js 26.13.1 LTS. Installed
+  desktop applications do not require Node. Refresh branded HAR report fixtures
+  while preserving deterministic evidence and browser-safety checks.
+- Install the AppIndicator build prerequisite required by Tauri's Linux bundler
+  when it detects the macOS tray feature. Linux does not gain a tray interface.
 
 - Correct low-contrast light-appearance text and status foregrounds while keeping
   the sidebar readable in both appearances. Fix the existing-rule empty prompt.
@@ -21,7 +29,7 @@ User-visible changes are recorded here. Back up important captures before upgrad
   archive formats and MCP compatibility identifiers. See
   [migration notes](docs/MIGRATING_TO_SNURPO.md).
 
-## 1.4.1 — 2026-11-09
+## 1.4.1: 2026-11-09
 
 - Upgrade the bundled SQLite driver/runtime to the patched line for
   RUSTSEC-2026-0459. Check the actual linked runtime in tests and keep a fresh
@@ -30,7 +38,7 @@ User-visible changes are recorded here. Back up important captures before upgrad
   diagnostics from the unpublished 1.4.0 candidate. Existing Android/platform
   verification boundaries remain unchanged.
 
-## 1.4.0 candidate — withheld, not published
+## 1.4.0 candidate: withheld, not published
 
 - Add Light, Dark and System appearance choices in the sidebar. Remember the
   local preference, follow live system changes in System mode and apply the
@@ -54,7 +62,7 @@ User-visible changes are recorded here. Back up important captures before upgrad
 - Update the MCP SDK to 3.9.0 and Vitest to 5.1.0, regenerate bundled dependency
   notices, and parse the appearance preload as HTML in its regression test.
 
-## 1.3.0 — 2026-11-06
+## 1.3.0: 2026-11-06
 
 - Pause matching endpoint requests, responses or both through Traffic rules,
   then continue unchanged, edit the actual message or abort it. Original values,
@@ -64,7 +72,7 @@ User-visible changes are recorded here. Back up important captures before upgrad
 - Preserve the typed proxy port while polling and validate it before capture.
   Persisted pause rules must be removed or converted before downgrading.
 
-## 1.2.2 — 2026-11-06
+## 1.2.2: 2026-11-06
 
 - Backport the upstream GLib `VariantStrIter` soundness fix to the compatible
   Linux GTK 0.18 dependency family. Retain the real 0.18.5 version, original
@@ -78,14 +86,14 @@ User-visible changes are recorded here. Back up important captures before upgrad
   while retaining code scanning. Interactive GTK/dialog and device acceptance
   remains open in #11.
 
-## 1.2.1 — 2026-11-06
+## 1.2.1: 2026-11-06
 
 - Move macOS CI and release packaging to the supported macOS 15 arm64 runner.
   This changes the build host and leaves application deployment-target settings unchanged.
 - Refresh release instructions and the current README to distinguish published
   1.2.0 builds from the 1.2.1 maintenance update.
 
-## 1.2.0 — 2026-11-05
+## 1.2.0: 2026-11-05
 
 - Reusable offline HAR comparison composite Action with JSON, HTML and JUnit
   outputs, minimized labels by default and explicit clean/regression/invalid
@@ -97,7 +105,7 @@ User-visible changes are recorded here. Back up important captures before upgrad
   dependency notices now match the committed locks and include Lucide's
   Feather-derived MIT notice.
 
-## 1.1.0 — 2026-11-05
+## 1.1.0: 2026-11-05
 
 - Structured desktop traffic search with combined method, host, status, body,
   lifecycle and edited predicates. Literal search remains available, and syntax
@@ -113,7 +121,7 @@ User-visible changes are recorded here. Back up important captures before upgrad
 - Current maintainer CODEOWNERS and a version-matched bot-authored release
   proposal flow. Required approvals and branch protections remain enabled.
 
-## 1.0.0 — 2026-11-02
+## 1.0.0: 2026-11-02
 
 - Persistent ordered request/response rewrites, mock responses and blocking, with validated atomic updates and per-request rule snapshots.
 - Applied-rule evidence, upstream/mock/blocked provenance and preserved original messages, including HAR/native roundtrips.
@@ -129,7 +137,7 @@ User-visible changes are recorded here. Back up important captures before upgrad
 
 Verification results and remaining platform/dependency limits: [docs/VERIFICATION.md](docs/VERIFICATION.md).
 
-## v0.1.0-alpha.1 — 2026-11-02
+## v0.1.0-alpha.1: 2026-11-02
 
 Application/package version: `0.1.0`. GitHub prerelease; macOS arm64 public artifact.
 

@@ -1,10 +1,11 @@
-# Snurpo — branding update on the 1.4.1 source line
+# Snurpo 1.4.2
 
-Snurpo is the new name for Scope. This source tree updates the application identity,
-artwork and project links. The application version remains `1.4.1`; this rebrand
-alone does not create a new tagged release or replace a published download.
-The latest published release is **Scope 1.4.1**, whose original asset names and
-checksums remain available from [Releases](https://github.com/dalkedev/snurpo/releases).
+Snurpo 1.4.2 is the first release under the new name, with mascot desktop icons,
+a macOS menu-bar icon, refreshed appearance and a native workflow gallery.
+Source tooling uses Node 26.13.1 LTS; installed applications need no Node runtime.
+The redundant `local` label beside the logo is removed. Packages and platform
+notes are available through [Releases](https://github.com/dalkedev/snurpo/releases).
+Earlier Scope releases keep their original assets and checksums.
 See [migration notes](docs/MIGRATING_TO_SNURPO.md) for the unchanged data directory,
 CA keys, archive formats and MCP compatibility identifiers.
 

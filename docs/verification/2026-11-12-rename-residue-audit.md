@@ -1,4 +1,4 @@
-# Snurpo rename residue audit — 12 November 2026
+# Snurpo rename residue audit: 12 November 2026
 
 This is a source audit of the pending Scope → Snurpo change. It is not a claim
 that the GitHub rename, deployment or a new binary release has completed.
