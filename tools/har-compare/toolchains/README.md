@@ -1,7 +1,7 @@
 # Local environment check
 
 This optional developer command inspects existing tools and runs the prototype's
-checks without installing anything. Python 3.9+ and Node.js 22.22.3+ are required.
+checks without installing anything. Python 3.9+ and Node.js 26.13.1+ are required.
 Run it from any directory; it locates this checkout from its own file location.
 
 ```sh
@@ -30,7 +30,7 @@ prefix. The script never downloads missing tools or dependencies:
 
 ```sh
 python3 tools/har-compare/toolchains/doctor.py --verify \
-  --node /opt/scope-lab/toolchains/node-v22.22.3-linux-x64/bin/node \
+  --node /opt/scope-lab/toolchains/node-v26.13.1-linux-x64/bin/node \
   --artifact-prefix /opt/scope-lab/toolchains
 ```
 
@@ -132,11 +132,11 @@ SCOPE_NATIVE_PARENT="$(mktemp -d)"
 python3 -B tools/har-compare/toolchains/build_native_capture.py \
   --work-dir "$SCOPE_NATIVE_PARENT/build" \
   --artifact-prefix /opt/scope-lab/toolchains \
-  --node /opt/scope-lab/toolchains/node-v22.22.3-linux-x64/bin/node
+  --node /opt/scope-lab/toolchains/node-v26.13.1-linux-x64/bin/node
 
 python3 -B tools/har-compare/toolchains/native_capture.py \
   --binary "$SCOPE_NATIVE_PARENT/build/target/debug/native_capture" \
-  --node /opt/scope-lab/toolchains/node-v22.22.3-linux-x64/bin/node \
+  --node /opt/scope-lab/toolchains/node-v26.13.1-linux-x64/bin/node \
   --output-parent "$SCOPE_NATIVE_PARENT"
 ```
 

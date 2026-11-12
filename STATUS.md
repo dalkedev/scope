@@ -40,7 +40,7 @@ do not establish a production writer change or archive-throughput improvement.
 
 Bodies remain buffered up to 16 MiB each. WebSocket frames, trailers, HTTP/3,
 large-session streaming and long-duration stability are outside verified coverage.
-The HAR Action initially targets Linux runners with caller-supplied Node 22.22.3+
+The HAR Action initially targets Linux runners with caller-supplied Node 26.13.1+
 and Bash; its results do not validate desktop or device behavior. Derived report
 labels and traffic patterns need review before sharing. Existing upstream
 dependency findings remain in [DEPENDENCIES.md](docs/DEPENDENCIES.md).

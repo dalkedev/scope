@@ -7,8 +7,8 @@ noise and invalid JSON from the repository root:
 node tools/har-compare/examples/sprint/run.mjs
 ```
 
-Use Node 22.22.3 or later; the prepared sprint runtime is
-`/opt/scope-lab/toolchains/node-v22.22.3-linux-x64/bin/node`. No npm dependencies,
+Use Node 26.13.1 or later; the prepared sprint runtime is
+`/opt/scope-lab/toolchains/node-v26.13.1-linux-x64/bin/node`. No npm dependencies,
 network access, browser or model are needed. The checked-in HARs are authored
 synthetic data at `https://synthetic.invalid`, not real captured traffic. Timing
 fields are fixed zeros. URLs are never requested or replayed.

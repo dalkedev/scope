@@ -7,7 +7,7 @@ and generates JSON, standalone offline HTML, and JUnit XML. Observed changes
 are regression candidates; [authored contracts](../../../tools/har-compare/contracts/README.md)
 express explicit required statuses and JSON fields.
 
-Requires **Node.js 22.22.3 or newer and Bash**, supplied by the caller. Linux is
+Requires **Node.js 26.13.1 or newer and Bash**, supplied by the caller. Linux is
 the supported runner for this initial wrapper; macOS and Windows runner execution
 have not been validated. No npm install, token, extra permission, or dependency is
 needed by the Action. The repository's [AGPL-3.0-or-later license](../../../LICENSE)
@@ -29,7 +29,7 @@ jobs:
           persist-credentials: false
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
-          node-version: '22.22.3'
+          node-version: '26.13.1'
       - uses: dalkedev/snurpo/.github/actions/har-compare@v1.2.0
         id: compare
         with:
@@ -169,7 +169,7 @@ implied by an Action result.
 
 ## Local verification
 
-From a Snurpo checkout with Node 22.22.3:
+From a Snurpo checkout with Node 26.13.1:
 
 ```sh
 npm test --prefix tools/har-compare

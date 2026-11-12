@@ -295,7 +295,7 @@ try {
     ({ DatabaseSync } = await import('node:sqlite'));
   } catch {
     throw new Error(
-      'This smoke test requires Node.js 22.13 or newer with node:sqlite (Node.js 24 LTS recommended).',
+      'This smoke test requires Node.js 26.13.1 or newer with node:sqlite (Node.js 26 LTS selected).',
     );
   }
   await Promise.all([access(scopeBinary), access(mcpBinary)]).catch(() => {

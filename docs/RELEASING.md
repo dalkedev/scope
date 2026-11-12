@@ -71,7 +71,7 @@ recovery file or proxy/forward mapping was created.
 
 ## Rebuild from a clean tag
 
-Use Node **22.22.3**, Rust **1.99.1** and the committed `package-lock.json` and
+Use Node **26.13.1**, Rust **1.99.1** and the committed `package-lock.json` and
 `Cargo.lock`. The platform also needs Tauri's native build prerequisites.
 
 ```sh

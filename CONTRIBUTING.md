@@ -4,7 +4,13 @@ Snurpo is an early local HTTP debugger. Useful contributions include reproducibl
 
 ## Development setup
 
-Install Rust, Node.js 22.13+ and [Tauri's prerequisites](https://v2.tauri.app/start/prerequisites/) for your host. Android changes also need SDK Platform Tools. The optional Frida runtime is described in [Android setup](docs/ANDROID.md#frida-runtime).
+Source builds, CI, the HAR CLI and its development lab now use Node 26 LTS.
+`.nvmrc` and the workflows pin 26.13.1; package metadata and runtime checks require
+at least that version. This source-tooling requirement does not add Node to the
+packaged native application's runtime requirements. Earlier verification records
+keep the Node versions actually used for those runs.
+
+Install Rust, Node.js 26.13.1+ and [Tauri's prerequisites](https://v2.tauri.app/start/prerequisites/) for your host. Android changes also need SDK Platform Tools. The optional Frida runtime is described in [Android setup](docs/ANDROID.md#frida-runtime).
 
 ```sh
 git clone https://github.com/dalkedev/snurpo.git

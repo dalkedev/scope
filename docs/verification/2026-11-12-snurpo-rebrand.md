@@ -83,3 +83,10 @@ primary-action surface. Dark appearance is unchanged by this correction.
 The rule library now says **Create another rule** when rules already exist. Its
 seven existing rule-editor tests passed. The final light-token UI test run and
 production build passed. These are focused checks, not a full accessibility audit.
+
+The rebuilt native app was also reopened with the isolated review data directory.
+Its eight captured exchanges persisted. Light analysis text and endpoint metadata
+were visibly readable; `07-analysis-light-fixed.jpg` in the local outputs records
+this state without a cursor. The existing-rule editor displayed **Create another
+rule**. Capture remained stopped and native application-menu Quit completed.
+This does not establish the separate status-item menu's Show/Quit behavior.

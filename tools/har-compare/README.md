@@ -11,7 +11,7 @@ The repository's [AGPL-3.0-or-later license](../../LICENSE) applies.
 
 ## Quick start
 
-Requires Node.js 22.22.3 (the tested runtime). No npm install, dependencies, model,
+Requires Node.js 26.13.1 or newer; CI pins 26.13.1. No npm install, dependencies, model,
 authentication, network access or running desktop/database is required.
 From the repository root:
 
@@ -39,7 +39,7 @@ mixed-unfiltered: exit 2, unsupported body analysis rejected
 For a separately installed runtime, select its bin directory, for example:
 
 ```sh
-export PATH=/opt/scope-lab/toolchains/node-v22.22.3-linux-x64/bin:$PATH
+export PATH=/opt/scope-lab/toolchains/node-v26.13.1-linux-x64/bin:$PATH
 ```
 
 All CLI paths resolve from the caller's working directory; an absolute path to

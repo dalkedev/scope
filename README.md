@@ -81,12 +81,12 @@ Reports minimize captured data; inspect them before sharing.
 The [reusable GitHub Action](.github/actions/har-compare/README.md) wraps the same
 offline CLI for Linux runners. It exposes reports and separate `0`/`1`/`2`
 results, defaults to minimized labels and lets the caller defer its final gate.
-It never uploads captures or reports automatically. Supply Node 22.22.3+ and Bash;
+It never uploads captures or reports automatically. Supply Node 26.13.1+ and Bash;
 review reports before choosing to share them.
 
 ### Build from source
 
-Install Rust, Node.js **22.13+** and [Tauri's native prerequisites](https://v2.tauri.app/start/prerequisites/). The repository pins the Rust compiler and dependency lockfiles.
+Install Rust, Node.js **26.13.1+** and [Tauri's native prerequisites](https://v2.tauri.app/start/prerequisites/). The repository pins the Rust compiler and dependency lockfiles.
 
 ```sh
 git clone https://github.com/dalkedev/snurpo.git
