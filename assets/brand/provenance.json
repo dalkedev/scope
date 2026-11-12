@@ -38,14 +38,24 @@
         1254
       ],
       "sha256": "548d451068565f38399a571e34c6314f719d3d0bd9904457995f1b256e0ad482"
+    },
+    {
+      "file": "snurpo-sign.png",
+      "kind": "Original generated website sign illustration, transparent RGBA; not an application screenshot",
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "sha256": "8bdbed1da36c2a27d953e0e9e48af92423e55fcebf652124704c50a2223485c7"
     }
   ],
   "prompts": {
     "mascot": "mascot-prompt.md",
     "banner": "banner-prompt.md",
-    "tray": "tray-prompt.md"
+    "tray": "tray-prompt.md",
+    "sign": "sign-prompt.md"
   },
-  "production_note": "Original generated mascot, banner and monochrome tray artwork retained unchanged. Desktop icon sizing/format export uses the locked Tauri CLI; the menu-bar template uses a technical sharp trim/resize export. No private content or screenshots supplied to generation. Domain snurpo.dev is not purchased or connected.",
+  "production_note": "Original generated mascot, banner and monochrome tray artwork retained unchanged. Desktop icon sizing/format export uses the locked Tauri CLI; the menu-bar template uses a technical sharp trim/resize export. No private content or screenshots supplied to generation. The domain was a candidate when the initial identity was generated. The owner subsequently registered snurpo.dev and connected the website on 2026-11-12. The website sign is a separate generated asset retained unchanged.",
   "desktop_icons": {
     "tool": "@tauri-apps/cli 2.12.4 from package-lock.json",
     "source": "assets/brand/snurpo-logo.png",
@@ -60,7 +70,7 @@
       36
     ],
     "sha256": "4e84af19a5e767d0f9574e5a1b1853a4238854d9deef2074c7ee9d684101a6b4",
-    "method": "Technical sharp export: trim transparent margins, resize within 32\u00d732, center on transparent 36\u00d736 canvas. Alpha eye/face holes retained; no opaque white pixels. macOS tray-icon renders at 18 logical points and applies template tint.",
+    "method": "Technical sharp export: trim transparent margins, resize within 32×32, center on transparent 36×36 canvas. Alpha eye/face holes retained; no opaque white pixels. macOS tray-icon renders at 18 logical points and applies template tint.",
     "tool_version": "sharp 0.34.3"
   }
 }

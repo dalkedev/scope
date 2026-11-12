@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/brand/snurpo-banner.png" alt="Snurpo: A nosy little HTTP debugger. Capture, inspect and compare HTTP(S) traffic." width="100%">
+  <a href="https://snurpo.dev"><img src="assets/brand/snurpo-banner.png" alt="Snurpo: A nosy little HTTP debugger. Capture, inspect and compare HTTP(S) traffic." width="100%"></a>
 </p>
 
 <p align="center">
@@ -8,6 +8,7 @@
 </p>
 
 <p align="center">
+  <a href="https://snurpo.dev">Website</a> ·
   <a href="docs/GETTING_STARTED.md">Get started</a> ·
   <a href="https://github.com/dalkedev/snurpo/releases">Downloads</a> ·
   <a href="docs/SCREENSHOTS.md">Screenshots</a> ·
@@ -23,6 +24,10 @@
 **Snurpo (formerly Scope)** routes traffic through a Rust engine, gives you control over requests and responses, and saves the result in a local SQLite archive. Inspect it yourself, reopen it tomorrow, or let an MCP client work from the same captured evidence.
 
 **Local capture, saved sessions and export need no account or subscription.** Built-in analysis runs locally. You choose which sessions an external agent can access.
+
+<p align="center">
+  <a href="https://snurpo.dev"><img src="assets/brand/snurpo-sign.png" alt="Snurpo holding a snurpo.dev sign. Visit the website." width="360"></a>
+</p>
 
 > **Snurpo 1.5.0: take a captured request to your terminal.** Select **Copy as cURL** to preview and explicitly copy a POSIX-shell command, including repeated headers and text or binary bodies. Previewing and copying send no traffic. [Downloads](https://github.com/dalkedev/snurpo/releases/tag/v1.5.0) · [Release notes](docs/releases/1.5.0.md) · [Terminal export and limits](docs/GETTING_STARTED.md#copy-a-request-to-your-terminal). Saved sessions, certificate trust and MCP configuration remain compatible. Source tooling uses Node 26.13.1 LTS; the installed desktop app needs no Node runtime. The existing gallery records Snurpo 1.4.2; see its [capture provenance](docs/images/README.md).
 
