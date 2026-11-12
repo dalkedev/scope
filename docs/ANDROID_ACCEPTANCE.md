@@ -1,4 +1,4 @@
-# Scope-owned Android engine acceptance — 9 November 2026
+# Scope-owned Android engine acceptance: 9 November 2026
 
 **PASS: 75/75 controlled Android outcomes and 2/2 Stop/restoration gates**, using AOSP Android 16/API 36 ARM64, emulator 37.1.11, Frida 17.9.1 and real OkHttp 3.14.9. Each cell is an actual synthetic APK request with a Logcat receipt. This is one measured API/ABI combination.
 

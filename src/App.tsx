@@ -550,10 +550,9 @@ export default function App() {
   return (
     <div className="app-shell">
       <aside className="sidebar">
-        <div className="brand-row" title="Snurpo — A nosy little HTTP debugger.">
+        <div className="brand-row" title="Snurpo: A nosy little HTTP debugger.">
           <img className="brand-mark" src={snurpoMark} alt="" />
           <span className="brand-name">snurpo</span>
-          <span className="preview-badge">local</span>
         </div>
         <button
           className={`device-switch ${panel === 'device' ? 'is-open' : ''}`}
@@ -2409,7 +2408,7 @@ function AnalysisView({
                 <small>{e.host}</small>
               </td>
               <td>{e.count}</td>
-              <td className={e.errorCount ? 'red-text' : ''}>{e.errorCount || '—'}</td>
+              <td className={e.errorCount ? 'red-text' : ''}>{e.errorCount}</td>
               <td>
                 <div className="duration-value">
                   <span
@@ -2551,9 +2550,9 @@ function CompareView({
                       <strong>{endpointName(row)}</strong>
                       <div className="change-metrics">
                         <span>
-                          Requests <b>{String(row.leftCount ?? '—')}</b>
+                          Requests <b>{String(row.leftCount ?? 'N/A')}</b>
                           <ArrowRight size={11} />
-                          <b>{String(row.rightCount ?? '—')}</b>
+                          <b>{String(row.rightCount ?? 'N/A')}</b>
                         </span>
                         <span>
                           Average <b>{ms(Number(row.leftAverageDurationMs || 0))}</b>

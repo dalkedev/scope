@@ -1,57 +1,57 @@
 {
   "captured": "2026-11-12",
   "application": "Snurpo native macOS arm64 source build",
-  "sourceVersion": "1.4.1; unreleased rebrand",
+  "sourceVersion": "1.4.2",
   "reviewBundleIdentifier": "dev.snurpo.review",
   "productionBundleIdentifier": "dev.scope.debugger",
-  "captureMethod": "Original native application JPEG captures (original bytes, no transcoding); pointer parked outside the application; no cropping, editing, retouching or image generation.",
-  "network": "Synthetic localhost only; proxy127.0.0.1:17890, fixture127.0.0.1:17891, isolated bridge17994",
+  "captureMethod": "Original native application fullscreen JPEG captures, no cropping, editing, retouching or image generation. Pointer parked outside the captured content; all images visually checked for absence of cursor and system sharing/title strip.",
+  "network": "Reopened the isolated eight-exchange localhost archive; capture stopped. Fixture originally127.0.0.1:17891, proxy127.0.0.1:17890, isolated bridge17994.",
   "images": [
     {
       "file": "traffic-inspector.jpg",
-      "originalCapture": "01-traffic-inspector.jpg",
+      "originalCapture": "v1.4.2/01-traffic-inspector.jpg",
       "dimensions": [
-        3494,
+        3600,
         2260
       ],
-      "sha256": "84b6b707a6d937548c1b25f226a6b277d7d24711505a15891cc219470109beae"
+      "sha256": "f0ab1b11fe58941181edb2c75d27f8678521b5c9134785e24c7d6b8d612c9de6"
     },
     {
       "file": "mocked-response.jpg",
-      "originalCapture": "03-mocked-response.jpg",
+      "originalCapture": "v1.4.2/03-mocked-response.jpg",
       "dimensions": [
-        3494,
+        3600,
         2260
       ],
-      "sha256": "712e02c5275a8d8ef688132f071bec7485511a510130dbdfb7d56ae3d813b8dc"
+      "sha256": "06e077f7c6fa9c92c6d308b69f062d55c43e822dcf3ba3d256b54c9c6a0e7435"
     },
     {
       "file": "replay-composer.jpg",
-      "originalCapture": "04-replay-composer.jpg",
+      "originalCapture": "v1.4.2/04-replay-composer.jpg",
       "dimensions": [
-        3494,
+        3600,
         2260
       ],
-      "sha256": "6a1c7ee3c1c6268b25a3e2f462dff403833eed6b8c43f0f81dde615337513b3d"
+      "sha256": "44365c8e1f26ae46019e35ba292d7a4a55cf62f09e9351310c070c32899acbac"
     },
     {
       "file": "session-analysis.jpg",
-      "originalCapture": "05-session-analysis.jpg",
+      "originalCapture": "v1.4.2/05-session-analysis.jpg",
       "dimensions": [
-        3494,
+        3600,
         2260
       ],
-      "sha256": "2f15e999b06e2626a4d137962fd49d2b47654d1e060d66d4b748661579581fe4"
+      "sha256": "81c8c658300c5a37ee9b7a453926537f548efdb2eefd8e434145dce3bdf0d272"
     },
     {
       "file": "traffic-rules.jpg",
-      "originalCapture": "02-mock-rule.jpg (selected-rule retake)",
+      "originalCapture": "v1.4.2/02-mock-rule.jpg",
       "dimensions": [
-        3494,
+        3600,
         2260
       ],
-      "sha256": "2e94a6de1094cf37e11ba905ceb0232c8b02f25b2262c1db3489387db11d1051"
+      "sha256": "a5e3746c449bb01e794772066797491db0582d801c97ab76ddb8163f3291934e"
     }
   ],
-  "format": "JPEG/JFIF; capture API initially supplied filenames ending in .png, corrected to .jpg without changing image bytes"
+  "format": "JPEG/JFIF; original native screenshot bytes preserved"
 }

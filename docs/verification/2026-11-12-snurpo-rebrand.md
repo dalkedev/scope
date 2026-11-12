@@ -1,4 +1,4 @@
-# Snurpo rebrand — local validation, 12 November 2026
+# Snurpo rebrand: local validation, 12 November 2026
 
 This records checks on the rebrand working tree based on
 `312802c5a89813af2d85d11fbcc1c992f57cb01a`. It is not a new published release.

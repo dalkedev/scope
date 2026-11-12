@@ -12,7 +12,7 @@ export function ExchangeStatus({
     <span
       className={`status-code ${error || (code && code >= 400) ? 'status-error' : code && code >= 300 ? 'status-redirect' : 'status-ok'}`}
     >
-      {error ? 'ERR' : (code ?? '—')}
+      {error ? 'ERR' : (code ?? 'N/A')}
     </span>
   );
 }

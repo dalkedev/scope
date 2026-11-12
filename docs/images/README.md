@@ -1,18 +1,18 @@
 # Screenshot provenance
 
-## Current Snurpo captures — 12 November 2026
+## Current Snurpo 1.4.2 captures: 12 November 2026
 
-These are original JPEG captures of the running native macOS arm64 Snurpo source
-build. The source version is still 1.4.1; these images do not represent a newly
-published Snurpo installer. The application rendered its real interface and
-processed every displayed exchange through its real engine. No browser mockup,
-seeded interface rows, image generation, cropping, retouching or cursor removal
-was used. The original 3494 × 2260 JPEG capture bytes are preserved without transcoding.
+These are original JPEG captures of the running native macOS arm64 Snurpo 1.4.2
+source build. The application rendered its real interface and reopened the eight
+persisted localhost exchanges from the earlier native walkthrough. No browser
+mockup, seeded interface rows, image generation, cropping or retouching was used.
+The original 3600 × 2260 JPEG capture bytes are preserved without transcoding.
 
-Before each final capture the pointer was parked in the native macOS menu bar,
-and the menu was dismissed. The saved images were then inspected and contain no
-pointer over the application. The native title/capture chrome is retained as
-captured.
+Snurpo was placed in native fullscreen mode to exclude the system capture/title
+strip. Before each final capture, the pointer was parked outside the captured content
+using the native system menu area. Each saved image was visually checked for the
+absence of the pointer and system sharing indicator. The redundant `local` logo
+badge is removed in the application itself.
 
 The packaged application was copied to a separate native-review location. Only
 that copy's bundle identifier was changed to `dev.snurpo.review` and it was
@@ -21,17 +21,17 @@ installed app. Application source, frontend, runtime resources and UI were not
 changed for the capture. The actual product remains `dev.scope.debugger` for
 installation/data compatibility.
 
-A fresh `.runtime/native-review` archive and bridge port `17994` isolated the
-session. Displayed traffic uses only the fixture on `127.0.0.1:17891` and proxy
+The existing isolated `.runtime/native-review` archive was reopened using
+bridge port `17994`. Capture remained stopped during this screenshot session. Displayed traffic uses only the fixture on `127.0.0.1:17891` and proxy
 on `127.0.0.1:17890`. No external request or Android-device operation was part
 of the capture. The interface displays synthetic product/profile data and a
 synthetic maintenance response, not personal traffic or credentials.
 
 | Image | Recorded state |
 | --- | --- |
-| [Traffic inspector](snurpo/traffic-inspector.jpg) | Seven exchanges: the six built-in fixture requests plus one independently issued proxied curl. An earlier successful products response is selected, showing HTTP 200 and its original JSON. |
-| [Traffic rules](snurpo/traffic-rules.jpg) | After the replay, with eight exchanges in the session, the saved maintenance rule is selected. Its host/path matcher, priority 10, enabled state, status 503 and JSON body are visible. |
-| [Mocked response](snurpo/mocked-response.jpg) | The same seven-exchange session, selecting the independent products request. It returned HTTP 503 and the maintenance body; the inspector identifies **Mock response** and **Product API maintenance**. |
+| [Traffic inspector](snurpo/traffic-inspector.jpg) | Eight saved exchanges: the six built-in fixture requests, one independently issued proxied curl and one edited POST replay. An earlier successful products response is selected, showing HTTP 200 and its original JSON. |
+| [Traffic rules](snurpo/traffic-rules.jpg) | After the replay, with eight saved exchanges in the session, the saved maintenance rule is selected. Its host/path matcher, priority 10, enabled state, status 503 and JSON body are visible. |
+| [Mocked response](snurpo/mocked-response.jpg) | The same eight-exchange session, selecting the saved independent products request. It returned HTTP 503 and the maintenance body; the inspector identifies **Mock response** and **Product API maintenance**. |
 | [Replay composer](snurpo/replay-composer.jpg) | Eight exchanges after sending an edited POST to `/api/profile?scenario=composed`. It returned HTTP 200 and was stored separately. The screenshot reopens that saved request on the Body tab; the reopened composer was then canceled. |
 | [Session analysis](snurpo/session-analysis.jpg) | The same eight exchanges: two error responses (401 and local 503), three products calls, one locally generated response and six observed method/path combinations. The displayed 840 B, 48 ms average and 382 ms slow request describe this capture, not a benchmark. |
 

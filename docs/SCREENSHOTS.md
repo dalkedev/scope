@@ -1,9 +1,9 @@
 # Snurpo in use
 
-Real captures from the native macOS Snurpo source build, taken on 12 November
-2026. The requests are synthetic localhost traffic processed by the actual
-engine. These are unreleased source-build screenshots; the latest published
-installer remains Scope 1.4.1.
+Real captures from the native macOS Snurpo 1.4.2 source build, taken on 12
+November 2026. The requests are synthetic localhost traffic processed by the
+actual engine and reopened from its persisted archive. Fullscreen keeps the
+system capture/title strip outside the image; no cursor is visible.
 
 ## Traffic inspector
 

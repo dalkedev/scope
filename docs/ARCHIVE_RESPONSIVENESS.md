@@ -276,7 +276,7 @@ are unchanged. Existing Linux/Windows results remain pinned to measured source
 `19aec4f`; no long benchmark rerun is implied by this cleanup-only correction.
 Exact follow-up test receipts and head are recorded in the PR description.
 
-## Scope 1.3.0 compatibility revalidation — 2026-11-09
+## Scope 1.3.0 compatibility revalidation: 2026-11-09
 
 Merged source `5c8f4aed5f96361289629ca4ed2bc03a66a90287` includes released
 Scope 1.3.0 from `cb5fccd3253a1a3b3ccb0ff4efe83350a94518e8`. Its clean-tree
@@ -307,7 +307,7 @@ check, not a new cross-platform or release-profile performance comparison. The
 GUI, physical Android, current-head hosted measurements and release-profile timing
 were **NOT RUN** by this revalidation. No production writer change is included.
 
-## Target-bound validation follow-up — 2026-11-09
+## Target-bound validation follow-up: 2026-11-09
 
 Independent review of release source `9789d92013ef2aac64941ebaca18a0ce691a6d4b`
 found that the detector checked the request index and equality between captured

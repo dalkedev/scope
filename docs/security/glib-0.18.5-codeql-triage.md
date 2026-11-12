@@ -148,7 +148,7 @@ location requires its own exact-flow review, not automatic classification.
 Platform checks and Windows verifier acceptance are reported separately in the PR.
 Issue #11 remains open until interactive GTK/dialog acceptance has been tested.
 
-## Independent operator decisions — 6 November 2026
+## Independent operator decisions: 6 November 2026
 
 Alerts 4–10 were independently reviewed against the complete baseline SARIF and
 the concrete generic instantiations described above, then individually dismissed

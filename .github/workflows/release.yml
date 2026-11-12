@@ -11,7 +11,7 @@ on:
       tag:
         description: Existing version tag to build
         required: true
-        default: v1.4.1
+        default: v1.4.2
 permissions:
   contents: read
 concurrency:

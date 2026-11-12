@@ -4,13 +4,13 @@ Snurpo stores captures locally and works without an account. Start with the incl
 
 ## Install a release
 
-The latest published release is **Scope 1.4.1** and still carries the Scope name.
-This source tree uses **Snurpo**; new branding does not change the saved-data
-location or trusted CA. See [migration notes](MIGRATING_TO_SNURPO.md).
+**Snurpo 1.4.2** is the first release with the new name and mascot. The branding
+does not change the saved-data location or trusted CA. See
+[migration notes](MIGRATING_TO_SNURPO.md).
 
 1. Download the artifact for your host from [GitHub Releases](https://github.com/dalkedev/snurpo/releases). Read its release notes for architecture, optional Frida resources and signing status.
 2. Compare its SHA-256 with the release checksum file, then extract the archive or run the platform installer.
-3. On macOS, move the app to Applications and open it (`Scope.app` for the published 1.4.1 package, `Snurpo.app` for new source builds). The public package is ad-hoc signed without Apple notarization. If Gatekeeper blocks it, use macOS **System Settings → Privacy & Security → Open Anyway** after verifying the source and checksum. Do not disable Gatekeeper globally.
+3. On macOS, move `Snurpo.app` to Applications and open it. Quit the older `Scope.app` before switching; both use the same local archive. The public package is ad-hoc signed without Apple notarization. If Gatekeeper blocks it, use macOS **System Settings → Privacy & Security → Open Anyway** after verifying the source and checksum. Do not disable Gatekeeper globally.
 
 The interactively tested host is **macOS arm64** (Apple Silicon). Windows x64 and Linux x64 have CI build/headless-protocol coverage; their interactive installers, desktop and device behavior remain unverified. Read the release notes for Linux's known dependency advisory. Optional Frida native binaries are not included in public packages; [install them locally](ANDROID.md#frida-runtime) for Frida mode.
 

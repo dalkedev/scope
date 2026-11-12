@@ -1,6 +1,13 @@
 # Recorded verification
 
-## SQLite security maintenance — 2026-11-09
+## Snurpo 1.4.2 preparation: 2026-11-12
+
+Version consistency, native package checks, the clean screenshot gallery and
+publication gates are recorded in the
+[1.4.2 verification note](verification/2026-11-12-snurpo-1.4.2.md).
+The older records below retain their original runtime and target boundaries.
+
+## SQLite security maintenance: 2026-11-09
 
 The final dependency audit blocked publication of 1.4.0: its actual bundled
 SQLite 3.51.1 is affected by
@@ -42,7 +49,7 @@ These are local source and archive-compatibility results. Hosted checks, package
 Earlier 1.4.0 appearance and Android evidence below retains its exact version and
 target boundaries.
 
-## Appearance candidate — 2026-11-09
+## Appearance candidate: 2026-11-09
 
 - **PASS:** 63 UI tests, including six preference regressions for reload,
   explicit overrides, live System changes, unavailable storage/system lookup,
@@ -73,7 +80,7 @@ Native theme persistence across process restart was not separately exercised.
 For the separate opt-in archive measurement harness, result provenance and proposed
 bounded writer, see [Archive responsiveness](ARCHIVE_RESPONSIVENESS.md).
 
-## Actual Scope-owned Android acceptance — 2026-11-09
+## Actual Scope-owned Android acceptance: 2026-11-09
 
 **PASS:** the direct production-worker matrix observed 75/75 expected synthetic outcomes and 2/2 owned-process Stop/restoration gates on AOSP Android 16/API 36 ARM64, Frida 17.9.1 and OkHttp 3.14.9. All phases, original SSL exception classes, pin/hostname markers, initial two failed outcomes, the explicit Java Key-cast correction and exact engine/worker hashes are recorded in [Android acceptance](ANDROID_ACCEPTANCE.md) and its [allowlisted JSON](verification/android-engine-2026-11-09.json).
 
@@ -83,7 +90,7 @@ Fresh baseline requests after both Stops restored original rejection behavior; m
 
 Crash/restart recovery with an active Android worker, physical devices, other API/ABI combinations and native TLS remain unverified. No global Android-support claim follows from this measured target. Earlier NOT RUN entries below describe their dated evidence, not the current result.
 
-## Android worker diagnostic memory follow-up — 2026-11-07
+## Android worker diagnostic memory follow-up: 2026-11-07
 
 The follow-up to the initial reviewed engine head `4edeb09` bounds worker stdout/stderr framing before JSON parsing and retained device logs. See [exact limits and lifecycle behavior](ANDROID_ENGINE.md#bounded-host-diagnostics).
 
@@ -98,7 +105,7 @@ A separate class-wrapper-cache candidate was rejected: the retained Frida bridge
 
 The emulator prerequisite investigation progressed beyond the earlier crash site using ordinary private directory preparation, but ADB still aborts because its standard user-storage directory is read-only in this executor. No host security setting, standard home directory or system trust store was changed. At that point actual Android/Frida/TLS/pinning/hostname/Stop acceptance was **NOT RUN**. The later [9 November target-specific record](ANDROID_ACCEPTANCE.md) supersedes that direct-worker gate; it does not infer other platform or native desktop lifecycle results. Exact final hosted check receipts are recorded in the same PR after publication.
 
-## Scope-owned Android engine boundary — 2026-11-07
+## Scope-owned Android engine boundary: 2026-11-07
 
 The source candidate reviewed on 7 November replaces the imported hook backend with Scope-owned Java hooks and ends the owned app process on Frida Stop. Local executable Node/Python policy/adapter and Rust lifecycle tests use simulated Java/Frida or local child processes; they do not execute Android TLS. At that review, real Android/Frida/OkHttp TLS, hostname controls, API/ABI compatibility and Stop restoration acceptance were **NOT RUN**; the later [9 November measured-target record](ANDROID_ACCEPTANCE.md) is separate. Earlier emulator receipts below describe the previous backend and remain historical. See [current engine coverage](ANDROID_ENGINE.md).
 
@@ -106,7 +113,7 @@ Local source gates passed on Linux: 84 locked headless Rust tests (core/device/M
 
 The owned fixture APK compiled, signed and passed apksigner v2/v3 verification with the real checksum-locked OkHttp 3.14.9/Okio 1.17.2 test dependencies. Host TLS controls accepted the valid fixture CA and rejected foreign, wrong-host and expired peers. These are host/build results, **not Android execution**. One bounded software-emulator prerequisite boot failed with SIGSEGV before Android startup; cause is unestablished. Independent component and whole-branch source reviews resolved all reported findings with covering regressions and scoped re-reviews. The first hosted Windows run exposed CRLF serialization differences after the bounded binary read. Explicit LF/CRLF/CR byte-input regressions reproduced that failure, and universal-newline normalization restored the prior text-read behavior without changing CA validation. Hosted exact-head check receipts belong in the draft PR and are separate from these local results.
 
-## Endpoint manual editing candidate — 2026-11-06
+## Endpoint manual editing candidate: 2026-11-06
 
 Scope 1.3.0 adds a `pause` Traffic rule with request, response or both-stage
 selection. This record describes the local candidate, separately from hosted
@@ -152,7 +159,7 @@ bodies still have the 16 MiB rejection limit; this change does not implement
 streaming or claim archive-writer performance improvements. See
 [rule behavior and downgrade precautions](RULES.md).
 
-## Concurrent rule fixture follow-up — 2026-11-06
+## Concurrent rule fixture follow-up: 2026-11-06
 
 At `2ada212`, the [Windows job](https://github.com/dalkedev/scope/actions/runs/42281855023/job/128112730439)
 passed GLib integrity and all eight attribution tests, then the combined
@@ -193,7 +200,7 @@ redesign or performance improvement is claimed by this test-only maintenance fix
 New-head hosted Windows results remain separate PR check evidence; interactive
 GTK/dialog acceptance is still outside these tests and #11 remains open.
 
-## License attribution path follow-up — 2026-11-06
+## License attribution path follow-up: 2026-11-06
 
 The GLib backport attribution now compares real filesystem manifest paths.
 The previous lexical comparison lost the backport/provenance links when macOS
@@ -227,7 +234,7 @@ verifier and locked Cargo selection. A fresh independent review found no
 production issue; its minor Windows JSON-escaping assertion gap was corrected.
 Hosted platform attribution results are separate PR check evidence.
 
-## GLib hosted acceptance follow-up — 2026-11-06
+## GLib hosted acceptance follow-up: 2026-11-06
 
 At `0799385`, [hosted run 42269942248](https://github.com/dalkedev/scope/actions/runs/42269942248)
 passed Linux and macOS workspace/frontend/package/desktop-engine/MCP checks.
@@ -271,7 +278,7 @@ All alert decisions remain with the independent operator. New-head hosted result
 are separate PR check evidence and must not be inferred from the old-head passes.
 Interactive GTK/dialog/installer/device acceptance remains untested; keep #11 open.
 
-## GLib 0.18.5 backport — 2026-11-06
+## GLib 0.18.5 backport: 2026-11-06
 
 This narrow change is based on Scope 1.2.1 (`98ba0ef`) and preserves the
 GTK 0.18 dependency family. [Backport provenance](../vendor/glib-provenance/README.md)
@@ -323,7 +330,7 @@ A fresh independent whole-change review found no substantive issues. Hosted
 three-platform checks remain separate evidence; local results are not a claim
 that hosted CI passed.
 
-## 1.2.1 maintenance preparation — 2026-11-06
+## 1.2.1 maintenance preparation: 2026-11-06
 
 This candidate updates the macOS CI and release build host from `macos-14` to
 `macos-15`. The old macOS job on main
@@ -340,7 +347,7 @@ new interactive desktop/device validation. The macOS package remains ad-hoc
 signed without Apple notarization. Windows/Linux interactive behavior remains
 experimental, and Intel macOS is unverified.
 
-## 1.2.0 release preparation — 2026-11-05
+## 1.2.0 release preparation: 2026-11-05
 
 Local checks on the combined `release/1.2.0` candidate used macOS arm64,
 Node 22.22.3 and Rust 1.99.1. Original heads from #3, #15, #22 and #23 are
@@ -373,7 +380,7 @@ macOS is unverified. Existing dependency findings remain in
 [DEPENDENCIES.md](DEPENDENCIES.md). Historical results below keep their original
 version boundaries.
 
-## 1.0.0 release preparation — 2026-11-02
+## 1.0.0 release preparation: 2026-11-02
 
 These checks were recorded on `release/1.0.0` before publication, with source and
 package version `1.0.0`. [GitHub Releases](https://github.com/SculptTechProject/scope/releases)

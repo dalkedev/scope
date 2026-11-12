@@ -1,9 +1,9 @@
 <p align="center">
-  <img src="assets/brand/snurpo-banner.png" alt="Snurpo — A nosy little HTTP debugger. Capture, inspect and compare HTTP(S) traffic." width="100%">
+  <img src="assets/brand/snurpo-banner.png" alt="Snurpo: A nosy little HTTP debugger. Capture, inspect and compare HTTP(S) traffic." width="100%">
 </p>
 
 <p align="center">
-  <strong>Snurpo — A nosy little HTTP debugger.</strong><br>
+  <strong>Snurpo: A nosy little HTTP debugger.</strong><br>
   A desktop workbench for HTTP(S), Android instrumentation and agent-assisted debugging.
 </p>
 
@@ -24,7 +24,7 @@
 
 **Local capture, saved sessions and export need no account or subscription.** Built-in analysis runs locally. You choose which sessions an external agent can access.
 
-> **Latest published release: Scope 1.4.1.** This source tree introduces the Snurpo name; existing downloads retain their original Scope branding. The real screenshots below show the current Snurpo source build, not a newly published installer. Saved sessions, certificate trust and MCP configuration remain compatible — see [migration notes](docs/MIGRATING_TO_SNURPO.md). Version 1.4.1 includes Light/Dark/System appearance, an experimental project-owned Android Java engine with owned-process Stop cleanup, and reproducible archive diagnostics. Endpoint pause/edit rules, the offline HAR Action and verified GLib backport remain included. Check [Releases](https://github.com/dalkedev/snurpo/releases) for published builds and platform notes. [Android acceptance →](docs/ANDROID_ACCEPTANCE.md) · [Archive measurements →](docs/ARCHIVE_RESPONSIVENESS.md) · [Verification record →](docs/VERIFICATION.md)
+> **Snurpo 1.4.2: new name, same saved work.** Get the Snurpo-branded packages from [Releases](https://github.com/dalkedev/snurpo/releases/tag/v1.4.2). This update brings the mascot, macOS menu-bar icon, clearer first-run actions and refreshed Light/Dark appearance. Saved sessions, certificate trust and MCP configuration remain compatible. See [migration notes](docs/MIGRATING_TO_SNURPO.md). Source tooling now uses Node 26.13.1 LTS; the installed desktop app needs no Node runtime. Previous Scope releases retain their original downloads and checksums. [Release notes →](docs/releases/1.4.2.md) · [Verification record →](docs/VERIFICATION.md)
 
 <a href="docs/SCREENSHOTS.md"><img src="docs/images/snurpo/mocked-response.jpg" alt="Real captured traffic: a products request returns a local HTTP 503 mock, with its rule and response JSON visible." width="100%"></a>
 
@@ -126,7 +126,7 @@ The same engine powers the native inspector and MCP. Real HTTP/TLS fixtures test
 
 | Today                   | Boundary                                                                                                                                                                                                                                                       |
 | ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| macOS arm64             | Reviewed runtime sources passed native UI/package and repeated Android Start/Stop checks; final 1.4.1 artifacts require separate verification. Ad-hoc signed; not Apple-notarized.                                                                             |
+| macOS arm64             | Native Snurpo capture, persisted sessions, rules and replay have been exercised on Apple Silicon. Tagged packages receive separate signature/resource and engine/MCP checks before publication. Ad-hoc signed; not Apple-notarized. |
 | Windows x64 / Linux x64 | CI builds, packages and headless MCP/capture smoke pass. Interactive UI and device validation remain open. Intel macOS is unverified.                                                                                                                          |
 | Android / Frida         | AOSP API 36 ARM64, Frida 17.9.1 and OkHttp 3.14.9 passed 75 direct-worker outcomes plus two native UI Start/Stop capture cycles. Other targets and active-worker crash/restart recovery remain unverified; native TLS and lazy Kotlin pinners are unsupported. |
 | Capture                 | Bodies are buffered up to **16 MiB each**. Streaming, WebSocket frames, trailers and HTTP3 are not implemented.                                                                                                                                                |
